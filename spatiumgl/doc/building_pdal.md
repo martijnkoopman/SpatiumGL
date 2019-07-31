@@ -163,12 +163,15 @@ TODO: The following steps should be scripted...
 * Compile
   * Open generated solution
   * Build project BUILD_ALL (Release and Debug)
+  * Build project INSTALL
 
 ### PDAL
-TODO
 1. Download source code of the latest version (1.9.1) from <https://pdal.io/download.html>
 2. Unpack to any directory (PDAL_SOURCE_DIR)
-3. CMake
+3. Start 'x64 Native Tools Command Prompt for VS 2019'
+4. Change directory to PDAL_SOURCE_DIR
+5. Start CMake. Run: `cmake-gui`
+6. CMake
   * Source dir: `PDAL_SOURCE_DIR`
   * Build dir: `PDAL_SOURCE_DIR/build` (PDAL_BUILD_DIR)
   * Generator: Visual Studio 16 2019 x64
@@ -191,16 +194,25 @@ TODO
 * Compile
   * Open generated solution
   * Build project BUILD_ALL (Release and Debug)
+  * Build project INSTALL
 
 Expected CMake output:
 ```
 Selecting Windows SDK version 10.0.17134.0 to target Windows 10.0.17763.
 Could NOT find JSONCPP (missing: JSONCPP_LIBRARY JSONCPP_INCLUDE_DIR) (Required is at least version "1.6.2")
 Could NOT find LibXml2 (missing: LIBXML2_LIBRARY LIBXML2_INCLUDE_DIR) 
-Could NOT find CURL (missing: CURL_LIBRARY CURL_INCLUDE_DIR) 
 Could NOT find LIBEXECINFO (missing: LIBEXECINFO_LIBRARY LIBEXECINFO_INCLUDE_DIR) 
 Could NOT find LIBUNWIND (missing: LIBUNWIND_LIBRARY LIBUNWIND_INCLUDE_DIR) 
-The following RECOMMENDED packages have been found:
+The following features have been enabled:
+
+ * Unit tests, PDAL unit tests
+
+-- The following OPTIONAL packages have been found:
+
+ * Curl
+ * PythonInterp
+
+-- The following RECOMMENDED packages have been found:
 
  * LASzip (required version >= 3.1)
    Provides LASzip compression
@@ -235,7 +247,6 @@ The following RECOMMENDED packages have been found:
  * MBIO plugin, add features that depend on MBIO
  * FBX plugin, add features that depend on FBX
  * TileDB plugin, read/write data from TileDB
- * Unit tests, PDAL unit tests
 
 -- The following OPTIONAL packages have not been found:
 
@@ -243,7 +254,6 @@ The following RECOMMENDED packages have been found:
  * JSONCPP (required version >= 1.6.2)
  * PkgConfig
  * LibXml2
- * Curl
  * Libexecinfo
  * Libunwind
 
