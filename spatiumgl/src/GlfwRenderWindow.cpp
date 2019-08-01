@@ -10,7 +10,7 @@ namespace spatiumgl
 	// Constructor
 	GlfwRenderWindow::GlfwRenderWindow()
 		: m_window(nullptr)
-		, m_pointCloud(nullptr)
+		, m_renderer(nullptr)
 		, m_camera(nullptr)
 		, prevMouseState(GLFW_RELEASE)
 		, prevMouseX(0)
@@ -94,9 +94,9 @@ namespace spatiumgl
 		m_camera = camera;
 	}
 
-	void GlfwRenderWindow::setPointCloud(PointCloud* pointCloud)
+	void GlfwRenderWindow::setRenderer(Renderer* renderer)
 	{
-		m_pointCloud = pointCloud;
+		m_renderer = renderer;
 	}
 
 	void GlfwRenderWindow::show()
@@ -122,7 +122,7 @@ namespace spatiumgl
 
 		// TODO: Deduce width and height from glViewport
 
-		m_pointCloud->render(m_camera, (float)640 / (float)480);
+		m_renderer->render(m_camera, (float)640 / (float)480);
 
 		// Swap front and back buffer (front = displayed, back = rendered)
 		glfwSwapBuffers(m_window);

@@ -17,7 +17,7 @@
 #include <GLFW/glfw3.h> // GLFWwindow
 
 #include "Camera.hpp"
-#include "PointCloud.hpp"
+#include "Renderer.hpp"
 #include "spatiumglexport.h"
 
 namespace spatiumgl
@@ -38,7 +38,7 @@ public:
 	void terminate() const;
 
 	void setCamera(Camera* camera);
-	void setPointCloud(PointCloud* pointCloud);
+	void setRenderer(Renderer* renderer);
 
 	void show();
 
@@ -50,7 +50,7 @@ protected:
 
 	GLFWwindow* m_window ;
 
-	PointCloud* m_pointCloud;
+	Renderer* m_renderer;
 	Camera* m_camera;
 
 	int prevMouseState = GLFW_RELEASE;
