@@ -150,7 +150,7 @@ namespace spatiumgl {
 			glEnableVertexAttribArray(0);
 		}
 
-		// Unbind
+		// Unbind for now to prevent unintended overwriting
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindVertexArray(0);
 	}
@@ -173,7 +173,7 @@ namespace spatiumgl {
 		// Use shader program
 		glUseProgram(m_shaderProgram);
 
-		// Set shader uniform values 
+		// Set shader uniform values: view and projection matrix
 		glm::mat4 viewMatrix = glm::inverse(camera->transform().matrix());
 		int viewMatrixLoc = glGetUniformLocation(m_shaderProgram, "viewMatrix");
 		glUniformMatrix4fv(viewMatrixLoc, 1, GL_FALSE, glm::value_ptr(viewMatrix));
@@ -186,7 +186,7 @@ namespace spatiumgl {
 		glBindVertexArray(m_vao);
 
 		// Draw
-		glDrawArrays(GL_TRIANGLES, 0, pointCloud()->pointCount() / 3);
+		glDrawArrays(GL_TRIANGLES, 0, pointCloud()->pointCount());
 	}
 
 } // namespace spatiumgl

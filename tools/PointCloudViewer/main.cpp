@@ -6,6 +6,7 @@
 #include <glm/gtx/string_cast.hpp>
 
 #include <spatiumgl/PointCloud.hpp>
+#include <spatiumgl/PointCloudRenderer.hpp>
 #include <spatiumgl/Camera.hpp>
 
 #include <spatiumgl/GlfwRenderWindow.hpp>
@@ -18,16 +19,16 @@ int main(int argc, char *argv[])
 {
 	// Optional: request OpenGL context version with glfwWindowHint()
 
-	spatiumgl::GlfwRenderWindow viewer;
-	viewer.init();
+	spatiumgl::GlfwRenderWindow renderWindow;
+	renderWindow.init();
 
 	// Create window with OpenGL context
-	if (!viewer.createWindow())
+	if (!renderWindow.createWindow(640, 480))
 	{
 		fprintf(stderr, "Failed to create window or OpenGL context.\n");
 
 		// Release resources of GLFW
-		viewer.terminate();
+		renderWindow.terminate();
 		return 1;
 	}
 
@@ -42,7 +43,7 @@ int main(int argc, char *argv[])
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(glewError));
 
 		// Exit
-		viewer.terminate();
+		renderWindow.terminate();
 		return 1;
 	}
 
@@ -59,33 +60,37 @@ int main(int argc, char *argv[])
 	//std::cout << "Camera up: " << camera->transform().up().x << " " << camera->transform().up().y << " " << camera->transform().up().z << std::endl;
 	//std::cout << "Camera right: " << camera->transform().right().x << " " << camera->transform().right().y << " " << camera->transform().right().z << std::endl;
 	//std::cout << "Camera back: " << camera->transform().back().x << " " << camera->transform().back().y << " " << camera->transform().back().z << std::endl;
-	viewer.setCamera(camera);
+	renderWindow.setCamera(camera);
 
-	// Create vertices
-	std::vector<float> positions = {
-		0.0f,  0.0f, 1.0f,
-		1.0f,  0.0f, -1.0f,
-		-1.0f, 0.0f, -1.0f
+	// Create point cloud
+	std::vector<glm::vec3> positions = { {0.0f,  0.0f, 1.0f },
+										{ 1.0f,  0.0f, -1.0f },
+										{ -1.0f, 0.0f, -1.0f } };
+	std::vector<glm::vec3> colors = {
+		{ 1.0f, 0.0f, 0.0f },
+		{ 0.0f, 1.0f, 0.0f },
+		{ 0.0f, 0.0f, 1.0f }
 	};
-
-	std::vector<float> colors = {
-		 1.0f, 0.0f, 0.0f,
-		 0.0f, 1.0f, 0.0f,
-		 0.0f, 0.0f, 1.0f
-	};
-	spatiumgl::PointCloud *pointcloud = new spatiumgl::PointCloud(positions, colors);
-	if (!pointcloud->isValid())
+	spatiumgl::PointCloud* pointcloud = new spatiumgl::PointCloud(positions, colors);
+	
+	// Create point cloud renderer
+	spatiumgl::PointCloudRenderer* renderer = new spatiumgl::PointCloudRenderer(pointcloud);
+	if (!renderer->isValid())
 	{
 		// Exit
-		viewer.terminate();
+		renderWindow.terminate();
 		return 1;
 	}
 
-	viewer.setPointCloud(pointcloud);
-	viewer.show();
-	viewer.destroyWindow();
+	renderWindow.setRenderer(renderer);
+	renderWindow.show();
+
+	renderWindow.destroyWindow();
 	// Release resources
-	viewer.terminate();
+	renderWindow.terminate();
+
+	delete renderer;
+	delete pointcloud;
 
 	return 0;
 }

@@ -1,23 +1,18 @@
 #include "spatiumgl/GlfwRenderWindow.hpp" 
 
-#include <glm/glm.hpp>
-#include <glm/gtx/rotate_vector.hpp>
-
 #include <iostream>
 
 namespace spatiumgl
 {
 	// Constructor
 	GlfwRenderWindow::GlfwRenderWindow()
-		: m_window(nullptr)
-		, m_renderer(nullptr)
-		, m_camera(nullptr)
+		: RenderWindow()
+		, m_window(nullptr)
 		, prevMouseState(GLFW_RELEASE)
 		, prevMouseX(0)
 		, prevMouseY(0)
 	{
 	}
-
 
 	// Destructor
 	GlfwRenderWindow::~GlfwRenderWindow()
@@ -39,10 +34,10 @@ namespace spatiumgl
 		return true;
 	}
 
-	bool GlfwRenderWindow::createWindow()
+	bool GlfwRenderWindow::createWindow(int width, int height)
 	{
 		// Create window with OpenGL context
-		m_window = glfwCreateWindow(640, 480, "TinyGL", NULL, NULL);
+		m_window = glfwCreateWindow(width, height, "SpatiumGL Render Window", NULL, NULL);
 		if (!m_window)
 		{
 			fprintf(stderr, "Failed to create window or OpenGL context.\n");
@@ -51,6 +46,7 @@ namespace spatiumgl
 			glfwTerminate();
 			return false;
 		}
+		glfwSetWindowUserPointer(m_window, this);
 
 		// Make OpenGL context of window current
 		glfwMakeContextCurrent(m_window);
@@ -67,10 +63,14 @@ namespace spatiumgl
 		}
 
 		// Capture frame buffer resize event (is not equal to window size)
-		glfwSetFramebufferSizeCallback(m_window, &GlfwRenderWindow::glfw_framebuffer_size_callback);
+		glfwSetFramebufferSizeCallback(m_window, [](GLFWwindow* win, int w, int h)
+		{
+			static_cast<GlfwRenderWindow*>(glfwGetWindowUserPointer(win))->glfw_framebuffer_size_callback(win, w, h);
+		});
+		//&GlfwRenderWindow::glfw_framebuffer_size_callback);
 
 		// Get current frame buffer size
-		//glfwGetFramebufferSize(m_window, frame_buffer_size, frame_buffer_size + 1);
+		glfwGetFramebufferSize(m_window, m_framebufferSize.data(), m_framebufferSize.data() + 1);
 
 		// Set swap interval of front and back buffer to 1 frame instead of 0 (immediate)
 		glfwSwapInterval(1);
@@ -87,16 +87,6 @@ namespace spatiumgl
 	void GlfwRenderWindow::terminate() const
 	{
 		glfwTerminate();
-	}
-
-	void GlfwRenderWindow::setCamera(Camera* camera)
-	{
-		m_camera = camera;
-	}
-
-	void GlfwRenderWindow::setRenderer(Renderer* renderer)
-	{
-		m_renderer = renderer;
 	}
 
 	void GlfwRenderWindow::show()
@@ -118,11 +108,9 @@ namespace spatiumgl
 	{
 		// Clear color buffer (dark gray)
 		glClearColor(0.227f, 0.227f, 0.227f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT); // Depth (Also glEnable(depth)
 
-		// TODO: Deduce width and height from glViewport
-
-		m_renderer->render(m_camera, (float)640 / (float)480);
+		m_renderer->render(m_camera, (float)m_framebufferSize[0] / (float)m_framebufferSize[1]);
 
 		// Swap front and back buffer (front = displayed, back = rendered)
 		glfwSwapBuffers(m_window);
@@ -136,31 +124,27 @@ namespace spatiumgl
 			glfwSetWindowShouldClose(m_window, true);
 		}
 
-		// Check mouse input
-		int state = glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_LEFT);
+		// Check mouse movement
 		double mousePosX, mousePosY;
 		glfwGetCursorPos(m_window, &mousePosX, &mousePosY);
 
-		if (state == GLFW_PRESS && prevMouseState == GLFW_PRESS)
+		// Emit mouse left button state changed
+		int state = glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_LEFT);
+		if (state == GLFW_PRESS && prevMouseState == GLFW_RELEASE)
 		{
-			// Get mouse movement vector
-			double deltaX = mousePosX - prevMouseX;
-			double deltaY = mousePosY - prevMouseY;
+			m_interactor->OnMousePressed(RenderWindowInteractor::MOUSE_BUTTON_LEFT, mousePosX, mousePosY);
+		}
+		else if (state == GLFW_RELEASE && prevMouseState == GLFW_PRESS)
+		{
+			m_interactor->OnMouseReleased(RenderWindowInteractor::MOUSE_BUTTON_LEFT, mousePosX, mousePosY);
+		}
 
-			// Get viewport size
-			int viewport[4];
-			glGetIntegerv(GL_VIEWPORT, viewport);
-
-			// Get rotation angles
-			float angleX = deltaX * glm::pi<float>() / viewport[2];
-			float angleY = deltaY * glm::pi<float>() / viewport[3];
-
-			// Rotate
-			glm::mat4 rotationX = glm::rotate(angleX, m_camera->transform().up());
-			m_camera->transform().setMatrix(rotationX * m_camera->transform().matrix());
-			glm::mat4 rotationY = glm::rotate(angleY, m_camera->transform().right());
-			m_camera->transform().setMatrix(rotationY * m_camera->transform().matrix());
-			//m_camera->orthogonalizeViewUp();
+		// Emit mouse moved
+		double deltaX = mousePosX - prevMouseX;
+		double deltaY = mousePosY - prevMouseY;
+		if (deltaX > 0.00 || deltaX < -0.00 || deltaY > 0.00 || deltaY < -0.00)
+		{
+			m_interactor->OnMouseMoved(deltaX, deltaY);
 		}
 
 		prevMouseState = state;
@@ -170,9 +154,18 @@ namespace spatiumgl
 
 	void GlfwRenderWindow::glfw_framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	{
+		// Store current viewport size
+		m_framebufferSize[0] = width;
+		m_framebufferSize[1] = height;
+
+		// Set viewport size
 		glViewport(0, 0, width, height);
+
+		// Draw during window resize
+		draw();
 	}
 
+	// Static
 	void GlfwRenderWindow::glfw_error_callback(int error, const char* description)
 	{
 		fprintf(stderr, "Error: %s\n", description);

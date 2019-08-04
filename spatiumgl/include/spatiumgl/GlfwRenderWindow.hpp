@@ -16,14 +16,13 @@
 #include <GL/glew.h> // Include GLEW *always* just before GLFW.
 #include <GLFW/glfw3.h> // GLFWwindow
 
-#include "Camera.hpp"
-#include "Renderer.hpp"
+#include "RenderWindow.hpp"
 #include "spatiumglexport.h"
 
 namespace spatiumgl
 {
 
-class SPATIUMGL_EXPORT GlfwRenderWindow
+class SPATIUMGL_EXPORT GlfwRenderWindow : public RenderWindow
 {
 public:
 	// Constructor
@@ -32,26 +31,20 @@ public:
 	// Destructor
 	virtual ~GlfwRenderWindow();
 
-	bool init();
-	bool createWindow();
-	void destroyWindow();
-	void terminate() const;
+	bool init() override;
+	bool createWindow(int width, int height) override;
+	void destroyWindow() override;
+	void terminate() const override;
 
-	void setCamera(Camera* camera);
-	void setRenderer(Renderer* renderer);
-
-	void show();
+	void show() override;
 
 protected:
 	void draw();
 	void processUserInput();
-	static void glfw_framebuffer_size_callback(GLFWwindow* window, int width, int height);
+	void glfw_framebuffer_size_callback(GLFWwindow* window, int width, int height);
 	static void glfw_error_callback(int error, const char* description);
 
-	GLFWwindow* m_window ;
-
-	Renderer* m_renderer;
-	Camera* m_camera;
+	GLFWwindow* m_window;
 
 	int prevMouseState = GLFW_RELEASE;
 	double prevMouseX, prevMouseY;

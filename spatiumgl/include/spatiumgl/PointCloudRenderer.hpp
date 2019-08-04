@@ -21,7 +21,7 @@
 
 namespace spatiumgl {
 
-class SPATIUMGL_EXPORT PointCloudRenderer : Renderer
+class SPATIUMGL_EXPORT PointCloudRenderer : public Renderer
 {
 public:
 	/// Constructor

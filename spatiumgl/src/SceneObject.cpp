@@ -2,13 +2,13 @@
 
 namespace spatiumgl {
 
-SceneObject::SceneObject()
-: m_transform()
-{}
+	SceneObject::SceneObject()
+		: m_transform()
+	{}
 
-Transform & SceneObject::transform()
-{
-return m_transform;
-}
+	Transform& SceneObject::transform()
+	{
+		return m_transform;
+	}
 
 } // namespace spatium

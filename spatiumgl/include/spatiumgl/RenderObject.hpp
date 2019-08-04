@@ -36,7 +36,7 @@ public:
 	std::array<double, 6> bounds() const;
 
 protected:
-	virtual void updateBounds() = 0;
+	//virtual void updateBounds() = 0;
 
 	std::array<double, 6> m_bounds; ///\TODO: use BoundingBox<double, 3> from namespace idx
 };
