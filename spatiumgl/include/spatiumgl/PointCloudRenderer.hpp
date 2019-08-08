@@ -15,9 +15,9 @@
 
 #include <GL/glew.h>
 
+#include "spatiumglexport.hpp"
 #include "Renderer.hpp"
 #include "PointCloud.hpp"
-#include "spatiumglexport.h"
 
 namespace spatiumgl {
 

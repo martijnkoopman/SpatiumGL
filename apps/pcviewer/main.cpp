@@ -8,6 +8,7 @@
 #include <spatiumgl/PointCloud.hpp>
 #include <spatiumgl/PointCloudRenderer.hpp>
 #include <spatiumgl/Camera.hpp>
+#include <spatiumgl/io/PointCloudReader.hpp>
 
 #include <spatiumgl/GlfwRenderWindow.hpp>
 
@@ -15,8 +16,20 @@
 
 void opengl_error_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam);
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
+	spatiumgl::PointCloudReader reader;
+	reader.setPath("C:\\Users\\Martijn\\Downloads\\autzen.laz");
+	reader.open();
+	auto b = reader.bounds();
+	glm::vec3 min(b[0], b[1], b[2]);
+	std::vector<glm::vec3> positions;
+	while (reader.readPoint())
+	{
+		glm::vec3 pt = reader.point() - min;
+		positions.push_back(pt);
+	}
+
 	// Optional: request OpenGL context version with glfwWindowHint()
 
 	spatiumgl::GlfwRenderWindow renderWindow;
@@ -53,7 +66,7 @@ int main(int argc, char *argv[])
 
 	// BEGIN: OpenGL rendering stuff...
 	
-	spatiumgl::Camera *camera = new spatiumgl::Camera(glm::radians(45.0f), 1.0f, 100.0f);
+	spatiumgl::Camera *camera = new spatiumgl::Camera(glm::radians(45.0f), 1.0f, 10000.0f);
 	camera->lookAt(glm::vec3(0, -10, 0), glm::vec3(0, 0, 0), glm::vec3(0,0,1));
 	//std::cout << glm::to_string(camera->transform().matrix()) << std::endl;
 	//std::cout << "Camera pos: " << camera->transform().position().x << " " << camera->transform().position().y << " " << camera->transform().position().z << std::endl;
@@ -63,15 +76,15 @@ int main(int argc, char *argv[])
 	renderWindow.setCamera(camera);
 
 	// Create point cloud
-	std::vector<glm::vec3> positions = { {0.0f,  0.0f, 1.0f },
-										{ 1.0f,  0.0f, -1.0f },
-										{ -1.0f, 0.0f, -1.0f } };
-	std::vector<glm::vec3> colors = {
-		{ 1.0f, 0.0f, 0.0f },
-		{ 0.0f, 1.0f, 0.0f },
-		{ 0.0f, 0.0f, 1.0f }
-	};
-	spatiumgl::PointCloud* pointcloud = new spatiumgl::PointCloud(positions, colors);
+	//std::vector<glm::vec3> positions = { {0.0f,  0.0f, 1.0f },
+	//									{ 1.0f,  0.0f, -1.0f },
+	//									{ -1.0f, 0.0f, -1.0f } };
+	//std::vector<glm::vec3> colors = {
+	//	{ 1.0f, 0.0f, 0.0f },
+	//	{ 0.0f, 1.0f, 0.0f },
+	//	{ 0.0f, 0.0f, 1.0f }
+	//};
+	spatiumgl::PointCloud* pointcloud = new spatiumgl::PointCloud(positions);// , colors);
 	
 	// Create point cloud renderer
 	spatiumgl::PointCloudRenderer* renderer = new spatiumgl::PointCloudRenderer(pointcloud);

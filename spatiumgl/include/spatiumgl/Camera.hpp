@@ -13,8 +13,8 @@
 #ifndef SPATIUMGL_CAMERA_H
 #define SPATIUMGL_CAMERA_H
 
+#include "spatiumglexport.hpp"
 #include "SceneObject.hpp"
-#include "spatiumglexport.h"
 
 namespace spatiumgl {
 

@@ -13,8 +13,8 @@
 #ifndef SPATIUMGL_PIVOTINTERACTOR_H
 #define SPATIUMGL_PIVOTINTERACTOR_H
 
+#include "spatiumglexport.hpp"
 #include "RenderWindowInteractor.hpp"
-#include "spatiumglexport.h"
 
 namespace spatiumgl {
 	class SPATIUMGL_EXPORT PivotInteractor : public RenderWindowInteractor

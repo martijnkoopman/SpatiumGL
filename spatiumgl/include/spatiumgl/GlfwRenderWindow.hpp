@@ -16,8 +16,8 @@
 #include <GL/glew.h> // Include GLEW *always* just before GLFW.
 #include <GLFW/glfw3.h> // GLFWwindow
 
+#include "spatiumglexport.hpp"
 #include "RenderWindow.hpp"
-#include "spatiumglexport.h"
 
 namespace spatiumgl
 {

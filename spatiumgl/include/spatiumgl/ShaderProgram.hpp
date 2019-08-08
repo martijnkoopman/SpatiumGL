@@ -13,9 +13,11 @@
 #ifndef SPATIUMGL_SHADERPROGRAM_H
 #define SPATIUMGL_SHADERPROGRAM_H
 
+#include "spatiumglexport.hpp"
+
 namespace spatiumgl {
 
-class ShaderProgram
+class SPATIUMGL_EXPORT ShaderProgram
 {
 public:
 	ShaderProgram()

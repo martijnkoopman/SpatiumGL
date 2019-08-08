@@ -10,8 +10,8 @@
  *
  */
 
-#ifndef SPATIUMGL_IDX_BOUNDS_H
-#define SPATIUMGL_IDX_BOUNDS_H
+#ifndef SPATIUMGL_BOUNDS_H
+#define SPATIUMGL_BOUNDS_H
 
 #include <array> // std::array
 #include <vector> // std::vector
@@ -176,4 +176,4 @@ namespace spatiumgl {
 	} // namespace idx
 } // namespace spatium
 
-#endif // SPATIUMGL_IDX_BOUNDS_H
+#endif // SPATIUMGL_BOUNDS_H

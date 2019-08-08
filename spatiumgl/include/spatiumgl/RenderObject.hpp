@@ -13,8 +13,8 @@
 #ifndef SPATIUMGL_RENDEROBJECT_H
 #define SPATIUMGL_RENDEROBJECT_H
 
+#include "spatiumglexport.hpp"
 #include "SceneObject.hpp"
-#include "spatiumglexport.h"
 
 #include <array>
 

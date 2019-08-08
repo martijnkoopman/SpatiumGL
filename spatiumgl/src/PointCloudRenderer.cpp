@@ -186,7 +186,7 @@ namespace spatiumgl {
 		glBindVertexArray(m_vao);
 
 		// Draw
-		glDrawArrays(GL_TRIANGLES, 0, pointCloud()->pointCount());
+		glDrawArrays(GL_POINTS, 0, pointCloud()->pointCount());
 	}
 
 } // namespace spatiumgl

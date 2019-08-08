@@ -13,7 +13,7 @@
 #ifndef SPATIUMGL_SCENEOBJECT_H
 #define SPATIUMGL_SCENEOBJECT_H
 
-#include "spatiumglexport.h"
+#include "spatiumglexport.hpp"
 #include "Transform.hpp"
 
 namespace spatiumgl {

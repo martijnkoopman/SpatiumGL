@@ -13,11 +13,11 @@
 #ifndef SPATIUMGL_RENDERWINDOW_H
 #define SPATIUMGL_RENDERWINDOW_H
 
+#include "spatiumglexport.hpp"
 #include "PivotInteractor.hpp"
 #include "RenderWindowInteractor.hpp"
 #include "Camera.hpp"
 #include "Renderer.hpp"
-#include "spatiumglexport.h"
 
 #include <array> // std::array
 

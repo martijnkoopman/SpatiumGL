@@ -10,8 +10,8 @@
  *
  */
 
-#ifndef SPATIUMGL_IDX_GEOMETRY_H
-#define SPATIUMGL_IDX_GEOMETRY_H
+#ifndef SPATIUMGL_GEOMETRY_H
+#define SPATIUMGL_GEOMETRY_H
 
 #include "Bounds.hpp"
 
@@ -38,4 +38,4 @@ namespace spatiumgl {
 	} // namespace idx
 } // namespace spatiumgl
 
-#endif // SPATIUMGL_IDX_GEOMETRY_H
+#endif // SPATIUMGL_GEOMETRY_H

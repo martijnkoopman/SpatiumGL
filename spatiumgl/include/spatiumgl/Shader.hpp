@@ -10,21 +10,20 @@
  *
  */
 
-#ifndef SPATIUMGLLIB_MATERIAL_H
-#define SPATIUMGLLIB_MATERIAL_H
+#ifndef SPATIUMGLLIB_SHADER_H
+#define SPATIUMGLLIB_SHADER_H
 
-#include <glm/mat4x4.hpp>
-#include <glm/vec3.hpp>
+#include "spatiumglexport.hpp"
 
 namespace spatiumgl {
 
-class Material
+class Shader
 {
 public:
-	Material()
+	Shader()
   {}
 };
 
 } // namespace spatiumgl
 
-#endif // SPATIUMGLLIB_MATERIAL_H
+#endif // SPATIUMGLLIB_SHADER_H

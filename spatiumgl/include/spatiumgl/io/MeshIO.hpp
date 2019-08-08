@@ -10,16 +10,16 @@
  *
  */
 
-#ifndef SPATIUMLIB_GFX3d_MESHIO_H
-#define SPATIUMLIB_GFX3d_MESHIO_H
+#ifndef SPATIUMLIB_MESHIO_H
+#define SPATIUMLIB_MESHIO_H
 
+#include "spatiumgl/spatiumglexport.hpp"
 #include "TriangleMesh.h"
 
 #include <fstream> // std::ofstream, std::ifstream
 #include <sstream> // std::istringstream
 
 namespace spatium {
-namespace gfx3d {
 
 /// \class MeshIO
 /// \brief Read and write meshes
@@ -107,7 +107,6 @@ private:
   MeshIO() = delete;
 };
 
-} // namespace gfx3d
 } // namespace spatium
 
-#endif // SPATIUMLIB_GFX3d_MESHIO_H
+#endif // SPATIUMLIB_MESHIO_H

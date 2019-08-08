@@ -13,8 +13,9 @@
 #ifndef SPATIUMGL_POINTCLOUD_H
 #define SPATIUMGL_POINTCLOUD_H
 
+#include "spatiumglexport.hpp"
 #include "RenderObject.hpp"
-#include "spatiumglexport.h"
+
 #include <glm/vec3.hpp>
 #include <vector>
 

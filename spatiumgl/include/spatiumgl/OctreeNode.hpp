@@ -10,28 +10,28 @@
  *
  */
 
-#ifndef SPATIUMGL_IDX_OCTREENODE_H
-#define SPATIUMGL_IDX_OCTREENODE_H
+#ifndef SPATIUMGL_OCTREENODE_H
+#define SPATIUMGL_OCTREENODE_H
+
+#include "TreeNode.hpp"
 
 namespace spatiumgl {
-	namespace idx {
 
-		/// \class OctreeNode
-		/// \brief Node in an Octree.
-		class OctreeNode : public TreeNode<void,8>
+	/// \class OctreeNode
+	/// \brief Node in an Octree.
+	class OctreeNode : public TreeNode<void, 8>
+	{
+	public:
+
+		/// Constructor
+		///
+		/// \param[in] parent Parent node
+		OctreeNode(OctreeNode* parent = nullptr)
+			: TreeNode<void, 8>(parent)
 		{
-		public:
+		}
+	};
 
-			/// Constructor
-			///
-			/// \param[in] parent Parent node
-			OctreeNode(OctreeNode *parent = nullptr)
-				: TreeNode<void,8>(parent)
-			{
-			}
-		};
-
-	} // namespace idx
 } // namespace spatiumgl
 
-#endif // SPATIUMGL_IDX_OCTREENODE_H
+#endif // SPATIUMGL_OCTREENODE_H

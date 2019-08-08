@@ -10,10 +10,10 @@
  *
  */
 
-#ifndef SPATIUMGL_IDX_TREE_H
-#define SPATIUMGL_IDX_TREE_H
+#ifndef SPATIUMGL_TREE_H
+#define SPATIUMGL_TREE_H
 
-#include "TreeNode.h"
+#include "TreeNode.hpp"
 
 namespace spatiumgl {
 	namespace idx {
@@ -87,4 +87,4 @@ namespace spatiumgl {
 	} // namespace idx
 } // namespace spatiumgl
 
-#endif // SPATIUMGL_IDX_TREE_H
+#endif // SPATIUMGL_TREE_H

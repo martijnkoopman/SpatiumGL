@@ -13,8 +13,8 @@
 #ifndef SPATIUMGL_MESH_H
 #define SPATIUMGL_MESH_H
 
+#include "spatiumglexport.hpp"
 #include "RenderObject.hpp"
-#include "spatiumglexport.h"
 
 #include <glm/vec3.hpp>
 #include <glm/gtx/std_based_type.hpp> // glm::tvec3<T>

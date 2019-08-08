@@ -15,9 +15,9 @@
 
 #include <GL/glew.h> // GLuint
 
+#include "spatiumglexport.hpp"
 #include "RenderObject.hpp"
 #include "Camera.hpp"
-#include "spatiumglexport.h"
 
 namespace spatiumgl {
 

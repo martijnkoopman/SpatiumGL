@@ -13,6 +13,8 @@
 #ifndef SPATIUMGLLIB_MATERIAL_H
 #define SPATIUMGLLIB_MATERIAL_H
 
+#include "spatiumglexport.hpp"
+
 namespace spatiumgl {
 
 class Material

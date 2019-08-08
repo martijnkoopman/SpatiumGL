@@ -13,7 +13,7 @@
 #ifndef SPATIUMGL_RENDERWINDOWINTERACTOR_H
 #define SPATIUMGL_RENDERWINDOWINTERACTOR_H
 
-#include "spatiumglexport.h"
+#include "spatiumglexport.hpp"
 
 namespace spatiumgl {
 
