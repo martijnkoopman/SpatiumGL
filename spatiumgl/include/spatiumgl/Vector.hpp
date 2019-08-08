@@ -32,9 +32,61 @@ namespace spatiumgl {
 	class VectorT
 	{
 	public:
+
+		/// Default constructor
 		VectorT()
 			: m_data()
 		{}
+
+		/// Constructor
+		///
+		/// \param[in] arr Initializer list
+		VectorT(std::initializer_list<T> arr)
+			: m_data()
+		{
+			// Copy values
+			auto rowIt = arr.begin();
+			auto dataIt = m_data.begin();
+			while (rowIt != arr.end() && dataIt != m_data.end())
+			{
+				*dataIt = *rowIt;
+
+				++rowIt;
+				++dataIt;
+			}
+		}
+
+		// Operators
+
+		/// Access element by value.
+		///
+		/// \param[in] row Row of element
+		/// \throw std::out_of_range Matrix element out of range
+		/// \return Element value
+		T operator[] (size_t row) const
+		{
+			if (row >= N)
+			{
+				throw std::out_of_range("Vector element out of range");
+			}
+			return m_data[row];
+		}
+
+		/// Access element by reference.
+		///
+		/// \param[in] row Row of element
+		/// \param[in] col Column of element
+		/// \throw std::out_of_range Matrix element out of range
+		/// \return Element reference
+		T& operator[] (size_t row)
+		{
+			if (row >= N)
+			{
+				throw std::out_of_range("Vector element out of range");
+			}
+			return m_data[row];
+		}
+
 		// Override operators:
 		// +
 		// -

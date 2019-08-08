@@ -23,12 +23,11 @@ namespace spatiumgl {
 			: m_lasreadopener()
 			, m_reader(nullptr)
 		{
-
 		}
 
 		~impl()
 		{
-			if (m_reader)
+			if (m_reader != nullptr)
 			{
 				close();
 			}
@@ -39,20 +38,9 @@ namespace spatiumgl {
 			m_lasreadopener.set_file_name(path.c_str());
 		}
 
-		std::array<double, 6> bounds() const
+		bool isActive() const
 		{
-			if (m_reader == nullptr)
-			{
-				return { 0, 0, 0, 0, 0, 0 };
-			}
-
-			return { m_reader->header.min_x,
-				   m_reader->header.min_y,
-				   m_reader->header.min_z,
-				   m_reader->header.max_x,
-				   m_reader->header.max_y,
-				   m_reader->header.max_z
-			};
+			return m_lasreadopener.active();
 		}
 
 		bool open()
@@ -63,16 +51,14 @@ namespace spatiumgl {
 			return (m_reader != nullptr);
 		}
 
-		//
-		//	bool PointCloudReader::isOpen()
-		//	{
-		//		//
-		//	}
-		//
+		bool isOpen() const
+		{
+			return (m_reader != nullptr);
+		}
 
 		void close()
 		{
-			if (m_reader)
+			if (m_reader != nullptr)
 			{
 				m_reader->close();
 				delete m_reader;
@@ -90,17 +76,50 @@ namespace spatiumgl {
 			return m_reader->read_point();
 		}
 
-		glm::vec3 point()
+		Vector3 point()
 		{
 			if (m_reader == nullptr)
 			{
-				return glm::vec3(0, 0, 0);
+				return Vector3(0,0,0);
 			}
 
 			float x = m_reader->point.get_x();
 			float y = m_reader->point.get_y();
 			float z = m_reader->point.get_z();
-			return glm::vec3(x, y, z);
+			return Vector3(x, y, z);
+		}
+
+		long long int pointCount() const
+		{
+			if (m_reader == nullptr)
+			{
+				return 0;
+			}
+
+			return m_reader->p_count;
+		}
+
+		bool hasColor() const
+		{
+			if (m_reader == nullptr)
+			{
+				return false;
+			}
+
+			int format = m_reader->get_format();
+			return (format == 2 || format == 3 || format == 5 || format == 7 || format == 10);
+		}
+
+		BoundingBox bounds() const
+		{
+			if (m_reader == nullptr)
+			{
+				return BoundingBox();
+			}
+
+			return BoundingBox::fromMinMax(
+				{ m_reader->get_min_x(), m_reader->get_min_y(), m_reader->get_min_z() }, 
+				{ m_reader->get_max_x(), m_reader->get_max_y(), m_reader->get_max_z() });
 		}
 
 	private:
@@ -109,7 +128,7 @@ namespace spatiumgl {
 	};
 
 	PointCloudReader::PointCloudReader(const std::string& path)
-		: pimpl{ std::make_unique<impl>(path) }
+		: m_pimpl{ std::make_unique<impl>(path) }
 	{
 	}
 
@@ -117,38 +136,51 @@ namespace spatiumgl {
 
 	void PointCloudReader::setPath(const std::string& path)
 	{
-		pimpl->setPath(path);
+		m_pimpl->setPath(path);
 	}
 
-	std::array<double, 6> PointCloudReader::bounds() const
+	bool PointCloudReader::isActive() const
 	{
-		return pimpl->bounds();
+		return m_pimpl->isActive();
 	}
 
 	bool PointCloudReader::open()
 	{
-		return pimpl->open();
+		return m_pimpl->open();
 	}
 
-	//
-	//	bool PointCloudReader::isOpen()
-	//	{
-	//		//
-	//	}
-	//
+	bool PointCloudReader::isOpen()
+	{
+		return m_pimpl->isOpen();
+	}
 
 	void PointCloudReader::close()
 	{
-		pimpl->close();
+		m_pimpl->close();
 	}
 
 	bool PointCloudReader::readPoint()
 	{
-		return pimpl->readPoint();
+		return m_pimpl->readPoint();
 	}
 
-	glm::vec3 PointCloudReader::point()
+	Vector3 PointCloudReader::point()
 	{
-		return pimpl->point();
+		return m_pimpl->point();
+	}
+
+	long long int PointCloudReader::pointCount() const
+	{
+		return m_pimpl->pointCount();
+	}
+
+	bool PointCloudReader::hasColor() const
+	{
+		return m_pimpl->hasColor();
+	}
+
+	BoundingBox PointCloudReader::bounds() const
+	{
+		return m_pimpl->bounds();
 	}
 } // namespace spatiumgl

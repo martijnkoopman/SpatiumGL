@@ -16,26 +16,24 @@
 #include "Bounds.hpp"
 
 namespace spatiumgl {
-	namespace idx {
 
-		///\class Geometry
-		///\brief Geometry in D-dimensional space.
-		///
-		/// A geometry always has some kind of bounding volume. A single point is not
-		/// considered geometry.
-		template<typename T, size_t D>
-		class Geometry
+	///\class Geometry
+	///\brief Geometry in D-dimensional space.
+	///
+	/// A geometry always has some kind of bounding volume. A single point is not
+	/// considered geometry.
+	template<typename T, size_t N>
+	class Geometry
+	{
+		BoundsT<T, D> bounds() const
 		{
-			Bounds<T, D> bounds() const
-			{
-				return m_bounds;
-			}
+			return m_bounds;
+		}
 
-		protected:
-			Bounds<T, D> m_bounds;
-		};
+	protected:
+		BoundsT<T, D> m_bounds;
+	};
 
-	} // namespace idx
 } // namespace spatiumgl
 
 #endif // SPATIUMGL_GEOMETRY_H

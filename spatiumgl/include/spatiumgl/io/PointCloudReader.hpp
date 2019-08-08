@@ -15,14 +15,9 @@
 
 #include "spatiumgl/spatiumglexport.hpp"
 #include "spatiumgl/Vector.hpp"
-
-#include <cstring> // strncpy memset
-
-#include <glm/vec3.hpp> 
+#include "spatiumgl/Bounds.hpp"
 
 #include <memory> // std::unique_ptr
-#include <string>
-#include <array>
 
 namespace spatiumgl {
 
@@ -31,7 +26,6 @@ namespace spatiumgl {
 	class SPATIUMGL_EXPORT PointCloudReader
 	{
 	public:
-
 		/// Constructor
 		///
 		/// \param[in] path Path to LAS/LAZ file
@@ -50,7 +44,7 @@ namespace spatiumgl {
 		/// \return Path to LAS/LAZ file
 		std::string path() const;
 
-		std::array<double, 6> bounds() const;
+		bool isActive() const;
 
 		bool open();
 
@@ -59,16 +53,18 @@ namespace spatiumgl {
 		void close();
 
 		bool readPoint();
-		glm::vec3 point();
 
-		Vector3 test() const
-		{
-			return Vector3(1, 2, 3);
-		}
+		Vector3 point();
+
+		long long int pointCount() const;
+
+		bool hasColor() const;
+
+		BoundingBox bounds() const;
 
 	private:
 		class impl;     
-		std::unique_ptr<impl> pimpl;
+		std::unique_ptr<impl> m_pimpl;
 	};
 
 } // namespace spatiumgl

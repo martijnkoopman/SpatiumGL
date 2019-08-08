@@ -30,7 +30,7 @@ namespace spatiumgl {
 	public:
 
 		/// Constructor
-		Octree(const BoundingBox<double, 3> & bounds)
+		Octree(const BoundingBox & bounds)
 			: Tree<void, 8>(new OctreeNode())
 			, m_boundingBox(bounds)
 		{
@@ -45,7 +45,7 @@ namespace spatiumgl {
 		/// \param[in] point Point positon (must be within bounding box)
 		/// \param[out] boundsChild Bounding box of child
 		/// \return Child index (0 = topleft, 1 = topright, 2 = bottom right, 3 = bottom left)
-		static size_t determineChild(const BoundingBox<double, 3> & boundsParent, const std::array<double, 3> & point, BoundingBox<double, 3> & boundsChild)
+		static size_t determineChild(const BoundingBox & boundsParent, const std::array<double, 3> & point, BoundingBoxT<double, 3> & boundsChild)
 		{
 			std::array<double, 3> min = boundsParent.min();
 			std::array<double, 3> max = boundsParent.max();
@@ -56,13 +56,13 @@ namespace spatiumgl {
 				if (point[1] < center[1])
 				{
 					// Bottom
-					boundsChild = BoundingBox<double, 3>::fromMinMax(min, center);
+					boundsChild = BoundingBox::fromMinMax(min, center);
 					return 0;
 				}
 				else
 				{
 					// Top
-					boundsChild = BoundingBox<double, 3>::fromMinMax({ min[0], center[1] }, { center[0], max[1] });
+					boundsChild = BoundingBox::fromMinMax({ min[0], center[1] }, { center[0], max[1] });
 					return 2;
 				}
 			}
@@ -72,20 +72,20 @@ namespace spatiumgl {
 				if (point[1] < center[1])
 				{
 					// Top
-					boundsChild = BoundingBox<double, 3>::fromMinMax({ center[0], min[1] }, { max[0], center[1] });
+					boundsChild = BoundingBox::fromMinMax({ center[0], min[1] }, { max[0], center[1] });
 					return 1;
 				}
 				else
 				{
 					// Bottom
-					boundsChild = BoundingBox<double, 3>::fromMinMax(center, max);
+					boundsChild = BoundingBox::fromMinMax(center, max);
 					return 3;
 				}
 			}
 		}
 
 		/// Get the bounding box 
-		BoundingBox<double, 3> bounds() const
+		BoundingBox bounds() const
 		{
 			return m_boundingBox;
 		}
@@ -99,7 +99,7 @@ namespace spatiumgl {
 		}
 
 	protected:
-		const BoundingBox<double, 3> m_boundingBox;
+		const BoundingBox m_boundingBox;
 		const size_t m_division;
 	};
 

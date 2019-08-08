@@ -13,167 +13,173 @@
 #ifndef SPATIUMGL_BOUNDS_H
 #define SPATIUMGL_BOUNDS_H
 
-#include <array> // std::array
-#include <vector> // std::vector
+#include "Vector.hpp"
+
+//#include <array> // std::array
+//#include <vector> // std::vector
 
 namespace spatiumgl {
-	namespace idx {
 
-		/// \class Bounds
-		/// \brief Boundaries in D-dimensional space.
-		template<typename T, size_t D>
-		class Bounds
+	/// \class Bounds
+	/// \brief Boundaries in N-dimensional space.
+	template<typename T, size_t N>
+	class BoundsT
+	{
+	public:
+		/// Default constructor
+		BoundsT()
+			: m_center()
 		{
-		public:
-			/// Default constructor
-			Bounds()
-				: m_center()
-			{
-			}
+		}
 
-			/// Constructor
-			Bounds(const std::array<T, D>& center)
-				: m_center(center)
-			{
-			}
-
-			std::array<T, D> center() const
-			{
-				return m_center;
-			}
-
-		protected:
-			std::array<T, D> m_center;
-		};
-
-		/// \class BoundingBox
-		/// \brief Axis-aligned bounding box (AABB) in D-dimensional space.
-		template<typename T, size_t D>
-		class BoundingBox : public Bounds<T, D>
+		/// Constructor
+		BoundsT(const VectorT<T, N> &center)
+			: m_center(center)
 		{
-		public:
-			/// Default onstructor
-			BoundingBox()
-				: Bounds<T, D>()
-				, m_radii()
+		}
+
+		VectorT<T, N> center() const
+		{
+			return m_center;
+		}
+
+	protected:
+		VectorT<T, N> m_center;
+	};
+
+	/// \class BoundingBox
+	/// \brief Axis-aligned bounding box (AABB) in N-dimensional space.
+	template<typename T, size_t N>
+	class BoundingBoxT : public BoundsT<T, N>
+	{
+	public:
+		/// Default onstructor
+		BoundingBoxT()
+			: BoundsT<T, N>()
+			, m_radii()
+		{
+		}
+
+		/// Constructor
+		BoundingBoxT(const VectorT<T, N>& center, const VectorT<T, N>& radii)
+			: BoundsT<T, N>(center)
+			, m_radii(radii)
+		{
+		}
+
+		/// Build from points
+		///
+		/// \param[in] points Points in N-dimensional space.
+		static BoundingBoxT<T, N> fromPoints(const std::vector<VectorT<T, N>>& points)
+		{
+			if (points.size() == 0)
 			{
+				return BoundingBoxT();
 			}
 
-			/// Constructor
-			BoundingBox(const std::array<T, D>& center, const std::array<T, D>& radii)
-				: Bounds<T, D>(center)
-				, m_radii(radii)
+			// Set initial bounds
+			VectorT<T, N> minVal, maxVal;
+			for (size_t i = 0; i < N; i++)
 			{
+				minVal[i] = maxVal[i] = points[0][i];
 			}
 
-			/// Build from points
-			///
-			/// \param[in] points Points in D-dimensional space.
-			static BoundingBox<T, D> fromPoints(const std::vector<std::array<T, D>>& points)
+			// Iterate points and update bounds
+			for (size_t i = 1; i < points.size(); i++)
 			{
-				if (points.size() == 0)
-				{
-					return BoundingBox();
-				}
+				VectorT<T, N> point = points[i];
 
-				// Set initial bounds
-				std::array<T, D> minVal, maxVal;
-				for (size_t i = 0; i < D; i++)
+				// Iterate dimensions
+				for (size_t i = 0; i < N; i++)
 				{
-					minVal[i] = maxVal[i] = points[0][i];
-				}
-
-				// Iterate points and update bounds
-				for (size_t i = 1; i < points.size(); i++)
-				{
-					std::array<T, D> point = points[i];
-
-					// Iterate dimensions
-					for (size_t i = 0; i < D; i++)
-					{
-						if (point[i] < minVal[i]) {
-							minVal[i] = point[i];
-						}
-						else if (point[i] > maxVal[i]) {
-							maxVal[i] = point[i];
-						}
+					if (point[i] < minVal[i]) {
+						minVal[i] = point[i];
+					}
+					else if (point[i] > maxVal[i]) {
+						maxVal[i] = point[i];
 					}
 				}
-
-				return BoundingBox<T, D>::fromMinMax(minVal, maxVal);
 			}
 
-			static BoundingBox<T, D> fromMinMax(const std::array<T, D>& min, const std::array<T, D>& max)
-			{
-				// Compute center and radii
-				std::array<T, D> centerVal, radiiVal;
-				for (size_t i = 0; i < D; i++)
-				{
-					centerVal[i] = max[i] * 0.5 + min[i] * 0.5;
-					radiiVal[i] = max[i] * 0.5 - min[i] * 0.5;
-				}
+			return BoundingBoxT<T, N>::fromMinMax(minVal, maxVal);
+		}
 
-				return BoundingBox(centerVal, radiiVal);
-			}
-
-			bool isInside(const std::array<T, D>& point) const
-			{
-				for (size_t i = 0; i < D; i++)
-				{
-					if (point[i] < this->m_center[i] - m_radii[i])
-					{
-						return false;
-					}
-					else if (point[i] > this->m_center[i] + m_radii[i])
-					{
-						return false;
-					}
-				}
-
-				return true;
-			}
-
-			std::array<T, D> min() const
-			{
-				std::array<T, D> res;
-				for (size_t i = 0; i < D; i++)
-				{
-					res[i] = this->m_center[i] - m_radii[i];
-				}
-				return res;
-			}
-
-			std::array<T, D> max() const
-			{
-				std::array<T, D> res;
-				for (size_t i = 0; i < D; i++)
-				{
-					res[i] = this->m_center[i] + m_radii[i];
-				}
-				return res;
-			}
-
-			T diameter(size_t dimension) const
-			{
-				return m_radii[dimension] * 2;
-			}
-
-		protected:
-			std::array<T, D> m_radii;
-		};
-
-		/// \class OrientedBoundingBox
-		/// \brief Oriented bounding box in D-dimensional space.
-		template<typename T, size_t D>
-		class OrientedBoundingBox : BoundingBox<T, D>
+		static BoundingBoxT<T, N> fromMinMax(const VectorT<T, N>& min, const VectorT<T, N>& max)
 		{
-		public:
+			// Compute center and radii
+			VectorT<T, N> centerVal, radiiVal;
+			for (size_t i = 0; i < N; i++)
+			{
+				centerVal[i] = max[i] * 0.5 + min[i] * 0.5;
+				radiiVal[i] = max[i] * 0.5 - min[i] * 0.5;
+			}
 
-		protected:
-			std::array<T, D> m_orientation;
-		};
+			return BoundingBoxT(centerVal, radiiVal);
+		}
 
-	} // namespace idx
+		bool isInside(const VectorT<T, N>& point) const
+		{
+			for (size_t i = 0; i < N; i++)
+			{
+				if (point[i] < this->m_center[i] - m_radii[i])
+				{
+					return false;
+				}
+				else if (point[i] > this->m_center[i] + m_radii[i])
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		VectorT<T, N> min() const
+		{
+			VectorT<T, N> res;
+			for (size_t i = 0; i < N; i++)
+			{
+				res[i] = this->m_center[i] - m_radii[i];
+			}
+			return res;
+		}
+
+		VectorT<T, N> max() const
+		{
+			VectorT<T, N> res;
+			for (size_t i = 0; i < N; i++)
+			{
+				res[i] = this->m_center[i] + m_radii[i];
+			}
+			return res;
+		}
+
+		T diameter(size_t dimension) const
+		{
+			return m_radii[dimension] * 2;
+		}
+
+	protected:
+		VectorT<T, N> m_radii;
+	};
+
+	using BoundingBox = BoundingBoxT<SPATIUMGL_PRECISION, 3>;
+	using BoundingRectangle = BoundingBoxT<SPATIUMGL_PRECISION, 2>;
+
+	/// \class OrientedBoundingBox
+	/// \brief Oriented bounding box in N-dimensional space.
+	template<typename T, size_t N>
+	class OrientedBoundingBoxT : BoundingBoxT<T, N>
+	{
+	public:
+
+	protected:
+		VectorT<T, N> m_orientation;
+	};
+
+	using OrientedBoundingBox = OrientedBoundingBoxT<SPATIUMGL_PRECISION, 3>;
+	using OrientedBoundingRectangle = OrientedBoundingBoxT<SPATIUMGL_PRECISION, 2>;
+
 } // namespace spatium
 
 #endif // SPATIUMGL_BOUNDS_H
