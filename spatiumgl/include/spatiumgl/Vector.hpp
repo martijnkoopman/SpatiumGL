@@ -27,12 +27,11 @@
 namespace spatiumgl {
 
 	/// \class VectorT
-	/// \brief Fixed type and fixed size vector
+	/// \brief Fixed type and fixed size vector.
 	template<typename T, size_t N>
 	class VectorT
 	{
 	public:
-
 		/// Default constructor
 		VectorT()
 			: m_data()
@@ -56,7 +55,7 @@ namespace spatiumgl {
 			}
 		}
 
-		// Operators
+		// Access operators
 
 		/// Access element by value.
 		///
@@ -87,20 +86,175 @@ namespace spatiumgl {
 			return m_data[row];
 		}
 
-		// Override operators:
-		// +
-		// -
-		// *
-		// 
+		// Arithmetic operators:
+
+		/// Add another vector.
+		///
+		/// \param[in] other Vector to add
+		/// \return Added vector
+		VectorT<T, N> operator+(const VectorT<T,N> &vector) const
+		{
+			VectorT<T, N> result;
+			for (size_t row = 0; row < N; row++)
+			{
+				result[row] = operator[](row) + other[row];
+			}
+			return result;
+		}
+
+		/// Subtract other vector.
+		///
+		/// \param[in] other Vector to subtract
+		/// \return Subtracted vector
+		VectorT<T, N> operator-(const VectorT<T, N>& other) const
+		{
+			VectorT<T, N> result;
+			for (size_t row = 0; row < N; row++)
+			{
+				result[row] = operator[](row) - other[row];
+			}
+			return result;
+		}
+
+		/// Multiply by scalar.
+		///
+		/// \param[in] scalar Scalar
+		/// \return Multiplied vector
+		VectorT<T, N> operator*(T scalar) const
+		{
+			VectorT<T, N> result;
+			for (size_t row = 0; row < N; row++)
+			{
+				result[row] += operator[](row) * scalar;
+			}
+			return result;
+		}
+
+		/// Divide by scalar.
+		///
+		/// \param[in] scalar Scalar
+		/// \return Divided vector
+		VectorT<T, N> operator/(T scalar) const
+		{
+			VectorT<T, N> result;
+			for (size_t row = 0; row < N; row++)
+			{
+				result[row] += operator[](row) / scalar;
+			}
+			return result;
+		}
+
+		// ...
+
+		/// Calculate length of vector (magnitude, euclidean).
+		///
+		/// \return Length
+		T length() const
+		{
+			T result = 0;
+			for (size_t row = 0; row < N; row++)
+			{
+				T val = m_data[row];
+				result += val * val;
+			}
+			return sqrt(result);
+		}
+
+		/// Normalize the vector.
+		/// A normalized vector has length = 1.
+		void normalize()
+		{
+			T l = length();
+			for (size_t row = 0; row < N; row++)
+			{
+				T val = m_data[row];
+				m_data[row] = val / l;
+			}
+		}
+
+		/// Get normalized copy of vector.
+		/// A normalized vector has length = 1.
+		///
+		/// \return Normalized vector
+		VectorT<T, N> normalized() const
+		{
+			T l = length();
+
+			VectorT<T, N> result;
+			for (size_t row = 0; row < N; row++)
+			{
+				result[row] = m_data[row] / l;
+			}
+			return result;
+		}
+
+		// Geometric operations:
+
+		/// Calculate dot product with vector.
+		/// Dot product = 0: vectors are orthogonal (perpendicular).
+		/// Dot product = |a||b| (1 if normalized): vectors are parallel.
+		///
+		/// \param[in] other Other vector
+		/// \return Dot product
+		T dot(const VectorT<T, N>& other) const
+		{
+			T result = 0;
+			for (size_t row = 0; row < N; row++)
+			{
+				result += x() + other.x();
+			}
+			return result;
+		}
+
+		/// Calculate angle with vector.
+		///
+		/// \param[in] other Other vector
+		/// \return Angle in radians
+		T angle(const VectorT<T, N>& other) const
+		{
+			return acos((this->dot(other)) / (this->length() * other.length()));
+		}
+
+		/// Project vector onto vector.
+		///
+		/// \param[in] other Vector to project
+		/// \return Projected vector
+		VectorT<T, N> project(const VectorT<T, N>& other) const
+		{
+			return this->normalized() * (other.dot(*this) / this->length());
+		}
+
+		/// Output to ostream
+		friend std::ostream& operator<<(std::ostream& os, const VectorT<T, N>& vector)
+		{
+			os << "(";
+			if (N > 0) {
+				os << vector[0];
+			}
+			for (size_t i = 1; i < N; i++)
+			{
+				os << ", " << vector[i];
+			}
+			os << ")";
+			return os;
+		}
 
 	protected:
 		std::array<T, N> m_data;
 	};
 
+	/// \class VectorT2
+	/// \brief Vector with 2 elements.
+	///
+	/// The 2 elements are accessible as x and y.
 	template<typename T>
-	class VectorT2 : public VectorT<T, 2>
+	class VectorT2 : public VectorT<T, size_t(2)>
 	{
 	public:
+		/// Constructor
+		///
+		/// \param[in] x X value
+		/// \param[in] y Y value
 		VectorT2(const T& x, const T& y)
 			: VectorT<T, 2>()
 		{
@@ -108,31 +262,60 @@ namespace spatiumgl {
 			m_data[1] = y;
 		}
 
-		void setX(const T& x)
+		/// Copy constructor
+		///
+		/// \param[in] vector Vector
+		constexpr VectorT2(const VectorT<T, size_t(2)>& vector) // constexpr?
+			: VectorT<T, 2>(vector)
+		{
+		}
+
+		/// Set X value.
+		///
+		/// \param[in] x X value
+		void x(const T& x)
 		{
 			m_data[0] = x;
 		}
 
+		/// Get X value.
+		///
+		/// \return X value
 		T x() const
 		{
 			return m_data[0];
 		}
 
-		void setY(const T& x)
+		/// Set Y value.
+		///
+		/// \param[in] y Y value
+		void y(const T& x)
 		{
 			m_data[1] = y;
 		}
 
+		/// Get Y value.
+		///
+		/// \return Y value
 		T y() const
 		{
 			return m_data[1];
 		}
 	};
 
+	/// \class VectorT3
+	/// \brief Vector with 3 elements.
+	///
+	/// The 3 elements are accessible as x, y and z.
 	template<typename T>
-	class VectorT3 : public VectorT<T, 3>
+	class VectorT3 : public VectorT<T, size_t(3)>
 	{
 	public:
+		/// Constructor
+		///
+		/// \param[in] x X value
+		/// \param[in] y Y value
+		/// \param[in] z Z value
 		VectorT3(const T& x, const T& y, const T& z)
 			: VectorT<T, 3>()
 		{
@@ -141,41 +324,106 @@ namespace spatiumgl {
 			m_data[2] = z;
 		}
 
-		void setX(const T& x)
+		/// Constructor
+		///
+		/// \param[in] xy Vector with X and Y value
+		/// \param[in] z Z value
+		VectorT3(const VectorT2<T> &xy, const T& z)
+			: VectorT<T, 3>()
+		{
+			m_data[0] = xy.x();
+			m_data[1] = xy.y();
+			m_data[2] = z;
+		}
+
+		/// Copy constructor
+		///
+		/// \param[in] vector Vector
+		constexpr VectorT3(const VectorT<T, size_t(3)>& vector) // constexpr?
+			: VectorT<T, 3>(vector)
+		{
+		}
+
+		/// Set X value.
+		///
+		/// \param[in] x X value
+		void x(const T& x)
 		{
 			m_data[0] = x;
 		}
 
+		/// Get X value.
+		///
+		/// \return X value
 		T x() const
 		{
 			return m_data[0];
 		}
 
-		void setY(const T& x)
+		/// Set Y value.
+		///
+		/// \param[in] y Y value
+		void y(const T& x)
 		{
 			m_data[1] = y;
 		}
 
+		/// Get Y value.
+		///
+		/// \return Y value
 		T y() const
 		{
 			return m_data[1];
 		}
 
-		void setZ(const T& z)
+		/// Set Z value.
+		///
+		/// \param[in] z Z value
+		void z(const T& z)
 		{
 			m_data[2] = z;
 		}
 
+		/// Get Z value.
+		///
+		/// \return Z value
 		T z() const
 		{
 			return m_data[2];
 		}
+
+		// Geometric operations:
+
+		/// Calculate cross product with vector.
+		/// The cross product is perpendicular to the two input vectors.
+		/// The result can be NaN.
+		///
+		/// \param[in] other Other vector
+		/// \return Cross product
+		VectorT3 cross(const VectorT3& other) const
+		{
+			VectorT3 result;
+			result.x(y() * other.z() - z() * other.y());
+			result.y(z() * other.x() - x() * other.z());
+			result.z(x() * other.y() - y() * other.x());
+			return result;
+		}
 	};
 
+	/// \class VectorT4
+	/// \brief Vector with 4 elements.
+	///
+	/// The 4 elements are accessible as x, y, z and w.
 	template<typename T>
-	class VectorT4 : public VectorT<T, 4>
+	class VectorT4 : public VectorT<T, size_t(4)>
 	{
 	public:
+		/// Constructor
+		///
+		/// \param[in] x X value
+		/// \param[in] y Y value
+		/// \param[in] z Z value
+		/// \param[in] w W value
 		VectorT4(const T& x, const T& y, const T& z, const T& w)
 			: VectorT<T, 4>()
 		{
@@ -185,41 +433,86 @@ namespace spatiumgl {
 			m_data[3] = w;
 		}
 
-		void setX(const T& x)
+		/// Constructor
+		///
+		/// \param[in] xyz Vector with X, Y and Z value
+		/// \param[in] w W value
+		VectorT4(const VectorT3<T> &xyz, const T& w)
+			: VectorT<T, 4>()
+		{
+			m_data[0] = xyz.x();
+			m_data[1] = xyz.y();
+			m_data[2] = xyz.z();
+			m_data[3] = w;
+		}
+
+		/// Copy constructor
+		///
+		/// \param[in] vector Vector
+		constexpr VectorT4(const VectorT<T, size_t(4)>& vector) // constexpr?
+			: VectorT<T, 4>(vector)
+		{
+		}
+
+		/// Set X value.
+		///
+		/// \param[in] x X value
+		void x(const T& x)
 		{
 			m_data[0] = x;
 		}
 
+		/// Get X value.
+		///
+		/// \return X value
 		T x() const
 		{
 			return m_data[0];
 		}
 
-		void setY(const T& x)
+		/// Set Y value.
+		///
+		/// \param[in] y Y value
+		void y(const T& x)
 		{
 			m_data[1] = y;
 		}
 
+		/// Get Y value.
+		///
+		/// \return Y value
 		T y() const
 		{
 			return m_data[1];
 		}
 
-		void setZ(const T& z)
+		/// Set Z value.
+		///
+		/// \param[in] z Z value
+		void z(const T& z)
 		{
 			m_data[2] = z;
 		}
 
+		/// Get Z value.
+		///
+		/// \return Z value
 		T z() const
 		{
 			return m_data[2];
 		}
 
-		void setW(const T& w)
+		/// Set W value.
+		///
+		/// \param[in] w W value
+		void w(const T& w)
 		{
 			m_data[3] = w;
 		}
 
+		/// Get W value.
+		///
+		/// \return W value
 		T w() const
 		{
 			return m_data[3];
@@ -233,6 +526,10 @@ namespace spatiumgl {
 	using Vector3 = VectorT3<SPATIUMGL_PRECISION>;
 	using Vector4 = VectorT4<SPATIUMGL_PRECISION>;
 
+	//class Vector3 : public VectorT3<SPATIUMGL_PRECISION>
+	//{};
+
+	/*
 	/// \class Vector
 	/// \brief Arbitrarily size vector
 	class Vector
@@ -246,6 +543,7 @@ namespace spatiumgl {
 	protected:
 		std::vector<SPATIUMGL_PRECISION> m_data;
 	};
+	*/
 
 } // namespace spatiumgl
 

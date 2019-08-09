@@ -1,12 +1,15 @@
-cmake_minimum_required(VERSION 3.6)
-project(downsampler CXX)
+cmake_minimum_required(VERSION 3.14)
 
-#find_package(SpatiumGL REQUIRED)
-find_package(LASlib REQUIRED)
+PROJECT(pcgridsampler LANGUAGES CXX)
 
-include_directories(${PROJECT_SOURCE_DIR}/include/)
-add_executable(downsampler downsampler.cpp)
+SET(CMAKE_INCLUDE_CURRENT_DIR ON)
+SET(CMAKE_CXX_STANDARD 11)
+SET(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-target_link_libraries(downsampler PRIVATE SpatiumGL LASlib)
-target_include_directories(downsampler PRIVATE
-    ${LASlib_INCLUDE_DIRS})
+# Create executable
+add_executable(${PROJECT_NAME} pcgridsampler.cpp)
+
+# Link dependencies
+target_link_libraries(${PROJECT_NAME} PRIVATE spatiumgl)
+
+install(TARGETS ${PROJECT_NAME})

@@ -13,42 +13,35 @@
 #ifndef SPATIUMGL_GLFWRENDERWINDOW_H
 #define SPATIUMGL_GLFWRENDERWINDOW_H
 
-#include <GL/glew.h> // Include GLEW *always* just before GLFW.
-#include <GLFW/glfw3.h> // GLFWwindow
-
 #include "spatiumglexport.hpp"
 #include "RenderWindow.hpp"
 
+#include <memory> // std::unique_ptr
+
 namespace spatiumgl
 {
+	/// \class GlfwRenderWindow
+	/// \brief GLFW implementation of RenderWindow
+	class SPATIUMGL_EXPORT GlfwRenderWindow : public RenderWindow
+	{
+	public:
+		// Constructor
+		GlfwRenderWindow(bool debug = false);
 
-class SPATIUMGL_EXPORT GlfwRenderWindow : public RenderWindow
-{
-public:
-	// Constructor
-	GlfwRenderWindow();
+		// Destructor
+		virtual ~GlfwRenderWindow();
 
-	// Destructor
-	virtual ~GlfwRenderWindow();
+		bool init() override;
+		bool createWindow(int width, int height) override;
+		void destroyWindow() override;
+		void terminate() const override;
 
-	bool init() override;
-	bool createWindow(int width, int height) override;
-	void destroyWindow() override;
-	void terminate() const override;
+		void show() override;
 
-	void show() override;
-
-protected:
-	void draw();
-	void processUserInput();
-	void glfw_framebuffer_size_callback(GLFWwindow* window, int width, int height);
-	static void glfw_error_callback(int error, const char* description);
-
-	GLFWwindow* m_window;
-
-	int prevMouseState = GLFW_RELEASE;
-	double prevMouseX, prevMouseY;
-};
+	private:
+		class impl;
+		std::unique_ptr<impl> m_pimpl;
+	};
 
 } // namespace spatiumgl
 

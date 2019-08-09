@@ -1,10 +1,12 @@
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp> // glm::lookat
+//#include <glm/gtc/matrix_transform.hpp> // glm::lookat
 #include <glm/gtx/string_cast.hpp>
 
+#include <spatiumgl/Vector.hpp>
 #include <spatiumgl/PointCloud.hpp>
 #include <spatiumgl/PointCloudRenderer.hpp>
 #include <spatiumgl/Camera.hpp>
@@ -12,21 +14,46 @@
 
 #include <spatiumgl/GlfwRenderWindow.hpp>
 
-#include <stdio.h> // fprintf
+//#include <stdio.h> // fprintf
 
 void opengl_error_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam);
 
+#include <iostream>
+
 int main(int argc, char* argv[])
 {
+	std::string path;
+	// Get path from command line arguments
+	if (argc != 2)
+	{
+		std::cerr << "usage:" << std::endl;
+		std::cerr << "pcinfo file.las" << std::endl;
+		//return 1;
+		path = "C:\\Users\\Martijn\\Downloads\\autzen.laz";
+	}
+	else {
+		path = argv[1];
+	}
+
 	spatiumgl::PointCloudReader reader;
-	reader.setPath("C:\\Users\\Martijn\\Downloads\\autzen.laz");
-	reader.open();
-	auto b = reader.bounds();
-	glm::vec3 min(b[0], b[1], b[2]);
-	std::vector<glm::vec3> positions;
+	reader.setPath(path);
+	if (!reader.isActive())
+	{
+		std::cerr << "Invalid input file: " << path << std::endl;
+		return 1;
+	}
+
+	if (!reader.open())
+	{
+		std::cerr << "Unable to open file: " << path << std::endl;
+		return 1;
+	}
+
+	spatiumgl::Vector3 min = reader.bounds().min();
+	std::vector<spatiumgl::Vector3> positions;
 	while (reader.readPoint())
 	{
-		glm::vec3 pt = reader.point() - min;
+		spatiumgl::Vector3 pt = reader.point() - min;
 		positions.push_back(pt);
 	}
 

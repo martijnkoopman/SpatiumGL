@@ -15,8 +15,8 @@
 
 #include "spatiumglexport.hpp"
 #include "RenderObject.hpp"
+#include "Vector.hpp"
 
-#include <glm/vec3.hpp>
 #include <vector>
 
 namespace spatiumgl {
@@ -31,7 +31,7 @@ public:
 	///
 	/// \param[in] positions Point positions
 	/// \param[in] colors Point colors (r,g,b)
-	PointCloud(const std::vector<glm::vec3>& positions, const std::vector<glm::vec3>& colors = std::vector<glm::vec3>());
+	PointCloud(const std::vector<Vector3>& positions, const std::vector<Vector3>& colors = std::vector<Vector3>());
 
 	/// Destructor
 	virtual ~PointCloud() = default;
@@ -45,12 +45,12 @@ public:
 	///
 	/// \param[in] index Point index
 	/// \return Point position (x,y,z)
-	glm::vec3 position(size_t index) const;
+	Vector3 position(size_t index) const;
 
 	/// Get all point positions (by reference)
 	///
 	/// \return All point positions
-	const std::vector<glm::vec3>& positions() const;
+	const std::vector<Vector3>& positions() const;
 
 	/// Has color?
 	///
@@ -61,16 +61,16 @@ public:
 	///
 	/// \param[in] index Point index
 	/// \return Point color (r,g,b)
-	glm::vec3 color(size_t index) const;
+	Vector3 color(size_t index) const;
 
 	/// Get all point colors (by reference)
 	///
 	/// \return All point positions
-	const std::vector<glm::vec3>& colors() const;
+	const std::vector<Vector3>& colors() const;
 
 protected:
-	std::vector<glm::vec3> m_positions;
-	std::vector<glm::vec3> m_colors;
+	std::vector<Vector3> m_positions;
+	std::vector<Vector3> m_colors;
 
 	// TODO: Create class Scalars
 };

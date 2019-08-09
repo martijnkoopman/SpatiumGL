@@ -13,10 +13,14 @@
 #ifndef SPATIUMGL_BOUNDS_H
 #define SPATIUMGL_BOUNDS_H
 
-#include "Vector.hpp"
+ // Precision
+#ifndef SPATIUMGL_SINGLE_PRECISION
+#define SPATIUMGL_PRECISION double
+#else
+#define SPATIUMGL_PRECISION float
+#endif
 
-//#include <array> // std::array
-//#include <vector> // std::vector
+#include "Vector.hpp"
 
 namespace spatiumgl {
 
@@ -33,7 +37,7 @@ namespace spatiumgl {
 		}
 
 		/// Constructor
-		BoundsT(const VectorT<T, N> &center)
+		BoundsT(const VectorT<T, N>& center)
 			: m_center(center)
 		{
 		}
@@ -159,12 +163,19 @@ namespace spatiumgl {
 			return m_radii[dimension] * 2;
 		}
 
+		/// Output to ostream
+		friend std::ostream& operator<<(std::ostream& os, const BoundingBoxT<T, N>& bounds)
+		{
+			os << "(" << bounds.min() << ", " << bounds.max() << ")";
+			return os;
+		}
+
 	protected:
 		VectorT<T, N> m_radii;
 	};
 
-	using BoundingBox = BoundingBoxT<SPATIUMGL_PRECISION, 3>;
-	using BoundingRectangle = BoundingBoxT<SPATIUMGL_PRECISION, 2>;
+	using BoundingBox = BoundingBoxT<SPATIUMGL_PRECISION, size_t(3)>;
+	using BoundingRectangle = BoundingBoxT<SPATIUMGL_PRECISION, size_t(2)>;
 
 	/// \class OrientedBoundingBox
 	/// \brief Oriented bounding box in N-dimensional space.
@@ -177,8 +188,8 @@ namespace spatiumgl {
 		VectorT<T, N> m_orientation;
 	};
 
-	using OrientedBoundingBox = OrientedBoundingBoxT<SPATIUMGL_PRECISION, 3>;
-	using OrientedBoundingRectangle = OrientedBoundingBoxT<SPATIUMGL_PRECISION, 2>;
+	using OrientedBoundingBox = OrientedBoundingBoxT<SPATIUMGL_PRECISION, size_t(3)>;
+	using OrientedBoundingRectangle = OrientedBoundingBoxT<SPATIUMGL_PRECISION, size_t(2)>;
 
 } // namespace spatium
 

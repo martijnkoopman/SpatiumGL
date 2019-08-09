@@ -7,7 +7,7 @@ SET(CMAKE_CXX_STANDARD 11)
 SET(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Create executable
-add_executable(${PROJECT_NAME} main.cpp)
+add_executable(${PROJECT_NAME} pcinfo.cpp)
 
 # Link dependencies
 target_link_libraries(${PROJECT_NAME} PRIVATE spatiumgl)

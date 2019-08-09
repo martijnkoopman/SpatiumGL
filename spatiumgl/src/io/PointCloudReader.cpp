@@ -96,7 +96,7 @@ namespace spatiumgl {
 				return 0;
 			}
 
-			return m_reader->p_count;
+			return m_reader->npoints;
 		}
 
 		bool hasColor() const

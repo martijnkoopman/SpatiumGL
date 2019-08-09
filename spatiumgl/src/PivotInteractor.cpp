@@ -49,7 +49,7 @@ namespace spatiumgl {
 			//int viewport[4];
 			//glGetIntegerv(GL_VIEWPORT, viewport);
 
-			std::array<int, 2> framebufferSize = m_window->framebufferSize();
+			Vector2i framebufferSize = m_window->framebufferSize();
 			Camera* camera = m_window->camera();
 			if (framebufferSize[0] > 0 && framebufferSize[1] > 0 && camera != nullptr)
 			{

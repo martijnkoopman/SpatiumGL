@@ -14,12 +14,11 @@
 #define SPATIUMGL_RENDERWINDOW_H
 
 #include "spatiumglexport.hpp"
+#include "Vector.hpp"
 #include "PivotInteractor.hpp"
 #include "RenderWindowInteractor.hpp"
 #include "Camera.hpp"
 #include "Renderer.hpp"
-
-#include <array> // std::array
 
 namespace spatiumgl
 {
@@ -28,11 +27,12 @@ class SPATIUMGL_EXPORT RenderWindow
 {
 public:
 	// Constructor
-	RenderWindow()
+	RenderWindow(bool debug=false)
 		: m_interactor(new PivotInteractor(this))
 		, m_camera(nullptr)
 		, m_renderer(nullptr)
 		, m_framebufferSize{ 0, 0 }
+		, m_debug(debug)
 	{}
 
 	// Destructor
@@ -72,7 +72,7 @@ public:
 		m_renderer = renderer;
 	}
 
-	std::array<int, 2> framebufferSize() const
+	Vector2i framebufferSize() const
 	{
 		return m_framebufferSize;
 	}
@@ -81,7 +81,8 @@ protected:
 	RenderWindowInteractor* m_interactor;
 	Renderer* m_renderer;
 	Camera* m_camera;
-	std::array<int, 2> m_framebufferSize;
+	Vector2i m_framebufferSize;
+	bool m_debug;
 };
 
 } // namespace spatiumgl
