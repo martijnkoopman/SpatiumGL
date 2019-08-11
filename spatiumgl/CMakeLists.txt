@@ -7,8 +7,10 @@ option(BUILD_SHARED_LIBS "Build ${PROJECT_NAME} as shared library." ON)
 find_package(LASlib REQUIRED)
 
 # Create library target
-file(GLOB_RECURSE sources ${CMAKE_CURRENT_SOURCE_DIR}/src *.cpp)
+file(GLOB_RECURSE sources ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 file(GLOB_RECURSE headers ${CMAKE_CURRENT_SOURCE_DIR}/include *.hpp)
+
+message(${sources})
 
 add_library(${PROJECT_NAME} ${sources} ${headers})
 
@@ -33,5 +35,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC ${GLEW_LIBRARIES} ${GLFW3_LIBRARY} 
 install(TARGETS ${PROJECT_NAME})
 install(DIRECTORY include/spatiumgl DESTINATION include
         FILES_MATCHING PATTERN "*.hpp")
+		
 # Unit tests for spatiumlib
-#add_subdirectory(test)
+enable_testing()
+add_subdirectory(test)

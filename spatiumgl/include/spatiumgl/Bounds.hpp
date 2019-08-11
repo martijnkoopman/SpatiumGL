@@ -13,13 +13,6 @@
 #ifndef SPATIUMGL_BOUNDS_H
 #define SPATIUMGL_BOUNDS_H
 
- // Precision
-#ifndef SPATIUMGL_SINGLE_PRECISION
-#define SPATIUMGL_PRECISION double
-#else
-#define SPATIUMGL_PRECISION float
-#endif
-
 #include "Vector.hpp"
 
 namespace spatiumgl {

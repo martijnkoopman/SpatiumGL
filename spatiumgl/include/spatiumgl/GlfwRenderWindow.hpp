@@ -35,7 +35,6 @@ namespace spatiumgl
 		bool createWindow(int width, int height) override;
 		void destroyWindow() override;
 		void terminate() const override;
-
 		void show() override;
 
 	private:

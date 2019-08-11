@@ -57,6 +57,14 @@ namespace spatiumgl {
 
 		// Access operators
 
+		/// Get pointer to data.
+		///
+		/// \return Data pointer
+		T* data()
+		{
+			return m_data.data();
+		}
+
 		/// Access element by value.
 		///
 		/// \param[in] row Row of element
@@ -311,6 +319,12 @@ namespace spatiumgl {
 	class VectorT3 : public VectorT<T, size_t(3)>
 	{
 	public:
+		/// Default constructor
+		VectorT3()
+			: VectorT<T, 3>()
+		{
+		}
+
 		/// Constructor
 		///
 		/// \param[in] x X value
@@ -418,6 +432,12 @@ namespace spatiumgl {
 	class VectorT4 : public VectorT<T, size_t(4)>
 	{
 	public:
+		/// Default constructor
+		VectorT4()
+			: VectorT<T, 4>()
+		{
+		}
+
 		/// Constructor
 		///
 		/// \param[in] x X value
@@ -525,26 +545,6 @@ namespace spatiumgl {
 	using Vector2 = VectorT2<SPATIUMGL_PRECISION>;
 	using Vector3 = VectorT3<SPATIUMGL_PRECISION>;
 	using Vector4 = VectorT4<SPATIUMGL_PRECISION>;
-
-	//class Vector3 : public VectorT3<SPATIUMGL_PRECISION>
-	//{};
-
-	/*
-	/// \class Vector
-	/// \brief Arbitrarily size vector
-	class Vector
-	{
-	public:
-		Vector()
-		{
-			// Do stuff
-		}
-
-	protected:
-		std::vector<SPATIUMGL_PRECISION> m_data;
-	};
-	*/
-
 } // namespace spatiumgl
 
 #endif // SPATIUMGL_VECTOR_H

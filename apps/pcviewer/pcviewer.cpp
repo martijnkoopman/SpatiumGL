@@ -7,6 +7,7 @@
 #include <glm/gtx/string_cast.hpp>
 
 #include <spatiumgl/Vector.hpp>
+#include <spatiumgl/Matrix.hpp>
 #include <spatiumgl/PointCloud.hpp>
 #include <spatiumgl/PointCloudRenderer.hpp>
 #include <spatiumgl/Camera.hpp>
@@ -22,12 +23,15 @@ void opengl_error_callback(GLenum source, GLenum type, GLuint id, GLenum severit
 
 int main(int argc, char* argv[])
 {
+
+	spatiumgl::Matrix4 m;
+
 	std::string path;
 	// Get path from command line arguments
 	if (argc != 2)
 	{
 		std::cerr << "usage:" << std::endl;
-		std::cerr << "pcinfo file.las" << std::endl;
+		std::cerr << "pcviewer file.las" << std::endl;
 		//return 1;
 		path = "C:\\Users\\Martijn\\Downloads\\autzen.laz";
 	}
