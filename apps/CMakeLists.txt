@@ -1,19 +1,17 @@
-option (BUILD_POINTCLOUD_INFO "Build application pcinfo" OFF) 
-if (BUILD_POINTCLOUD_INFO)
-	add_subdirectory(pcinfo)
-endif (BUILD_POINTCLOUD_INFO)
+# Point cloud viewer app
+option(SPATIUMGL_APP_HELLO "Build app hello." OFF)
+if(SPATIUMGL_APP_HELLO)
+    add_subdirectory(hello)
+endif(SPATIUMGL_APP_HELLO)
 
-option (BUILD_POINTCLOUD_GRIDSAMPLER "Build application pcgridsampler" OFF) 
-if (BUILD_POINTCLOUD_GRIDSAMPLER)
-	add_subdirectory(pcgridsampler)
-endif (BUILD_POINTCLOUD_GRIDSAMPLER)
+# Point cloud viewer app
+option(SPATIUMGL_APP_PCVIEWER "Build app pcviewer." OFF)
+if(SPATIUMGL_APP_PCVIEWER)
+    add_subdirectory(pcviewer)
+endif(SPATIUMGL_APP_PCVIEWER)
 
-option (BUILD_POINTCLOUD_VIEWER "Build application pcviewer" OFF) 
-if (BUILD_POINTCLOUD_VIEWER)
-	add_subdirectory(pcviewer)
-endif (BUILD_POINTCLOUD_VIEWER)
-
-option (BUILD_POINTCLOUD_OCTREEVIEWER "Build application pcoctreeviewer" OFF) 
-if (BUILD_POINTCLOUD_OCTREEVIEWER)
-	add_subdirectory(pcoctreeviewer)
-endif (BUILD_POINTCLOUD_OCTREEVIEWER)
+# Point cloud info app
+option(SPATIUMGL_APP_PCINFO "Build app pcinfo." OFF)
+if(SPATIUMGL_APP_PCINFO)
+    add_subdirectory(pcinfo)
+endif(SPATIUMGL_APP_PCINFO)

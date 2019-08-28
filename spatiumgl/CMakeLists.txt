@@ -2,40 +2,45 @@ cmake_minimum_required(VERSION 3.1.0)
 
 project(spatiumgl VERSION 0.1.0 LANGUAGES CXX)
 
-option(BUILD_SHARED_LIBS "Build ${PROJECT_NAME} as shared library." ON)
-
-find_package(LASlib REQUIRED)
+add_subdirectory(common)
 
 # Create library target
-file(GLOB_RECURSE sources ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
-file(GLOB_RECURSE headers ${CMAKE_CURRENT_SOURCE_DIR}/include *.hpp)
+option(BUILD_SHARED_LIBS "Build spatiumgl as shared library." ON)
+add_library(spatiumgl ${spatiumgl_sources} ${spatiumgl_headers})
+target_compile_definitions(spatiumgl PRIVATE SPATIUMGL_LIBRARY=1)
+target_include_directories(spatiumgl PUBLIC ${spatiumgl_includes})
+set_target_properties(spatiumgl PROPERTIES CXX_STANDARD 11 LINKER_LANGUAGE CXX)
+cmake_policy(SET CMP0079 NEW) # Allow linking dependencies from subdirectories
 
-message(${sources})
+# Add modules
 
-add_library(${PROJECT_NAME} ${sources} ${headers})
+# GFX LAS module
+option(SPATIUMGL_MODULE_GFX3D "Build ${PROJECT_NAME} with 3D graphics module." OFF)
+if(SPATIUMGL_MODULE_GFX3D)
+    add_subdirectory(gfx3d)
+endif(SPATIUMGL_MODULE_GFX3D)
 
-# Set preprocessor definition for library import/export
-target_compile_definitions(${PROJECT_NAME} PRIVATE SPATIUMGL_LIBRARY=1)
+# GFX LAS module
+option(SPATIUMGL_MODULE_GFX3D_LAS "Build ${PROJECT_NAME} with LAS read/write support." OFF)
+if(SPATIUMGL_MODULE_GFX3D_LAS)
+    add_subdirectory(gfx3d_las)
+endif(SPATIUMGL_MODULE_GFX3D_LAS)
 
-# Set include directories for target
-target_include_directories(${PROJECT_NAME} PUBLIC 
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include>
-  ${OPENGL_INCLUDE_DIR}
-  ${GLM_INCLUDE_DIR}
-  ${GLEW_INCLUDE_DIRS}
-  ${GLFW3_INCLUDE_DIR}
-  ${LASlib_INCLUDE_DIRS})
-  
-set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 11 LINKER_LANGUAGE CXX)
+# GFX OpenGL module
+option(SPATIUMGL_MODULE_GFX3D_OPENGL "Build ${PROJECT_NAME} with OpenGL rendering." OFF)
+if(SPATIUMGL_MODULE_GFX3D_OPENGL)
+    add_subdirectory(gfx3d_opengl)
+endif(SPATIUMGL_MODULE_GFX3D_OPENGL)
 
-# Link dependencies
-target_link_libraries(${PROJECT_NAME} PUBLIC ${GLEW_LIBRARIES} ${GLFW3_LIBRARY} ${OPENGL_gl_LIBRARY} PRIVATE LASlib)
+# CV module
+option(SPATIUMGL_MODULE_CV_OPENGL "Build ${PROJECT_NAME} with OpenGL image processing." OFF)
+if(SPATIUMGL_MODULE_CV_OPENGL)
+    add_subdirectory(cv_opengl)
+endif(SPATIUMGL_MODULE_CV_OPENGL)
 
-install(TARGETS ${PROJECT_NAME})
-install(DIRECTORY include/spatiumgl DESTINATION include
+target_include_directories(spatiumgl PUBLIC ${spatiumgl_includes})
+
+# Install target
+install(TARGETS spatiumgl)
+install(DIRECTORY common/include/spatiumgl DESTINATION include
         FILES_MATCHING PATTERN "*.hpp")
-		
-# Unit tests for spatiumlib
-enable_testing()
-add_subdirectory(test)
