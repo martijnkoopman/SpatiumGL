@@ -114,23 +114,32 @@ namespace spatiumgl
 	template<class T, size_t N>
 	struct SPATIUMGL_EXPORT Vector : public VectorBase<T, N>
 	{
-		///// Compare operator. Is equal.
-		/////
-		///// \param[in] other Other vector
-		///// \return True if equal, otherwise false
-		//bool operator==(const Vector<T,N> &other) const
-		//{
-		//	// Compare elements
-		//	for (size_t i = 0; i < N; i++)
-		//	{
-		//		if (m_data[i] != other.m_data[i])
-		//		{
-		//			return false;
-		//		}
-		//	}
+		/// Compare operator. Is equal.
+		///
+		/// \param[in] other Other vector
+		/// \return True if equal, otherwise false
+		bool operator==(const Vector<T,N> &other) const
+		{
+			// Compare elements
+			for (size_t i = 0; i < N; i++)
+			{
+				if (m_data[i] != other.m_data[i])
+				{
+					return false;
+				}
+			}
 
-		//	return true;
-		//}
+			return true;
+		}
+
+		/// Compare operator. Is unequal.
+		///
+		/// \param[in] other Other vector
+		/// \return True if unequal, otherwise false
+		bool operator!=(const Vector<T, N> &other) const
+		{
+			return !(operator ==(other));
+		}
 
 		//// Arithmetic operators:
 

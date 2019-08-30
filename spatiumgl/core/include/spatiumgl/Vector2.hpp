@@ -70,7 +70,28 @@ namespace spatiumgl
 
 		// Compare operators
 
-		// TODO
+		/// Compare operator. Is equal.
+		///
+		/// \param[in] other Other vector
+		/// \return True if equal, otherwise false
+		bool operator==(const Vector<T, 2>& other) const
+		{
+			if (m_data[0] != other.m_data[0]
+				|| m_data[1] != other.m_data[1])
+			{
+				return false;
+			}
+			return true;
+		}
+
+		/// Compare operator. Is unequal.
+		///
+		/// \param[in] other Other vector
+		/// \return True if unequal, otherwise false
+		bool operator!=(const Vector<T, 2>& other) const
+		{
+			return !(operator ==(other));
+		}
 
 		// Arithmetic operators
 

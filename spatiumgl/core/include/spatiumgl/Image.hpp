@@ -17,8 +17,6 @@
 
 namespace spatiumgl {
 
-
-
 	/// \class ImageColumn
 	template<typename T = unsigned char, size_t N = 3>
 	class ImageColumn

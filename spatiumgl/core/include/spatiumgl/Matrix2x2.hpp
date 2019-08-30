@@ -47,10 +47,10 @@ namespace spatiumgl
 
 		// Compare operators
 
-				/// Compare operator. Is equal.
-				///
-				/// \param[in] other Other matrix
-				/// \return True if equal, otherwise false
+		/// Compare operator. Is equal.
+		///
+		/// \param[in] other Other matrix
+		/// \return True if equal, otherwise false
 		bool operator==(const Matrix<T, 3, 3> & other) const
 		{
 			if (m_data[0] != other.m_data[0]
