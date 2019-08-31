@@ -32,7 +32,7 @@ namespace spatiumgl
 	/// \brief Vector base class
 	///
 	/// Cannot be declared directly, only inherited.
-	template<class T, size_t N>
+	template<typename T, size_t N>
 	struct SPATIUMGL_EXPORT VectorBase
 	{
 	public:
@@ -85,7 +85,7 @@ namespace spatiumgl
 		}
 
 	protected:
-		// Default constructor
+		/// Default constructor
 		constexpr VectorBase()
 			: m_data{ 0 }
 		{}
@@ -111,9 +111,12 @@ namespace spatiumgl
 
 	/// \class Vector
 	/// \brief Arbitrary fixed size vector
-	template<class T, size_t N>
+	template<typename T, size_t N>
 	struct SPATIUMGL_EXPORT Vector : public VectorBase<T, N>
 	{
+		/// Default constructor
+		constexpr Vector() = default;
+
 		/// Compare operator. Is equal.
 		///
 		/// \param[in] other Other vector

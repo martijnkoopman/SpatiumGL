@@ -24,60 +24,130 @@ namespace spatiumgl {
 /// \class PointCloud
 /// \brief Point cloud with optional colors
 ///
-/// This is a container for points and optionally scalars (colors, normals, classifications, etc)
+/// This is a container for points and optionally scalars (colors, normals)
 class SPATIUMGL_EXPORT PointCloud : public RenderObject
 {
 public:
-	
+	/// Default constructor.
+	///
+	/// Creates an empty point cloud.
+	PointCloud();
+
 	/// Constructor
 	///
 	/// \param[in] positions Point positions
 	/// \param[in] colors Point colors (r,g,b)
-	PointCloud(const std::vector<Vector3>& positions, const std::vector<Vector3>& colors = std::vector<Vector3>());
-
-	/// Destructor
-	virtual ~PointCloud() = default;
+	PointCloud(const std::vector<Vector3>& positions,
+		const std::vector<Vector3>& colors = std::vector<Vector3>(),
+		const std::vector<Vector3>& normals = std::vector<Vector3>());
 
 	/// Get point count.
 	///
 	/// \return Point count
 	size_t pointCount() const;
 
-	/// Get a point position.
+	/// Add a point.
+	///
+	/// This will expand the boundaries if needed.
+	///
+	/// \return True if boundaries expanded, false otherwise
+	bool addPoint(const Vector3& position);
+
+	/// Add a point with color.
+	///
+	/// This will expand the boundaries if needed.
+	///
+	/// \param[in] position Point position
+	/// \param[in] color Point color (r,g,b)
+	/// \return True if boundaries expanded, false otherwise
+	bool addPoint(const Vector3& position, const Vector3 &color);
+
+	/// Add a point with color and normal.
+	///
+	/// This will expand the boundaries if needed.
+	///
+	/// \param[in] position Point position
+	/// \param[in] color Point color (r,g,b)
+	/// \param[in] normal Point normal
+	/// \return True if boundaries expanded, false otherwise
+	bool addPoint(const Vector3& position, const Vector3& color, const Vector3& normal);
+
+	// Positions
+
+	/// Get a point position (by reference).
 	///
 	/// \param[in] index Point index
 	/// \return Point position (x,y,z)
-	Vector3 position(size_t index) const;
+	Vector3& position(size_t index);
 
-	/// Get all point positions (by reference)
+	/// Get a point position (by const reference).
+	///
+	/// \param[in] index Point index
+	/// \return Point position (x,y,z)
+	const Vector3& position(size_t index) const;
+
+	/// Get all point positions (by const reference)
 	///
 	/// \return All point positions
 	const std::vector<Vector3>& positions() const;
+
+	// Colors
 
 	/// Has color?
 	///
 	/// True if colors are present, false otherwise
 	bool hasColors() const;
 
-	/// Get a point color.
+	/// Get a point color (by reference).
 	///
 	/// \param[in] index Point index
 	/// \return Point color (r,g,b)
-	Vector3 color(size_t index) const;
+	Vector3& color(size_t index);
 
-	/// Get all point colors (by reference)
+	/// Get a point color (by const reference).
 	///
-	/// \return All point positions
+	/// \param[in] index Point index
+	/// \return Point color (r,g,b)
+	const Vector3& color(size_t index) const;
+
+	/// Get all point colors (by const reference)
+	///
+	/// \return All point colors
 	const std::vector<Vector3>& colors() const;
+
+	// Normals
+
+	/// Has normals?
+	///
+	/// True if normals are present, false otherwise
+	bool hasNormals() const;
+
+	/// Get a point normal (by reference).
+	///
+	/// \param[in] index Point index
+	/// \return Point normal
+	Vector3& normal(size_t index);
+
+	/// Get a point normal (by const reference).
+	///
+	/// \param[in] index Point index
+	/// \return Point normal
+	const Vector3& normal(size_t index) const;
+
+	/// Get all point normals (by const reference)
+	///
+	/// \return All point normals
+	const std::vector<Vector3>& normals() const;
 
 protected:
 	std::vector<Vector3> m_positions;
 	std::vector<Vector3> m_colors;
-
-	// TODO: Create class Scalars
+	std::vector<Vector3> m_normals;
 };
 
 /*
+	// TODO: Create class Scalars
+
 class Scalars
 {
 public:

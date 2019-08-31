@@ -15,30 +15,28 @@
 
 #include "spatiumglexport.hpp"
 #include "SceneObject.hpp"
-
-#include <array>
+#include "spatiumgl/Bounds.hpp"
 
 namespace spatiumgl {
 
 /// \class RenderObject
 /// \brief Scene object that can be rendered.
 ///
-/// A RenderObject has a certain size (bounds).
+/// A RenderObject has a certain size (boundaries). It is up to the derived 
+/// class to keep these updated.
 class SPATIUMGL_EXPORT RenderObject : public SceneObject
 {
 public:
+	/// Default constrcutor
 	RenderObject();
 
-	/// Get the boundaries of the object; axis aligned.
-	/// Xmin, Xmax, Ymin, Ymax, Zmin, Zmax
+	/// Get boundaries of the object (axis aligned bounding box).
 	///
 	/// \return Boundaries
-	std::array<double, 6> bounds() const;
+	BoundingBox<SPATIUMGL_PRECISION> bounds() const;
 
 protected:
-	//virtual void updateBounds() = 0;
-
-	std::array<double, 6> m_bounds; ///\TODO: use BoundingBox<double, 3> from namespace idx
+	BoundingBox<SPATIUMGL_PRECISION> m_bounds;
 };
 
 } // namespace spatiumgl

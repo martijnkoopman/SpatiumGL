@@ -10,18 +10,19 @@
  *
  */
 
-#include "spatiumgl/gfx3d/RenderObject.hpp"
+#ifndef SPATIUMGL_PIXMAP_H
+#define SPATIUMGL_PIXMAP_H
+
+#include "spatiumglexport.hpp"
 
 namespace spatiumgl {
 
-	RenderObject::RenderObject()
-		: SceneObject()
-		, m_bounds()
-	{}
-
-	BoundingBox<SPATIUMGL_PRECISION> RenderObject::bounds() const
+	/// \class Pixmap
+	class SPATIUMGL_EXPORT Pixmap
 	{
-		return m_bounds;
-	}
+	public:
+		Pixmap();
+	};
+} // namespace spatium
 
-} // namespace spatiumgl
+#endif // SPATIUMGL_PIXMAP_H

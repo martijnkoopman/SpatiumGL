@@ -10,18 +10,15 @@
  *
  */
 
-#include "spatiumgl/gfx3d/RenderObject.hpp"
+#include "spatiumgl/Pixmap.hpp"
 
 namespace spatiumgl {
 
-	RenderObject::RenderObject()
-		: SceneObject()
-		, m_bounds()
-	{}
-
-	BoundingBox<SPATIUMGL_PRECISION> RenderObject::bounds() const
+	Pixmap::Pixmap()
 	{
-		return m_bounds;
-	}
+		int i = 3;
+		return;
 
-} // namespace spatiumgl
+	} // namespace spatiumgl
+
+}

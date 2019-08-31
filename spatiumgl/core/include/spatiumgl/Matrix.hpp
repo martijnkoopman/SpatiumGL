@@ -18,7 +18,7 @@
 
 namespace spatiumgl
 {
-	template<class T, size_t W, size_t H>
+	template<typename T, size_t W, size_t H>
 	struct SPATIUMGL_EXPORT MatrixBase
 	{
 	public:
@@ -112,7 +112,7 @@ namespace spatiumgl
 		Vector<T, H> m_data[W];
 	};
 
-	template<class T, size_t W, size_t H>
+	template<typename T, size_t W, size_t H>
 	struct SPATIUMGL_EXPORT Matrix : public MatrixBase<T, W, H>
 	{
 		constexpr Matrix() = default;

@@ -19,7 +19,7 @@ namespace spatiumgl
 {
 	/// \class Vector<T,3>
 	/// \brief Fixed size vector with length 3
-	template<class T>
+	template<typename T>
 	struct SPATIUMGL_EXPORT Vector<T, 3> : public VectorBase<T, 3>
 	{
 		/// Default constructor

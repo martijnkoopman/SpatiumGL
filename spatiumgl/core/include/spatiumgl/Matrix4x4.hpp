@@ -17,7 +17,7 @@
 
 namespace spatiumgl
 {
-	template<class T>
+	template<typename T>
 	struct SPATIUMGL_EXPORT Matrix<T, 4, 4> : public MatrixBase<T, 4, 4>
 	{
 		/// Default constructor

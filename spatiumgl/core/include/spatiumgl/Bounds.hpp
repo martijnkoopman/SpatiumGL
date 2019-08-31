@@ -19,49 +19,175 @@
 
 namespace spatiumgl {
 
-	/// \class Bounds
-	/// \brief Boundaries in N-dimensional space.
 	template<typename T, size_t N>
-	class BoundsT
+	struct SPATIUMGL_EXPORT BoundsCenter
 	{
 	public:
-		/// Default constructor
-		BoundsT()
-			: m_center()
-		{
-		}
-
-		/// Constructor
-		BoundsT(const Vector<T, N>& center)
-			: m_center(center)
-		{
-		}
-
-		Vector<T, N> center() const
+		/// Get center position
+		///
+		/// \return Center position
+		const Vector<T, N>& center() const
 		{
 			return m_center;
 		}
 
 	protected:
+		/// Default constructor
+		constexpr BoundsCenter()
+			: m_center()
+		{
+		}
+
+		/// Constructor
+		///
+		/// \param[in] center Center position
+		constexpr BoundsCenter(const Vector<T, N>& center)
+			: m_center(center)
+		{
+		}
+
 		Vector<T, N> m_center;
+	};
+
+	template<typename T, size_t N>
+	struct SPATIUMGL_EXPORT BoundsRadii
+	{
+	public:
+		/// Get radii.
+		///
+		/// \return Radii
+		const Vector<T, N>& radii() const
+		{
+			return m_radii;
+		}
+
+		/// Get diameter for given dimension.
+		///
+		/// \param[in] dimension Dimension (should be < N)
+		/// \return Diameter
+		T diameter(size_t dimension) const
+		{
+			return m_radii[dimension] * 2;
+		}
+
+	protected:
+		/// Default constructor
+		constexpr BoundsRadii()
+			: m_radii()
+		{
+		}
+
+		/// Constructor
+		///
+		/// \param[in] center Center position
+		constexpr BoundsRadii(const Vector<T, N>& radii)
+			: m_radii(radii)
+		{
+		}
+
+		Vector<T, N> m_radii;
+	};
+
+	template<typename T>
+	struct SPATIUMGL_EXPORT BoundsRadii<T,1>
+	{
+	public:
+		/// Get radius.
+		///
+		/// \return Radius
+		T radius() const
+		{
+			return m_radius;
+		}
+
+		/// Get diameter.
+		///
+		/// \return Diameter
+		T diameter() const
+		{
+			return m_radius * 2;
+		}
+
+	protected:
+		/// Default constructor
+		constexpr BoundsRadii()
+			: m_radius()
+		{
+		}
+
+		/// Constructor
+		///
+		/// \param[in] center Center position
+		constexpr BoundsRadii(T radius)
+			: m_radius(radius)
+		{
+		}
+
+		T m_radius;
+	};
+
+	template<typename T, size_t N>
+	struct SPATIUMGL_EXPORT BoundsOrientation
+	{
+	public:
+		/// Get center position
+		///
+		/// \return Center position
+		const Vector<T, N>& orientation() const
+		{
+			return m_orientation;
+		}
+
+	protected:
+		/// Default constructor
+		constexpr BoundsOrientation()
+			: m_orientation()
+		{
+		}
+
+		/// Constructor
+		///
+		/// \param[in] orientation ...n
+		constexpr BoundsOrientation(const Vector<T, N>& orientation)
+			: m_orientation(orientation)
+		{
+		}
+
+		Vector<T, N> m_orientation;
+	};
+
+	/*
+	/// \class Bounds
+	/// \brief Boundaries in N-dimensional space.
+	template<typename T, size_t N>
+	struct SPATIUMGL_EXPORT Bounds : public BoundsBase<T, N>
+	{
+		/// Default constructor
+		constexpr Bounds() = default;
+
+	protected:
+		Vector<T, N> m_radii;
 	};
 
 	/// \class BoundingBox
 	/// \brief Axis-aligned bounding box (AABB) in N-dimensional space.
 	template<typename T, size_t N>
-	class BoundingBoxT : public BoundsT<T, N>
+	struct SPATIUMGL_EXPORT BoundingBoxT : public BoundsBase<T, N>
 	{
 	public:
 		/// Default onstructor
 		BoundingBoxT()
-			: BoundsT<T, N>()
+			: BoundsBase<T, N>()
 			, m_radii()
 		{
 		}
 
 		/// Constructor
+		///
+		/// \param[in] center Center position
+		/// \param[in] radii Radii for each axis
 		BoundingBoxT(const Vector<T, N>& center, const Vector<T, N>& radii)
-			: BoundsT<T, N>(center)
+			: BoundsBase<T, N>(center)
 			, m_radii(radii)
 		{
 		}
@@ -153,10 +279,7 @@ namespace spatiumgl {
 			return res;
 		}
 
-		T diameter(size_t dimension) const
-		{
-			return m_radii[dimension] * 2;
-		}
+
 
 		/// Output to ostream
 		friend std::ostream& operator<<(std::ostream& os, const BoundingBoxT<T, N>& bounds)
@@ -175,7 +298,7 @@ namespace spatiumgl {
 	/// \class OrientedBoundingBox
 	/// \brief Oriented bounding box in N-dimensional space.
 	template<typename T, size_t N>
-	class OrientedBoundingBoxT : BoundingBoxT<T, N>
+	struct SPATIUMGL_EXPORT OrientedBoundingBoxT : BoundingBoxT<T, N>
 	{
 	public:
 
@@ -185,6 +308,171 @@ namespace spatiumgl {
 
 	using OrientedBoundingBox = OrientedBoundingBoxT<SPATIUMGL_PRECISION, size_t(3)>;
 	using OrientedBoundingRectangle = OrientedBoundingBoxT<SPATIUMGL_PRECISION, size_t(2)>;
+	*/
+
+	template<typename T>
+	struct BoundingCircle : public BoundsCenter<T, 2>, public BoundsRadii<T, 1>
+	{};
+
+	template<typename T>
+	struct BoundingEllipse : public BoundsCenter<T, 2>, public BoundsRadii<T, 2>
+	{};
+
+	template<typename T>
+	struct BoundingSquare : public BoundsCenter<T, 2>, public BoundsRadii<T, 1>
+	{};
+
+	template<typename T>
+	struct BoundingRectangle : public BoundsCenter<T, 2>, public BoundsRadii<T, 2>
+	{};
+
+	template<typename T>
+	struct OrientedBoundingEllipse : public BoundsCenter<T, 2>, public BoundsRadii<T, 2>, public BoundsOrientation<T, 2>
+	{};
+
+	template<typename T>
+	struct OrientedBoundingSquare : public BoundsCenter<T, 2>, public BoundsRadii<T, 1>, public BoundsOrientation<T, 2>
+	{};
+
+	template<typename T>
+	struct OrientedBoundingRectangle : public BoundsCenter<T, 2>, public BoundsRadii<T, 2>, public BoundsOrientation<T, 2>
+	{};
+
+	template<typename T>
+	struct BoundingSphere : public BoundsCenter<T, 3>, public BoundsRadii<T, 1>
+	{};
+
+	template<typename T>
+	struct BoundingEllipsoid : public BoundsCenter<T, 3>, public BoundsRadii<T, 3>
+	{};
+
+	template<typename T>
+	struct BoundingCube : public BoundsCenter<T, 3>, public BoundsRadii<T, 1>
+	{};
+
+	template<typename T>
+	struct BoundingBox : public BoundsCenter<T, 3>, public BoundsRadii<T, 3>
+	{
+		/// Default onstructor
+		BoundingBox() = default;
+
+		/// Constructor
+		///
+		/// \param[in] center Center position
+		/// \param[in] radii Radii for each axis
+		BoundingBox(const Vector<T, 3>& center, const Vector<T, 3>& radii)
+			: BoundsCenter<T, 3>(center)
+			, BoundsRadii<T, 3>(radii)
+		{
+		}
+
+		/// Build from points
+		///
+		/// \param[in] points Points in N-dimensional space.
+		/// \return Bounding box
+		static BoundingBox fromPoints(const std::vector<Vector<T, 3>>& points)
+		{
+			if (points.size() == 0)
+			{
+				return BoundingBox();
+			}
+
+			// Set initial bounds
+			Vector<T, 3> minVal, maxVal;
+			for (size_t i = 0; i < N; i++)
+			{
+				minVal[i] = maxVal[i] = points[0][i];
+			}
+
+			// Iterate points and update bounds
+			for (size_t i = 1; i < points.size(); i++)
+			{
+				Vector<T, 3> point = points[i];
+
+				// Iterate dimensions
+				for (size_t i = 0; i < 3; i++)
+				{
+					if (point[i] < minVal[i]) {
+						minVal[i] = point[i];
+					}
+					else if (point[i] > maxVal[i]) {
+						maxVal[i] = point[i];
+					}
+				}
+			}
+
+			return BoundingBox::fromMinMax(minVal, maxVal);
+		}
+
+		static BoundingBox fromMinMax(const Vector<T, 3>& min, const Vector<T, 3>& max)
+		{
+			// Compute center and radii
+			Vector<T, 3> centerVal, radiiVal;
+			for (size_t i = 0; i < 3; i++) // TODO: Ditch the loop, consexpr?
+			{
+				centerVal[i] = max[i] * 0.5 + min[i] * 0.5;
+				radiiVal[i] = max[i] * 0.5 - min[i] * 0.5;
+			}
+
+			return BoundingBox(centerVal, radiiVal);
+		}
+
+		bool isInside(const Vector<T, 3>& point) const
+		{
+			for (size_t i = 0; i < 3; i++)
+			{
+				if (point[i] < this->m_center[i] - m_radii[i])
+				{
+					return false;
+				}
+				else if (point[i] > this->m_center[i] + m_radii[i])
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		Vector<T, 3> min() const
+		{
+			Vector<T, 3> res;
+			for (size_t i = 0; i < 3; i++)
+			{
+				res[i] = this->m_center[i] - m_radii[i];
+			}
+			return res;
+		}
+
+		Vector<T, 3> max() const
+		{
+			Vector<T, N> res;
+			for (size_t i = 0; i < 3; i++)
+			{
+				res[i] = this->m_center[i] + m_radii[i];
+			}
+			return res;
+		}
+
+		/// Output to ostream
+		friend std::ostream& operator<<(std::ostream& os, const BoundingBox& bounds)
+		{
+			os << "(" << bounds.min() << ", " << bounds.max() << ")";
+			return os;
+		}
+	};
+
+	template<typename T>
+	struct OrientedBoundingEllipsoid : public BoundsCenter<T, 3>, public BoundsRadii<T, 3>, public BoundsOrientation<T, 3>
+	{};
+
+	template<typename T>
+	struct OrientedBoundingCube : public BoundsCenter<T, 3>, public BoundsRadii<T, 1>, public BoundsOrientation<T, 3>
+	{};
+
+	template<typename T>
+	struct OrientedBoundingBox : public BoundsCenter<T, 3>, public BoundsRadii<T, 3>, public BoundsOrientation<T, 3>
+	{};
 
 } // namespace spatium
 
