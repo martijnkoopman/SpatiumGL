@@ -15,10 +15,9 @@ int main(int argc, char* argv[])
 	// Get path from command line arguments
 	if (argc != 2)
 	{
-		std::cerr << "usage:" << std::endl;
-		std::cerr << "pcviewer file.las" << std::endl;
+		std::cerr << "usage: pcviewer file.las" << std::endl;
 		//return 1;
-		path = "C:\\Users\\Martijn\\Downloads\\autzen.laz";
+		path = "C:\\Users\\Martijn\\Downloads\\autzen_sub.laz";
 	}
 	else {
 		path = argv[1];
@@ -48,7 +47,7 @@ int main(int argc, char* argv[])
 
 	// Optional: request OpenGL context version with glfwWindowHint()
 
-	spatiumgl::gfx3d::GlfwRenderWindow renderWindow;
+	spatiumgl::gfx3d::GlfwRenderWindow renderWindow(true);
 	if (!renderWindow.init())
 	{
 		std::cerr << "Failed to initialize GLFW." << std::endl;

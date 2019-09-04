@@ -94,28 +94,10 @@ namespace spatiumgl {
 				// Set error calback function
 				glfwSetErrorCallback(&impl::glfw_error_callback);
 
-				// Initialize GLFW
+				// Initialize GLFW (After this always terminate)
 				if (!glfwInit())
 				{
 					return false;
-				}
-
-				// Print OpenGL version in use
-				std::cerr << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
-				std::cerr << "GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
-
-				// Capture OpenGL debug output
-				if (m_parent->m_debug)
-				{
-					glEnable(GL_DEBUG_OUTPUT);
-					glDebugMessageCallback(opengl_error_callback, NULL);
-				}
-
-				// Initialize GLEW extension loader library
-				GLenum glewError = glewInit();
-				if (glewError != GLEW_OK)
-				{
-					std::cerr << "[Warning] Unable to load extension library GLEW: " << glewGetErrorString(glewError) << std::endl;
 				}
 
 				return true;
@@ -147,6 +129,17 @@ namespace spatiumgl {
 					// Exit
 					glfwTerminate();
 					return false;
+				}
+
+				// Print OpenGL version in use
+				std::cout << "OpenGL version: " << reinterpret_cast<char const*>(glGetString(GL_VERSION)) << std::endl;
+				std::cout << "GLSL version: " << reinterpret_cast<char const*>(glGetString(GL_SHADING_LANGUAGE_VERSION)) << std::endl;
+
+				// Capture OpenGL debug output
+				if (m_parent->m_debug)
+				{
+					glEnable(GL_DEBUG_OUTPUT);
+					glDebugMessageCallback(opengl_error_callback, NULL);
 				}
 
 				// Capture frame buffer resize event (is not equal to window size)

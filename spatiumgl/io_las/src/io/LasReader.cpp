@@ -24,6 +24,7 @@ namespace spatiumgl {
 				: m_lasreadopener()
 				, m_reader(nullptr)
 			{
+				m_lasreadopener.set_file_name(path.c_str());
 			}
 
 			~impl()
