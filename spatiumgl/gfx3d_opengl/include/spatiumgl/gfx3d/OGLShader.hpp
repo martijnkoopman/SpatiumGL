@@ -10,20 +10,22 @@
  *
  */
 
-#ifndef SPATIUMGLLIB_SHADER_H
-#define SPATIUMGLLIB_SHADER_H
+#ifndef SPATIUMGL_GFX3D_SHADER_H
+#define SPATIUMGL_GFX3D_SHADER_H
 
 #include "spatiumglexport.hpp"
 
 namespace spatiumgl {
+	namespace gfx3d {
 
-class Shader
-{
-public:
-	Shader()
-  {}
-};
+		class Shader
+		{
+		public:
+			Shader()
+			{}
+		};
 
+	} // namespace gfx3d
 } // namespace spatiumgl
 
-#endif // SPATIUMGLLIB_SHADER_H
+#endif // SPATIUMGL_GFX3D_SHADER_H

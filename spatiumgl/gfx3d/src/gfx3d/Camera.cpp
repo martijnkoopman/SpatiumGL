@@ -13,8 +13,8 @@
 #include "spatiumgl/gfx3d/Camera.hpp"
 
 namespace spatiumgl {
-
-Camera::Camera(float fov, float near, float far)
+	namespace gfx3d {
+		Camera::Camera(double fov, double near, double far)
 			: SceneObject()
 			, m_fov(fov)
 			, m_near(near)
@@ -22,7 +22,7 @@ Camera::Camera(float fov, float near, float far)
 		{
 		}
 
-		float Camera::fov() const
+		double Camera::fov() const
 		{
 			return m_fov;
 		}
@@ -30,7 +30,7 @@ Camera::Camera(float fov, float near, float far)
 		/// Get the distance to the near clipping plane in world space.
 		///
 		/// \return Near clipping plane distance.
-		float Camera::near() const
+		double Camera::near() const
 		{
 			return m_near;
 		}
@@ -38,7 +38,7 @@ Camera::Camera(float fov, float near, float far)
 		/// Get the distance to the far clipping plane in world space.
 		///
 		/// \return Far clipping plane distance.
-		float Camera::far() const
+		double Camera::far() const
 		{
 			return m_far;
 		}
@@ -99,7 +99,7 @@ Camera::Camera(float fov, float near, float far)
 		/// \param[in] target Target position
 		/// \param[in] up Up vector
 		///                May not be parallel with vector from eye to target
-		void lookAt(const glm::vec3& eye, const glm::vec3& target, 
+		void lookAt(const glm::vec3& eye, const glm::vec3& target,
 			const glm::vec3& up)
 		{
 			// Normalize and orthogonalize view up vector
@@ -122,5 +122,5 @@ Camera::Camera(float fov, float near, float far)
 
 			m_transform.setMatrix(M);
 		}
-
+	} // namespace gfx3d
 } // namespace spatiumgl

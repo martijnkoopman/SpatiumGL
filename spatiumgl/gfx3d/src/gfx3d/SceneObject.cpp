@@ -13,14 +13,16 @@
 #include "spatiumgl/gfx3d/SceneObject.hpp"
 
 namespace spatiumgl {
+	namespace gfx3d {
 
-	SceneObject::SceneObject()
-		: m_transform()
-	{}
+		SceneObject::SceneObject()
+			: m_transform()
+		{}
 
-	Transform& SceneObject::transform()
-	{
-		return m_transform;
-	}
+		Transform& SceneObject::transform()
+		{
+			return m_transform;
+		}
 
-} // namespace spatium
+	} // namespace gfx3d
+} // namespace spatiumgl

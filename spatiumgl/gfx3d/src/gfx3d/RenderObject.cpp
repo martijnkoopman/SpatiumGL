@@ -13,15 +13,17 @@
 #include "spatiumgl/gfx3d/RenderObject.hpp"
 
 namespace spatiumgl {
+	namespace gfx3d {
 
-	RenderObject::RenderObject()
-		: SceneObject()
-		, m_bounds()
-	{}
+		RenderObject::RenderObject()
+			: SceneObject()
+			, m_bounds()
+		{}
 
-	BoundingBox<SPATIUMGL_PRECISION> RenderObject::bounds() const
-	{
-		return m_bounds;
-	}
+		BoundingBox<SPATIUMGL_PRECISION> RenderObject::bounds() const
+		{
+			return m_bounds;
+		}
 
+	} // namespace gfx3d
 } // namespace spatiumgl

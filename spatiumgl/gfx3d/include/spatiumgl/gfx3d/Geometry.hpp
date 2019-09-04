@@ -10,30 +10,31 @@
  *
  */
 
-#ifndef SPATIUMGL_GEOMETRY_H
-#define SPATIUMGL_GEOMETRY_H
+#ifndef SPATIUMGL_GFX3D_GEOMETRY_H
+#define SPATIUMGL_GFX3D_GEOMETRY_H
 
-#include "Bounds.hpp"
+#include "spatiumgl/Bounds.hpp"
 
 namespace spatiumgl {
+	namespace gfx3d {
 
-	///\class Geometry
-	///\brief Geometry in D-dimensional space.
-	///
-	/// A geometry always has some kind of bounding volume. A single point is not
-	/// considered geometry.
-	template<typename T, size_t N>
-	class Geometry
-	{
-		BoundsT<T, D> bounds() const
+		///\class Geometry
+		///\brief Geometry in D-dimensional space.
+		///
+		/// A geometry always has some kind of bounding volume. A single point is not
+		/// considered geometry.
+		template<typename T, size_t N>
+		class Geometry
 		{
-			return m_bounds;
-		}
+			BoundsT<T, D> bounds() const
+			{
+				return m_bounds;
+			}
 
-	protected:
-		BoundsT<T, D> m_bounds;
-	};
-
+		protected:
+			BoundsT<T, D> m_bounds;
+		};
+	} // namespace gfx3d
 } // namespace spatiumgl
 
-#endif // SPATIUMGL_GEOMETRY_H
+#endif // SPATIUMGL_GFX3D_GEOMETRY_H

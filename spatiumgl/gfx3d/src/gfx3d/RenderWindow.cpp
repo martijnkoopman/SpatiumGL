@@ -13,48 +13,50 @@
 #include "spatiumgl/gfx3d/RenderWindow.hpp"
 
 namespace spatiumgl {
+	namespace gfx3d {
 
-	RenderWindow::RenderWindow(bool debug)
-		: m_interactor(new PivotInteractor(this))
-		, m_camera(nullptr)
-		, m_renderer(nullptr)
-		, m_framebufferSize{ 0, 0 }
-		, m_debug(debug)
-	{}
+		RenderWindow::RenderWindow(bool debug)
+			: m_interactor(new PivotInteractor(this))
+			, m_camera(nullptr)
+			, m_renderer(nullptr)
+			, m_framebufferSize{ 0, 0 }
+			, m_debug(debug)
+		{}
 
-	RenderWindow::~RenderWindow()
-	{
-		delete m_interactor;
-	}
-	
-	void RenderWindow::setInteractor(RenderWindowInteractor* interactor)
-	{
-		m_interactor = interactor;
-	}
+		RenderWindow::~RenderWindow()
+		{
+			delete m_interactor;
+		}
 
-	RenderWindowInteractor* RenderWindow::interactor() const
-	{
-		return m_interactor;
-	}
+		void RenderWindow::setInteractor(RenderWindowInteractor* interactor)
+		{
+			m_interactor = interactor;
+		}
 
-	void RenderWindow::setCamera(Camera* camera)
-	{
-		m_camera = camera;
-	}
+		RenderWindowInteractor* RenderWindow::interactor() const
+		{
+			return m_interactor;
+		}
 
-	Camera* RenderWindow::camera() const
-	{
-		return m_camera;
-	}
+		void RenderWindow::setCamera(Camera* camera)
+		{
+			m_camera = camera;
+		}
 
-	void RenderWindow::setRenderer(Renderer* renderer)
-	{
-		m_renderer = renderer;
-	}
+		Camera* RenderWindow::camera() const
+		{
+			return m_camera;
+		}
 
-	Vector2i RenderWindow::framebufferSize() const
-	{
-		return m_framebufferSize;
-	}
+		void RenderWindow::setRenderer(Renderer* renderer)
+		{
+			m_renderer = renderer;
+		}
 
+		Vector2i RenderWindow::framebufferSize() const
+		{
+			return m_framebufferSize;
+		}
+
+	} // namespace gfx3d
 } // namespace spatiumgl

@@ -23,7 +23,15 @@ namespace spatiumgl {
 	struct SPATIUMGL_EXPORT BoundsCenter
 	{
 	public:
-		/// Get center position
+		/// Get center position (by reference)
+		///
+		/// \return Center position
+		Vector<T, N>& center()
+		{
+			return m_center;
+		}
+
+		/// Get center position (by const reference)
 		///
 		/// \return Center position
 		const Vector<T, N>& center() const
@@ -53,7 +61,15 @@ namespace spatiumgl {
 	struct SPATIUMGL_EXPORT BoundsRadii
 	{
 	public:
-		/// Get radii.
+		/// Get radii (by reference)
+		///
+		/// \return Radii
+		Vector<T, N>& radii() 
+		{
+			return m_radii;
+		}
+
+		/// Get radii (by const reference)
 		///
 		/// \return Radii
 		const Vector<T, N>& radii() const
@@ -92,7 +108,15 @@ namespace spatiumgl {
 	struct SPATIUMGL_EXPORT BoundsRadii<T,1>
 	{
 	public:
-		/// Get radius.
+		/// Get radius (by reference)
+		///
+		/// \return Radius
+		T& radius()
+		{
+			return m_radius;
+		}
+
+		/// Get radius (by value)
 		///
 		/// \return Radius
 		T radius() const
@@ -130,9 +154,17 @@ namespace spatiumgl {
 	struct SPATIUMGL_EXPORT BoundsOrientation
 	{
 	public:
-		/// Get center position
+		/// Get orientation (by reference).
 		///
-		/// \return Center position
+		/// \return Center orientation
+		Vector<T, N>& orientation()
+		{
+			return m_orientation;
+		}
+
+		/// Get orientation (by const reference).
+		///
+		/// \return Center orientation
 		const Vector<T, N>& orientation() const
 		{
 			return m_orientation;
@@ -378,18 +410,15 @@ namespace spatiumgl {
 			}
 
 			// Set initial bounds
-			Vector<T, 3> minVal, maxVal;
-			for (size_t i = 0; i < N; i++)
-			{
-				minVal[i] = maxVal[i] = points[0][i];
-			}
+			Vector<T, 3> minVal(points[0][0], points[0][1], points[0][2]);
+			Vector<T, 3> maxVal(points[0][0], points[0][1], points[0][2]);
 
 			// Iterate points and update bounds
 			for (size_t i = 1; i < points.size(); i++)
 			{
 				Vector<T, 3> point = points[i];
 
-				// Iterate dimensions
+				// Update min and max
 				for (size_t i = 0; i < 3; i++)
 				{
 					if (point[i] < minVal[i]) {
@@ -407,14 +436,32 @@ namespace spatiumgl {
 		static BoundingBox fromMinMax(const Vector<T, 3>& min, const Vector<T, 3>& max)
 		{
 			// Compute center and radii
-			Vector<T, 3> centerVal, radiiVal;
-			for (size_t i = 0; i < 3; i++) // TODO: Ditch the loop, consexpr?
-			{
-				centerVal[i] = max[i] * 0.5 + min[i] * 0.5;
-				radiiVal[i] = max[i] * 0.5 - min[i] * 0.5;
-			}
+			Vector<T, 3> center(
+				max[0] * 0.5 + min[0] * 0.5,
+				max[1] * 0.5 + min[1] * 0.5,
+				max[2] * 0.5 + min[2] * 0.5
+			);
+			
+			Vector<T, 3> radii(
+				max[0] * 0.5 - min[0] * 0.5,
+				max[1] * 0.5 - min[1] * 0.5,
+				max[2] * 0.5 - min[2] * 0.5);
 
-			return BoundingBox(centerVal, radiiVal);
+			return BoundingBox(center, radii);
+		}
+
+		Vector<T, 3> min() const
+		{
+			return Vector<T, 3>(m_center[0] - m_radii[0],
+				m_center[1] - m_radii[1],
+				m_center[2] - m_radii[2]);
+		}
+
+		Vector<T, 3> max() const
+		{
+			return Vector<T, 3>(m_center[0] + m_radii[0],
+				m_center[1] + m_radii[1],
+				m_center[2] + m_radii[2]);
 		}
 
 		bool isInside(const Vector<T, 3>& point) const
@@ -434,24 +481,25 @@ namespace spatiumgl {
 			return true;
 		}
 
-		Vector<T, 3> min() const
+		void include(const Vector<T, 3> & point)
 		{
-			Vector<T, 3> res;
-			for (size_t i = 0; i < 3; i++)
-			{
-				res[i] = this->m_center[i] - m_radii[i];
-			}
-			return res;
-		}
+			Vector3 minVal = min();
+			Vector3 maxVal = max();
 
-		Vector<T, 3> max() const
-		{
-			Vector<T, N> res;
+			// Update min and max
 			for (size_t i = 0; i < 3; i++)
 			{
-				res[i] = this->m_center[i] + m_radii[i];
+				if (point[i] < minVal[i]) {
+					minVal[i] = point[i];
+				}
+				else if (point[i] > maxVal[i]) {
+					maxVal[i] = point[i];
+				}
 			}
-			return res;
+
+			const auto box = BoundingBox<T>::fromMinMax(minVal, maxVal);
+			m_center = box.center();
+			m_radii = box.radii();
 		}
 
 		/// Output to ostream

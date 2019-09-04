@@ -10,35 +10,37 @@
  *
  */
 
-#ifndef SPATIUMGL_RENDEROBJECT_H
-#define SPATIUMGL_RENDEROBJECT_H
+#ifndef SPATIUMGL_GFX3D_RENDEROBJECT_H
+#define SPATIUMGL_GFX3D_RENDEROBJECT_H
 
 #include "spatiumglexport.hpp"
 #include "SceneObject.hpp"
 #include "spatiumgl/Bounds.hpp"
 
 namespace spatiumgl {
+	namespace gfx3d {
 
-/// \class RenderObject
-/// \brief Scene object that can be rendered.
-///
-/// A RenderObject has a certain size (boundaries). It is up to the derived 
-/// class to keep these updated.
-class SPATIUMGL_EXPORT RenderObject : public SceneObject
-{
-public:
-	/// Default constrcutor
-	RenderObject();
+		/// \class RenderObject
+		/// \brief Scene object that can be rendered.
+		///
+		/// A RenderObject has a certain size (boundaries). It is up to the derived 
+		/// class to keep these updated.
+		class SPATIUMGL_EXPORT RenderObject : public SceneObject
+		{
+		public:
+			/// Default constrcutor
+			RenderObject();
 
-	/// Get boundaries of the object (axis aligned bounding box).
-	///
-	/// \return Boundaries
-	BoundingBox<SPATIUMGL_PRECISION> bounds() const;
+			/// Get boundaries of the object (axis aligned bounding box).
+			///
+			/// \return Boundaries
+			BoundingBox<SPATIUMGL_PRECISION> bounds() const;
 
-protected:
-	BoundingBox<SPATIUMGL_PRECISION> m_bounds;
-};
+		protected:
+			BoundingBox<SPATIUMGL_PRECISION> m_bounds;
+		};
 
+	} // namespace gfx3d
 } // namespace spatiumgl
 
-#endif // SPATIUMGL_RENDEROBJECT_H
+#endif // SPATIUMGL_GFX3D_RENDEROBJECT_H

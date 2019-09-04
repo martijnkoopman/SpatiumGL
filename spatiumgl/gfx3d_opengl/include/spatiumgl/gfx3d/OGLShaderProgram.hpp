@@ -10,25 +10,27 @@
  *
  */
 
-#ifndef SPATIUMGL_SHADERPROGRAM_H
-#define SPATIUMGL_SHADERPROGRAM_H
+#ifndef SPATIUMGL_GFX3D_SHADERPROGRAM_H
+#define SPATIUMGL_GFX3D_SHADERPROGRAM_H
 
 #include "spatiumglexport.hpp"
 
 namespace spatiumgl {
+	namespace gfx3d {
 
-class SPATIUMGL_EXPORT ShaderProgram
-{
-public:
-	ShaderProgram()
-  {}
+		class SPATIUMGL_EXPORT ShaderProgram
+		{
+		public:
+			ShaderProgram()
+			{}
 
-	void use()
-	{
+			void use()
+			{
 
-	}
-};
+			}
+		};
 
+	} // namespace gfx3d
 } // namespace spatiumgl
 
-#endif // SPATIUMGL_SHADERPROGRAM_H
+#endif // SPATIUMGL_GFX3D_SHADERPROGRAM_H

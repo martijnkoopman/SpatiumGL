@@ -10,7 +10,7 @@ if(BUILD_TESTING)
 endif(BUILD_TESTING)
 
 add_subdirectory(spatiumgl)
-#add_subdirectory(apps)
+add_subdirectory(apps)
 
 # Install CMake config file
 #include(CMakePackageConfigHelpers)
