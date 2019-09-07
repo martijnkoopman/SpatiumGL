@@ -1,6 +1,6 @@
 #include "spatiumglexport.hpp"
 
-int SPATIUMGL_EXPORT dummy()
+SPATIUMGL_EXPORT int dummy()
 {
   return 0;
 }
