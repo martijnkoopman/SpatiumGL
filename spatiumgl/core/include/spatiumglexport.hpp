@@ -11,14 +11,14 @@
  */
 
 #if defined(SPATIUMGL_SHARED)
-#  ifdef __linux__
+#  if defined(__linux__) || defined(__APPLE__)
 #    if defined(SPATIUMGL_LIBRARY)
 #      define SPATIUMGL_EXPORT __attribute__((visibility("default")))
 #    else
 #      define SPATIUMGL_EXPORT
 #    endif
 #  endif
-#  ifdef _WIN32
+#  if defined(_WIN32)
 #    if defined(SPATIUMGL_LIBRARY)
 #      define SPATIUMGL_EXPORT __declspec(dllexport)
 #    else
