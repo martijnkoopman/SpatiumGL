@@ -23,7 +23,7 @@ namespace spatiumgl
 	struct SPATIUMGL_EXPORT Vector<T, 4> : public VectorBase<T, 4>
 	{
 		/// Default constructor
-		constexpr Vector() = default;
+    Vector() = default;
 
 		/// Constructor
 		///
@@ -31,22 +31,22 @@ namespace spatiumgl
 		/// \param[in] y Y value
 		/// \param[in] z Z value
 		/// \param[in] w W value
-		constexpr Vector(T x, T y, T z, T w)
-			: VectorBase()
+    Vector(T x, T y, T z, T w)
+      : VectorBase<T,4>()
 		{
-			m_data[0] = x;
-			m_data[1] = y;
-			m_data[2] = z;
-			m_data[3] = w;
+      this->m_data[0] = x;
+      this->m_data[1] = y;
+      this->m_data[2] = z;
+      this->m_data[3] = w;
 		}
 
-		constexpr Vector(const Vector<T, 3> & xyz, T w)
-			: VectorBase()
+    Vector(const Vector<T, 3> & xyz, T w)
+      : VectorBase<T,4>()
 		{
-			m_data[0] = xyz[0];
-			m_data[1] = xyz[1];
-			m_data[2] = xyz[2];
-			m_data[3] = w;
+      this->m_data[0] = xyz[0];
+      this->m_data[1] = xyz[1];
+      this->m_data[2] = xyz[2];
+      this->m_data[3] = w;
 		}
 
 		/// Access X element by reference.
@@ -54,7 +54,7 @@ namespace spatiumgl
 		/// \return X element reference
 		T& x()
 		{
-			return m_data[0];
+      return this->m_data[0];
 		}
 
 		/// Access X element by const reference.
@@ -62,7 +62,7 @@ namespace spatiumgl
 		/// \return X element const reference
 		const T& x() const
 		{
-			return m_data[0];
+      return this->m_data[0];
 		}
 
 		/// Access Y element by reference.
@@ -70,7 +70,7 @@ namespace spatiumgl
 		/// \return Y element reference
 		T& y()
 		{
-			return m_data[1];
+      return this->m_data[1];
 		}
 
 		/// Access Y element by const reference.
@@ -78,7 +78,7 @@ namespace spatiumgl
 		/// \return Y element const reference
 		const T& y() const
 		{
-			return m_data[1];
+      return this->m_data[1];
 		}
 
 		/// Access Z element by reference.
@@ -86,7 +86,7 @@ namespace spatiumgl
 		/// \return Z element reference
 		T& z()
 		{
-			return m_data[2];
+      return this->m_data[2];
 		}
 
 		/// Access Z element by const reference.
@@ -94,7 +94,7 @@ namespace spatiumgl
 		/// \return Z element const reference
 		const T& z() const
 		{
-			return m_data[2];
+      return this->m_data[2];
 		}
 
 		/// Access W element by reference.
@@ -102,7 +102,7 @@ namespace spatiumgl
 		/// \return W element reference
 		T& w()
 		{
-			return m_data[3];
+      return this->m_data[3];
 		}
 
 		/// Access W element by const reference.
@@ -110,7 +110,7 @@ namespace spatiumgl
 		/// \return W element const reference
 		const T& w() const
 		{
-			return m_data[3];
+      return this->m_data[3];
 		}
 
 		// Compare operators
@@ -121,10 +121,10 @@ namespace spatiumgl
 		/// \return True if equal, otherwise false
 		bool operator==(const Vector<T, 4> & other) const
 		{
-			if (m_data[0] != other.m_data[0]
-				|| m_data[1] != other.m_data[1]
-				|| m_data[2] != other.m_data[2]
-				|| m_data[3] != other.m_data[3])
+      if (this->m_data[0] != other.m_data[0]
+        || this->m_data[1] != other.m_data[1]
+        || this->m_data[2] != other.m_data[2]
+        || this->m_data[3] != other.m_data[3])
 			{
 				return false;
 			}

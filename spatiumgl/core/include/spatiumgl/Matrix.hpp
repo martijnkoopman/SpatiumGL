@@ -78,11 +78,11 @@ namespace spatiumgl
 
 	protected:
 		// Hide constructor to prevent declaration
-		constexpr MatrixBase()
+    MatrixBase()
 			: m_data()
 		{}
 
-		constexpr MatrixBase(std::initializer_list<std::initializer_list<T>> data)
+    MatrixBase(std::initializer_list<std::initializer_list<T>> data)
 			: m_data()
 		{
 			// Iterate columns

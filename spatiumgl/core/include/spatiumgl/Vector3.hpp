@@ -15,6 +15,8 @@
 
 #include "Vector.hpp"
 
+#include <cmath> // sqrt()
+
 namespace spatiumgl
 {
 	/// \class Vector<T,3>
@@ -30,12 +32,12 @@ namespace spatiumgl
 		/// \param[in] x X value
 		/// \param[in] y Y value
 		/// \param[in] z Z value
-		constexpr Vector(T x, T y, T z)
-			: VectorBase()
+    Vector(T x, T y, T z)
+      : VectorBase<T,3>()
 		{
-			m_data[0] = x;
-			m_data[1] = y;
-			m_data[2] = z;
+      this->m_data[0] = x;
+      this->m_data[1] = y;
+      this->m_data[2] = z;
 		}
 
 		/// Access X element by reference.
@@ -43,7 +45,7 @@ namespace spatiumgl
 		/// \return X element reference
 		T& x()
 		{
-			return m_data[0];
+      return this->m_data[0];
 		}
 
 		/// Access X element by const reference.
@@ -51,7 +53,7 @@ namespace spatiumgl
 		/// \return X element const reference
 		const T& x() const
 		{
-			return m_data[0];
+      return this->m_data[0];
 		}
 
 		/// Access Y element by reference.
@@ -59,7 +61,7 @@ namespace spatiumgl
 		/// \return Y element reference
 		T& y()
 		{
-			return m_data[1];
+      return this->m_data[1];
 		}
 
 		/// Access Y element by const reference.
@@ -67,7 +69,7 @@ namespace spatiumgl
 		/// \return Y element const reference
 		const T& y() const
 		{
-			return m_data[1];
+      return this->m_data[1];
 		}
 
 		/// Access Z element by reference.
@@ -75,7 +77,7 @@ namespace spatiumgl
 		/// \return Z element reference
 		T& z()
 		{
-			return m_data[2];
+      return this->m_data[2];
 		}
 
 		/// Access Z element by const reference.
@@ -83,7 +85,7 @@ namespace spatiumgl
 		/// \return Z element const reference
 		const T& z() const
 		{
-			return m_data[2];
+      return this->m_data[2];
 		}
 
 		// Compare operators
@@ -94,9 +96,9 @@ namespace spatiumgl
 		/// \return True if equal, otherwise false
 		bool operator==(const Vector<T, 3> & other) const
 		{
-			if (m_data[0] != other.m_data[0]
-				|| m_data[1] != other.m_data[1]
-				|| m_data[2] != other.m_data[2]) 
+      if (this->m_data[0] != other.m_data[0]
+        || this->m_data[1] != other.m_data[1]
+        || this->m_data[2] != other.m_data[2])
 			{
 				return false;
 			}
@@ -121,9 +123,9 @@ namespace spatiumgl
 		Vector<T, 3> operator+(const Vector<T, 3> &other) const
 		{
 			Vector<T, 3> result;
-			result[0] = m_data[0] + other[0];
-			result[1] = m_data[1] + other[1];
-			result[2] = m_data[2] + other[2];
+      result[0] = this->m_data[0] + other[0];
+      result[1] = this->m_data[1] + other[1];
+      result[2] = this->m_data[2] + other[2];
 			return result;
 		}
 
@@ -134,9 +136,9 @@ namespace spatiumgl
 		Vector<T, 3> operator-(const Vector<T, 3> & other) const
 		{
 			Vector<T, 3> result;
-			result[0] = m_data[0] - other[0];
-			result[1] = m_data[1] - other[1];
-			result[2] = m_data[2] - other[2];
+      result[0] = this->m_data[0] - other[0];
+      result[1] = this->m_data[1] - other[1];
+      result[2] = this->m_data[2] - other[2];
 			return result;
 		}
 
@@ -147,9 +149,9 @@ namespace spatiumgl
 		Vector<T, 3> operator*(T scalar) const
 		{
 			Vector<T, 3> result;
-			result[0] = m_data[0] * scalar;
-			result[1] = m_data[1] * scalar;
-			result[2] = m_data[2] * scalar;
+      result[0] = this->m_data[0] * scalar;
+      result[1] = this->m_data[1] * scalar;
+      result[2] = this->m_data[2] * scalar;
 			return result;
 		}
 
@@ -160,9 +162,9 @@ namespace spatiumgl
 		Vector<T, 3> operator/(T scalar) const
 		{
 			Vector<T, 3> result;
-			result[0] = m_data[0] / scalar;
-			result[1] = m_data[1] / scalar;
-			result[2] = m_data[2] / scalar;
+      result[0] = this->m_data[0] / scalar;
+      result[1] = this->m_data[1] / scalar;
+      result[2] = this->m_data[2] / scalar;
 			return result;
 		}
 
@@ -172,9 +174,9 @@ namespace spatiumgl
 		constexpr T length() const
 		{
 			return sqrt(
-				m_data[0] * m_data[0] + 
-				m_data[1] * m_data[1] + 
-				m_data[2] * m_data[2]);
+        this->m_data[0] * this->m_data[0] +
+        this->m_data[1] * this->m_data[1] +
+        this->m_data[2] * this->m_data[2]);
 		}
 
 		/// Normalize the vector.
@@ -182,9 +184,9 @@ namespace spatiumgl
 		void normalize()
 		{
 			const T l = length();
-			m_data[0] = m_data[0] / l;
-			m_data[1] = m_data[1] / l;
-			m_data[2] = m_data[2] / l;
+      this->m_data[0] = this->m_data[0] / l;
+      this->m_data[1] = this->m_data[1] / l;
+      this->m_data[2] = this->m_data[2] / l;
 		}
 
 		/// Get normalized copy of vector.
@@ -195,9 +197,9 @@ namespace spatiumgl
 		{
 			const T l = length();
 			Vector<T, 3> result;
-			result[0] = m_data[0] / l;
-			result[1] = m_data[1] / l;
-			result[2] = m_data[2] / l;
+      result[0] = this->m_data[0] / l;
+      result[1] = this->m_data[1] / l;
+      result[2] = this->m_data[2] / l;
 			return result;
 		}
 
@@ -211,9 +213,9 @@ namespace spatiumgl
 		/// \return Dot product
 		constexpr T dot(const Vector<T, 3>& other) const
 		{
-			return (m_data[0] * other[0] +
-				m_data[1] * other[1] +
-				m_data[2] * other[2]);
+      return (this->m_data[0] * other[0] +
+        this->m_data[1] * other[1] +
+        this->m_data[2] * other[2]);
 		}
 
 		/// Calculate cross product with vector.

@@ -452,27 +452,27 @@ namespace spatiumgl {
 
 		Vector<T, 3> min() const
 		{
-			return Vector<T, 3>(m_center[0] - m_radii[0],
-				m_center[1] - m_radii[1],
-				m_center[2] - m_radii[2]);
+      return Vector<T, 3>(this->m_center[0] - this->m_radii[0],
+        this->m_center[1] - this->m_radii[1],
+        this->m_center[2] - this->m_radii[2]);
 		}
 
 		Vector<T, 3> max() const
 		{
-			return Vector<T, 3>(m_center[0] + m_radii[0],
-				m_center[1] + m_radii[1],
-				m_center[2] + m_radii[2]);
+      return Vector<T, 3>(this->m_center[0] + this->m_radii[0],
+        this->m_center[1] + this->m_radii[1],
+        this->m_center[2] + this->m_radii[2]);
 		}
 
 		bool isInside(const Vector<T, 3>& point) const
 		{
 			for (size_t i = 0; i < 3; i++)
 			{
-				if (point[i] < this->m_center[i] - m_radii[i])
+        if (point[i] < this->m_center[i] - this->m_radii[i])
 				{
 					return false;
 				}
-				else if (point[i] > this->m_center[i] + m_radii[i])
+        else if (point[i] > this->m_center[i] + this->m_radii[i])
 				{
 					return false;
 				}
@@ -498,8 +498,8 @@ namespace spatiumgl {
 			}
 
 			const auto box = BoundingBox<T>::fromMinMax(minVal, maxVal);
-			m_center = box.center();
-			m_radii = box.radii();
+      this->m_center = box.center();
+      this->m_radii = box.radii();
 		}
 
 		/// Output to ostream
