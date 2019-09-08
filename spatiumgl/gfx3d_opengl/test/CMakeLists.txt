@@ -1,7 +1,7 @@
 project(gfx3d_opengl_test LANGUAGES CXX)
 
-add_executable(${PROJECT_NAME} test_PointCloudRenderer.cpp)
+add_executable(gfx3d_opengl_test test_PointCloudRenderer.cpp)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE spatiumgl GTest::GTest GTest::Main)
+target_link_libraries(gfx3d_opengl_test PRIVATE spatiumgl gtest_main)
 
-add_test(unit ${PROJECT_NAME})
+add_test(NAME gfx3d_opengl_test COMMAND $<TARGET_FILE:gfx3d_opengl_test>)

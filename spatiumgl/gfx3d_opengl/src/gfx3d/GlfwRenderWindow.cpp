@@ -22,7 +22,7 @@ namespace spatiumgl {
 
 		static void opengl_error_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
 		{
-			char* typeStr = "unknown";
+      std::string typeStr("unknown");
 			switch (type)
 			{
 			case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
@@ -48,7 +48,7 @@ namespace spatiumgl {
 				break;
 			}
 
-			char* severityStr = "unknown";
+      std::string severityStr("unknown");
 			switch (severity)
 			{
 			case GL_DEBUG_SEVERITY_LOW:
@@ -299,7 +299,7 @@ namespace spatiumgl {
 		// Constructor
 		GlfwRenderWindow::GlfwRenderWindow(bool debug)
 			: RenderWindow(debug)
-			, m_pimpl(std::make_unique<impl>(this, debug))
+      , m_pimpl(new impl(this, debug))
 		{
 		}
 

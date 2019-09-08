@@ -11,8 +11,15 @@ project(spatiumgl_all)
 option(BUILD_TESTING "Build the testing tree." OFF)
 if(BUILD_TESTING)
   enable_testing()
-  add_subdirectory(googletest)
-endif(BUILD_TESTING)
+
+  # Build dependencies for testing (GTEST)
+  add_subdirectory(cmake/googletest)
+endif()
+
+# Build dependencies for GFX3D_OPENGL
+if(SPATIUMGL_MODULE_GFX3D_OPENGL)
+    add_subdirectory(cmake/glfw)
+endif()
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
 
