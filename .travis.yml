@@ -5,9 +5,10 @@ matrix:
       dist: bionic
       compiler: gcc
       before_script:
+        - sudo apt-get -y install libglew-dev xorg-dev
         - mkdir build
         - cd build
-        - cmake .. -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=ON -DSPATIUMGL_MODULE_GFX3D=ON -DSPATIUMGL_MODULE_GFX3D_OPENGL=OFF -DSPATIUMGL_MODULE_IO_LAS=OFF -DSPATIUMGL_APP_PCINFO=OFF -DSPATIUMGL_APP_PCVIEWER=OFF
+        - cmake .. -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=ON -DSPATIUMGL_MODULE_GFX3D=ON -DSPATIUMGL_MODULE_GFX3D_OPENGL=ON -DSPATIUMGL_MODULE_IO_LAS=OFF -DSPATIUMGL_APP_PCINFO=OFF -DSPATIUMGL_APP_PCVIEWER=OFF
       script:
         - make
         - make test
