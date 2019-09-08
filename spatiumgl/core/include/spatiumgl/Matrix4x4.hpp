@@ -15,6 +15,10 @@
 
 #include "Matrix.hpp"
 
+#ifdef __linux__
+#undef minor
+#endif
+
 namespace spatiumgl
 {
 	template<typename T>

@@ -15,6 +15,8 @@
 
 #include "Vector.hpp"
 
+#include <cmath> // sqrt(), acos()
+
 namespace spatiumgl
 {
 	/// \class Vector<T,2>

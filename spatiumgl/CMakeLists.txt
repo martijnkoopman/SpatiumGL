@@ -31,7 +31,12 @@ endif()
 
 # Create library
 add_library(spatiumgl spatiumgl.cpp)
-set_target_properties(spatiumgl PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(spatiumgl PROPERTIES
+    LINKER_LANGUAGE CXX
+    CXX_STANDARD 11
+    CXX_STANDARD_REQUIRED YES
+    CXX_EXTENSIONS NO
+)
 
 # Set compile definitions to export symbols
 target_compile_definitions(spatiumgl PRIVATE SPATIUMGL_LIBRARY=1)
