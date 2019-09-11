@@ -13,12 +13,14 @@ if(BUILD_TESTING)
   enable_testing()
 
   # Build dependencies for testing (GTEST)
-  add_subdirectory(cmake/googletest)
+  add_subdirectory(thirdparty/googletest)
 endif()
 
 # Build dependencies for GFX3D_OPENGL
 if(SPATIUMGL_MODULE_GFX3D_OPENGL)
-    add_subdirectory(cmake/glfw)
+    add_subdirectory(thirdparty/glfw)
+    add_subdirectory(thirdparty/glew)
+    include(${CMAKE_CURRENT_BINARY_DIR}/thirdparty/glew/glew-install/lib/cmake/glew/glew-config.cmake)
 endif()
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)

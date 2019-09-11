@@ -1,0 +1,16 @@
+cmake_minimum_required(VERSION 3.1.0)
+
+project(glew-download NONE)
+
+# Do git clone, update, configure, build and install (no testing)
+# Build without docs, tests and no examples
+include(ExternalProject)
+ExternalProject_Add(glew
+  URL               https://netcologne.dl.sourceforge.net/project/glew/glew/2.1.0/glew-2.1.0.tgz
+  SOURCE_DIR        "${CMAKE_CURRENT_BINARY_DIR}/glew-src"
+  SOURCE_SUBDIR     "build/cmake"
+  BINARY_DIR        "${CMAKE_CURRENT_BINARY_DIR}/glew-build"
+  INSTALL_DIR       "${CMAKE_CURRENT_BINARY_DIR}/glew-install"
+  TEST_COMMAND      ""
+  CMAKE_CACHE_ARGS  -DBUILD_UTILS:BOOL=OFF -DCMAKE_INSTALL_PREFIX:STRING=${CMAKE_CURRENT_BINARY_DIR}/glew-install
+)
