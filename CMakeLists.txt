@@ -14,6 +14,7 @@ if(BUILD_TESTING)
 
   # Build dependencies for testing (GTEST)
   add_subdirectory(thirdparty/googletest)
+  include(${CMAKE_CURRENT_BINARY_DIR}/thirdparty/googletest/googletest-install/lib/cmake/GTest/GTestConfig.cmake)
 endif()
 
 # Build dependencies for GFX3D_OPENGL
