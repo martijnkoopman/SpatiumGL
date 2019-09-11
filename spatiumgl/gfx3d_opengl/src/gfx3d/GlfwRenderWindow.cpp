@@ -16,13 +16,14 @@
 #include <GLFW/glfw3.h> // GLFWwindow
 
 #include <iostream>
+#include <string>
 
 namespace spatiumgl {
 	namespace gfx3d {
 
 		static void opengl_error_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
 		{
-      std::string typeStr("unknown");
+			std::string typeStr("unknown");
 			switch (type)
 			{
 			case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
@@ -48,7 +49,7 @@ namespace spatiumgl {
 				break;
 			}
 
-      std::string severityStr("unknown");
+			std::string severityStr("unknown");
 			switch (severity)
 			{
 			case GL_DEBUG_SEVERITY_LOW:
@@ -65,9 +66,10 @@ namespace spatiumgl {
 				break;
 			}
 
+			std::string messageStr(message);
 			std::cerr << "GL CALLBACK: type = " << typeStr <<
 				", severity = " << severityStr <<
-				", message = " << message << std::endl;
+				", message = " << messageStr << std::endl;
 		}
 
 		class GlfwRenderWindow::impl
@@ -299,7 +301,7 @@ namespace spatiumgl {
 		// Constructor
 		GlfwRenderWindow::GlfwRenderWindow(bool debug)
 			: RenderWindow(debug)
-      , m_pimpl(new impl(this, debug))
+			, m_pimpl(new impl(this, debug))
 		{
 		}
 
