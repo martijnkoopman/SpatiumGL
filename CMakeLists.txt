@@ -7,21 +7,30 @@ endif ()
 
 project(spatiumgl_all)
 
+# Force single configuration build.
+if (NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "Release" CACHE STRING "" FORCE)
+endif()
+if (CMAKE_CONFIGURATION_TYPES)
+  set(CMAKE_CONFIGURATION_TYPES ${CMAKE_BUILD_TYPE} CACHE STRING "")
+endif()
+
 # Check testing
 option(BUILD_TESTING "Build the testing tree." OFF)
 if(BUILD_TESTING)
   enable_testing()
 
-  # Build dependencies for testing (GTEST)
+  # Build dependencies for testing
   add_subdirectory(thirdparty/googletest)
-  include(${CMAKE_CURRENT_BINARY_DIR}/thirdparty/googletest/googletest-install/lib/cmake/GTest/GTestConfig.cmake)
+  include(${GTEST_CONFIG_FILE})
 endif()
 
 # Build dependencies for GFX3D_OPENGL
 if(SPATIUMGL_MODULE_GFX3D_OPENGL)
-    add_subdirectory(thirdparty/glfw)
-    add_subdirectory(thirdparty/glew)
-    include(${CMAKE_CURRENT_BINARY_DIR}/thirdparty/glew/glew-install/lib/cmake/glew/glew-config.cmake)
+  add_subdirectory(thirdparty/glfw)
+  include(${GLFW_CONFIG_FILE})
+  add_subdirectory(thirdparty/glew)
+  include(${GLEW_CONFIG_FILE})
 endif()
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)

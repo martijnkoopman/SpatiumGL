@@ -1,30 +1,42 @@
-# Download and unpack GLEW at configure time
-if(NOT EXISTS ${CMAKE_CURRENT_BINARY_DIR}/glew-src 
-  OR NOT EXISTS ${CMAKE_CURRENT_BINARY_DIR}/glew-build
-  OR NOT EXISTS ${CMAKE_CURRENT_BINARY_DIR}/glew-install)
+# This script builds, configures and installs GLEW in the build tree.
+# Link afterwards against target GLEW::glew_s (static library)
+# Do not use FindGLEW() because the required input variables vary between CMake versions.
 
-  message(STATUS "Configuring to build dependency: GLEW")
+message(STATUS "Configure dependency GLEW")
 
-  # Confiure CMakeLists.txt for target that builds GLEW
-  configure_file(CMakeLists.txt.in glew-download/CMakeLists.txt)
+# Create build and install directories
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/build)
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/install)
 
-  # Configure GLEW
-  execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
-    RESULT_VARIABLE result
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/glew-download )
-  if(result)
-    message(FATAL_ERROR "Download + configure step for GLEW failed: ${result}")
-  endif()
+# Configure
+configure_file(CMakeCache.txt.in cache.txt) # CMake bug: output name may not be 'CMakeCache.txt'
 
-  message(STATUS "Building dependency: GLEW")
+execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" -C ${CMAKE_CURRENT_BINARY_DIR}/cache.txt ${CMAKE_CURRENT_SOURCE_DIR}/glew-src/build/cmake 
+  RESULT_VARIABLE result
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/build)
+if(result)
+  message(FATAL_ERROR "Configure dependency GLEW FAILED: ${result}")
+endif()
+  
+message(STATUS "Build dependency GLEW (${CMAKE_BUILD_TYPE})")
 
-  # Build GLEW
-  execute_process(COMMAND ${CMAKE_COMMAND} --build .
-    RESULT_VARIABLE result
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/glew-download )
-  if(result)
-    message(FATAL_ERROR "Build step for GLEW failed: ${result}")
-  endif()
+# Build
+execute_process(COMMAND ${CMAKE_COMMAND} --build . --target glew_s --config ${CMAKE_BUILD_TYPE}
+  RESULT_VARIABLE result
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/build)
+if(result)
+  message(FATAL_ERROR "Build dependency GLEW FAILED: ${result}")
 endif()
 
-message("Dependency 'GLEW' available in directory: " ${CMAKE_CURRENT_BINARY_DIR}/glew-install)
+# Install
+execute_process(COMMAND ${CMAKE_COMMAND} --build . --target install --config ${CMAKE_BUILD_TYPE}
+  RESULT_VARIABLE result
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/build)
+if(result)
+  message(FATAL_ERROR "Install dependency GLEW FAILED: ${result}")
+endif()
+
+message(STATUS "Successfully built dependency GLEW")
+
+# Expose configuration file
+set(GLEW_CONFIG_FILE ${CMAKE_CURRENT_BINARY_DIR}/install/lib/cmake/glew/glew-config.cmake PARENT_SCOPE)
