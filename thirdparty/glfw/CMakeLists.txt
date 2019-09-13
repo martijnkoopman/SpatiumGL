@@ -1,5 +1,5 @@
 # This script builds, configures and installs GLFW in the build tree.
-# Link afterwards against target ????(static library)
+# Link afterwards against target glfw (static library)
 # Do not use FindGLFW() because the required input variables vary between CMake versions.
 
 message(STATUS "Configure dependency GLFW")

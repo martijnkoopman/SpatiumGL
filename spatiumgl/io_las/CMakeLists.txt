@@ -11,5 +11,4 @@ target_include_directories(io_las PUBLIC
 	
 target_link_libraries(io_las PRIVATE core gfx3d)
 
-find_package(LASlib REQUIRED)
 target_link_libraries(io_las PRIVATE LASlib)
