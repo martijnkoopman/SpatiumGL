@@ -25,11 +25,11 @@ namespace spatiumgl {
 		class SPATIUMGL_EXPORT GlfwRenderWindow : public RenderWindow
 		{
 		public:
-			// Constructor
+      /// Constructor
 			GlfwRenderWindow(bool debug = false);
 
-			// Destructor
-			virtual ~GlfwRenderWindow();
+      /// Destructor
+      virtual ~GlfwRenderWindow() override = default;
 
 			bool init() override;
 			bool createWindow(int width, int height) override;

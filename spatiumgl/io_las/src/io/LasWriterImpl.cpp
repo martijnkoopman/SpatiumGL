@@ -12,6 +12,8 @@
 
 #include "LasWriterImpl.hpp"
 
+#include <memory> // std::unique_ptr
+
 namespace spatiumgl {
 	namespace io {
 		LasWriterImpl::LasWriterImpl(const std::string& path)

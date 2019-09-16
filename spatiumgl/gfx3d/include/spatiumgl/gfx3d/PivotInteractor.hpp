@@ -22,6 +22,7 @@ namespace spatiumgl {
 		{
 		public:
 			PivotInteractor(RenderWindow* window);
+      virtual ~PivotInteractor() override = default;
 			virtual void OnMousePressed(MouseButton button, double x, double y) override;
 			virtual void OnMouseReleased(MouseButton button, double x, double y) override;
 			virtual void OnMouseMoved(double deltaX, double deltaY) override;

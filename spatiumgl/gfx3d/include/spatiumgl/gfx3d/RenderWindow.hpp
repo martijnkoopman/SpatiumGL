@@ -48,8 +48,8 @@ namespace spatiumgl {
 
 		protected:
 			RenderWindowInteractor* m_interactor;
-			Renderer* m_renderer;
 			Camera* m_camera;
+      Renderer* m_renderer;
 			Vector2i m_framebufferSize;
 			bool m_debug;
 		};

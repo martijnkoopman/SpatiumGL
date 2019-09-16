@@ -65,9 +65,11 @@ namespace spatiumgl {
 				break;
 			}
 
+      std::string messageStr(message);
+
 			std::cerr << "GL CALLBACK: type = " << typeStr <<
 				", severity = " << severityStr <<
-				", message = " << message << std::endl;
+        ", message = " << messageStr << std::endl;
 		}
 
 		class GlfwRenderWindow::impl
@@ -103,10 +105,10 @@ namespace spatiumgl {
 				return true;
 			}
 
-			bool createWindow(int width, int height)
+      bool createWindow(const int width, const int height)
 			{
 				// Create window with OpenGL context
-				m_window = glfwCreateWindow(width, height, "SpatiumGL Render Window", NULL, NULL);
+        m_window = glfwCreateWindow(width, height, "SpatiumGL Render Window", nullptr, nullptr);
 				if (!m_window)
 				{
 					fprintf(stderr, "Failed to create window or OpenGL context.\n");
@@ -139,7 +141,7 @@ namespace spatiumgl {
 				if (m_parent->m_debug)
 				{
 					glEnable(GL_DEBUG_OUTPUT);
-					glDebugMessageCallback(opengl_error_callback, NULL);
+          glDebugMessageCallback(opengl_error_callback, nullptr);
 				}
 
 				// Capture frame buffer resize event (is not equal to window size)
@@ -300,11 +302,6 @@ namespace spatiumgl {
 		GlfwRenderWindow::GlfwRenderWindow(bool debug)
 			: RenderWindow(debug)
       , m_pimpl(new impl(this, debug))
-		{
-		}
-
-		// Destructor
-		GlfwRenderWindow::~GlfwRenderWindow()
 		{
 		}
 

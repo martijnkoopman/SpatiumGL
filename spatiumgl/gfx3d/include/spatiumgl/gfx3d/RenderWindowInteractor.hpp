@@ -38,6 +38,9 @@ namespace spatiumgl {
 				: m_window(window)
 			{}
 
+      /// Destructor
+      virtual ~RenderWindowInteractor() = default;
+
 			virtual void OnMousePressed(MouseButton button, double x, double y) = 0;
 			virtual void OnMouseReleased(MouseButton button, double x, double y) = 0;
 			virtual void OnMouseMoved(double deltaX, double deltaY) = 0;
