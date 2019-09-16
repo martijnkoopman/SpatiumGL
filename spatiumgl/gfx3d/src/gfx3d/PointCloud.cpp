@@ -29,7 +29,21 @@ namespace spatiumgl {
 			, m_positions(positions)
 			, m_colors(colors)
 			, m_normals(normals)
-		{}
+		{
+			// Update bounds
+			if (m_positions.size() > 0)
+			{
+				// First point
+				m_bounds.center() = m_positions[0];
+				m_bounds.radii() = Vector3();
+
+				for (size_t i = 1; i < m_positions.size(); i++)
+				{
+					// Second or later point
+					m_bounds.include(m_positions[i]);
+				}
+			}
+		}
 
 
 		PointCloud::PointCloud(const size_t count, const bool hasColors, const bool hasNormals)

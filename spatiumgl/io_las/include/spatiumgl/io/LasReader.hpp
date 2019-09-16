@@ -22,7 +22,7 @@ namespace spatiumgl {
 	namespace io {
 
 		/// \class PointCloudReader
-		/// \brief Read point cloud from file as stream
+		/// \brief Read point cloud from LAS/LAZ file.
 		class SPATIUMGL_EXPORT LasReader
 		{
 		public:
@@ -32,7 +32,7 @@ namespace spatiumgl {
 			LasReader(const std::string& path = "");
 
 			/// Destructor
-			virtual ~LasReader();
+			virtual ~LasReader(); // Must be virtual for PIMPL pattern
 
 			/// Set path to file to read.
 			///
@@ -44,30 +44,66 @@ namespace spatiumgl {
 			/// \return Path to LAS/LAZ file
 			std::string path() const;
 
-			bool isActive() const;
+			/// ???
+			bool isReady() const;
 
+			/// Open file input stream.
+			///
+			/// This function may fail for various reasons: file doesn't 
+			/// exist, no permission to read, etc. 
+			///
+			/// \return True on success, false otherwise
 			bool open();
 
+			/// Check whether the file stream is open.
+			///
+			/// \return True if open, false otherwise
 			bool isOpen();
 
+			/// Close the file input stream.
 			void close();
 
-			gfx3d::PointCloud readAll();
+			/// Read all points from file into a point cloud.
+			///
+			/// \return PointCloud
+			gfx3d::PointCloud readAllPoints();
 
-			bool readPoint();
+			/// Read single point from input file stream.
+			///
+			/// \return True on read, false on end-of-file
+			bool readSinglePoint();
 
-			Vector3 point();
+			/// Get the last read point.
+			///
+			/// The point should first be read with readSinglePoint()
+			///
+			/// \return Last read point
+			/// \sa readSinglePoint
+			Vector3 lastReadPoint();
 
+			/// Get the total point count according to the file header.
+			///
+			/// \return Point count
 			long long int pointCount() const;
 
-			bool hasColor() const;
+			/// Indicator if the points have normals, according to the file header.
+			///
+			/// \return True if points have colors, false otherwise
+			bool hasColors() const;
 
-			/// Return bounds of dataset
+			/// Indicator if points have normals, according to the file header.
+			///
+			/// \return True if points have normals, false otherwise
+			bool hasNormals() const;
+
+			/// Gte the boundaries of all points combined, according to the file header.
+			///
+			/// \return Boundaries
 			BoundingBox<SPATIUMGL_PRECISION> bounds() const;
 
 		private:
-			class impl;
-			std::unique_ptr<impl> m_pimpl;
+			class Impl;
+			std::unique_ptr<Impl> m_pimpl;
 		};
 
 	} // namespace io

@@ -17,17 +17,17 @@
 namespace spatiumgl {
 	namespace io {
 
-		class LasReader::impl
+		class LasReader::Impl
 		{
 		public:
-			impl(const std::string& path)
+			Impl(const std::string& path)
 				: m_lasreadopener()
 				, m_reader(nullptr)
 			{
 				m_lasreadopener.set_file_name(path.c_str());
 			}
 
-			~impl()
+			~Impl()
 			{
 				if (m_reader != nullptr)
 				{
@@ -45,7 +45,7 @@ namespace spatiumgl {
 				return m_lasreadopener.get_file_name();
 			}
 
-			bool isActive() const
+			bool isReady() const
 			{
 				return m_lasreadopener.active();
 			}
@@ -73,7 +73,7 @@ namespace spatiumgl {
 				}
 			}
 
-			bool readPoint()
+			bool readSinglePoint()
 			{
 				if (m_reader == nullptr)
 				{
@@ -83,7 +83,7 @@ namespace spatiumgl {
 				return m_reader->read_point();
 			}
 
-			Vector3 point()
+			Vector3 lastReadPoint()
 			{
 				if (m_reader == nullptr)
 				{
@@ -96,7 +96,7 @@ namespace spatiumgl {
 				return Vector3(x, y, z);
 			}
 
-			gfx3d::PointCloud readAll()
+			gfx3d::PointCloud readAllPoints()
 			{
 				if (m_reader == nullptr)
 				{
@@ -104,13 +104,26 @@ namespace spatiumgl {
 				}
 				else
 				{
-					gfx3d::PointCloud pointCloud(m_reader->npoints);
+					const bool hasColor = hasColors();
+					gfx3d::PointCloud pointCloud(m_reader->npoints, hasColor);
 					while (m_reader->read_point())
 					{
 						double x = m_reader->point.get_x();
 						double y = m_reader->point.get_y();
 						double z = m_reader->point.get_z();
-						pointCloud.addPoint({ x, y, z });
+
+						if (hasColor)
+						{
+							double r = static_cast<double>(m_reader->point.get_R()) / 0xFFFF;
+							double g = static_cast<double>(m_reader->point.get_G()) / 0xFFFF;
+							double b = static_cast<double>(m_reader->point.get_B()) / 0xFFFF;
+
+							pointCloud.addPoint({ x, y, z }, { r, g, b });
+						}
+						else
+						{
+							pointCloud.addPoint({ x, y, z });
+						}
 					}
 					return pointCloud;
 				}
@@ -126,15 +139,25 @@ namespace spatiumgl {
 				return m_reader->npoints;
 			}
 
-			bool hasColor() const
+			bool hasColors() const
 			{
 				if (m_reader == nullptr)
 				{
 					return false;
 				}
 
-				int format = m_reader->get_format();
-				return (format == 2 || format == 3 || format == 5 || format == 7 || format == 10);
+				const unsigned char format = m_reader->header.point_data_format;// get_format();
+				return (format == 2 || format == 3 || format == 5 || format == 7 || format == 8 || format == 10);
+			}
+
+			bool hasNormals() const
+			{
+				if (m_reader == nullptr)
+				{
+					return false;
+				}
+
+				return false;
 			}
 
 			BoundingBox<SPATIUMGL_PRECISION> bounds() const
@@ -155,7 +178,7 @@ namespace spatiumgl {
 		};
 
 		LasReader::LasReader(const std::string& path)
-			: m_pimpl{ std::make_unique<impl>(path) }
+			: m_pimpl{ std::unique_ptr<Impl>(new Impl(path)) }
 		{
 		}
 
@@ -171,9 +194,9 @@ namespace spatiumgl {
 			return m_pimpl->path();
 		}
 
-		bool LasReader::isActive() const
+		bool LasReader::isReady() const
 		{
-			return m_pimpl->isActive();
+			return m_pimpl->isReady();
 		}
 
 		bool LasReader::open()
@@ -186,9 +209,9 @@ namespace spatiumgl {
 			return m_pimpl->isOpen();
 		}
 
-		gfx3d::PointCloud LasReader::readAll()
+		gfx3d::PointCloud LasReader::readAllPoints()
 		{
-			return m_pimpl->readAll();
+			return m_pimpl->readAllPoints();
 		}
 
 		void LasReader::close()
@@ -196,14 +219,14 @@ namespace spatiumgl {
 			m_pimpl->close();
 		}
 
-		bool LasReader::readPoint()
+		bool LasReader::readSinglePoint()
 		{
-			return m_pimpl->readPoint();
+			return m_pimpl->readSinglePoint();
 		}
 
-		Vector3 LasReader::point()
+		Vector3 LasReader::lastReadPoint()
 		{
-			return m_pimpl->point();
+			return m_pimpl->lastReadPoint();
 		}
 
 		long long int LasReader::pointCount() const
@@ -211,10 +234,16 @@ namespace spatiumgl {
 			return m_pimpl->pointCount();
 		}
 
-		bool LasReader::hasColor() const
+		bool LasReader::hasColors() const
 		{
-			return m_pimpl->hasColor();
+			return m_pimpl->hasColors();
 		}
+
+		bool LasReader::hasNormals() const
+		{
+			return m_pimpl->hasNormals();
+		}
+
 
 		BoundingBox<SPATIUMGL_PRECISION> LasReader::bounds() const
 		{

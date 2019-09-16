@@ -15,7 +15,7 @@
 
 #include "spatiumglexport.hpp"
 
-// Precision
+ // Precision
 #ifndef SPATIUMGL_SINGLE_PRECISION
 #define SPATIUMGL_PRECISION double
 #else
@@ -29,30 +29,30 @@
 namespace spatiumgl
 {
 
-  template<typename T>
-  struct VectorBase2
-  {
-  public:
+	template<typename T>
+	struct VectorBase2
+	{
+	public:
 
-  protected:
-    VectorBase2()
-      : arr()
-    {}
+	protected:
+		VectorBase2()
+			: arr()
+		{}
 
 
-    T arr[3];
-  };
+		T arr[3];
+	};
 
-  template<typename T2>
-  struct Vector22 : public VectorBase2<T2>
-  {
-    public:
-    Vector22()
-    {
-      this->arr[0] = 1;
-    }
+	template<typename T2>
+	struct Vector22 : public VectorBase2<T2>
+	{
+	public:
+		Vector22()
+		{
+			this->arr[0] = 1;
+		}
 
-  };
+	};
 
 
 	/// \class VectorBase
@@ -60,7 +60,7 @@ namespace spatiumgl
 	///
 	/// Cannot be declared directly, only inherited.
 	template<typename T, size_t N>
-  struct SPATIUMGL_EXPORT VectorBase
+	struct SPATIUMGL_EXPORT VectorBase
 	{
 	public:
 		/// Access element by reference.
@@ -113,7 +113,7 @@ namespace spatiumgl
 
 	protected:
 		/// Default constructor
-    VectorBase()
+		VectorBase()
 			: m_data{ 0 }
 		{}
 
@@ -139,7 +139,7 @@ namespace spatiumgl
 	/// \class Vector
 	/// \brief Arbitrary fixed size vector
 	template<typename T, size_t N>
-  struct SPATIUMGL_EXPORT Vector : public VectorBase<T,N>
+	struct SPATIUMGL_EXPORT Vector : public VectorBase<T, N>
 	{
 		/// Default constructor
 		constexpr Vector() = default;
@@ -148,12 +148,12 @@ namespace spatiumgl
 		///
 		/// \param[in] other Other vector
 		/// \return True if equal, otherwise false
-		bool operator==(const Vector<T,N> &other) const
+		bool operator==(const Vector<T, N>& other) const
 		{
 			// Compare elements
 			for (size_t i = 0; i < N; i++)
 			{
-        if (this->m_data[i] != other.m_data[i])
+				if (this->m_data[i] != other.m_data[i])
 				{
 					return false;
 				}
@@ -166,7 +166,7 @@ namespace spatiumgl
 		///
 		/// \param[in] other Other vector
 		/// \return True if unequal, otherwise false
-		bool operator!=(const Vector<T, N> &other) const
+		bool operator!=(const Vector<T, N>& other) const
 		{
 			return !(operator ==(other));
 		}
