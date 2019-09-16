@@ -16,6 +16,7 @@
 #include <GLFW/glfw3.h> // GLFWwindow
 
 #include <iostream>
+#include <string>
 
 namespace spatiumgl {
 	namespace gfx3d {
