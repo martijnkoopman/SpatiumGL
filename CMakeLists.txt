@@ -11,7 +11,9 @@ project(spatiumgl_all)
 if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release" CACHE STRING "" FORCE)
 endif()
-set(CMAKE_CONFIGURATION_TYPES ${CMAKE_BUILD_TYPE} CACHE STRING "" FORCE)
+if (GENERATOR_IS_MULTI_CONFIG)
+	set(CMAKE_CONFIGURATION_TYPES ${CMAKE_BUILD_TYPE} CACHE STRING "" FORCE)
+endif()
 
 # Check testing
 option(BUILD_TESTING "Build the testing tree." OFF)
