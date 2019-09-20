@@ -13,6 +13,6 @@ target_link_libraries(gfx3d_opengl PRIVATE core gfx3d)
 
 find_package(OpenGL REQUIRED)
 
-target_include_directories(gfx3d_opengl PRIVATE ${OPENGL_INCLUDE_DIR}) # ${GLEW_INCLUDE_DIRS})
+target_include_directories(gfx3d_opengl PRIVATE ${OPENGL_INCLUDE_DIR})
 
-target_link_libraries(gfx3d_opengl PRIVATE ${GLEW_LIBRARIES} ${OPENGL_gl_LIBRARY} glfw GLEW::GLEW)
+target_link_libraries(gfx3d_opengl PRIVATE ${GLEW_LIBRARIES} ${OPENGL_gl_LIBRARY} glfw GLEW::glew_s)

@@ -73,13 +73,21 @@ namespace spatiumgl {
 			/// \return True on read, false on end-of-file
 			bool readSinglePoint();
 
-			/// Get the last read point.
+			/// Get the last read point position.
 			///
 			/// The point should first be read with readSinglePoint()
 			///
-			/// \return Last read point
-			/// \sa readSinglePoint
-			Vector3 lastReadPoint();
+			/// \return Last read point position
+			/// \sa readSinglePoint()
+			Vector3 lastReadPointPosition();
+
+			/// Get the last read point color.
+			///
+			/// The point should first be read with readSinglePoint()
+			///
+			/// \return Last read point color
+			/// \sa readSinglePoint()
+			Vector3 lastReadPointColor();
 
 			/// Get the total point count according to the file header.
 			///

@@ -11,10 +11,10 @@
  */
 
 #include "spatiumgl/gfx3d/RenderWindow.hpp"
+#include "spatiumgl/gfx3d/PivotInteractor.hpp"
 
 namespace spatiumgl {
 	namespace gfx3d {
-
 		RenderWindow::RenderWindow(bool debug)
 			: m_interactor(new PivotInteractor(this))
 			, m_camera(nullptr)
@@ -57,6 +57,5 @@ namespace spatiumgl {
 		{
 			return m_framebufferSize;
 		}
-
 	} // namespace gfx3d
 } // namespace spatiumgl

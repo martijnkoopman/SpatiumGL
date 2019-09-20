@@ -15,8 +15,7 @@
 
 #include "spatiumglexport.hpp"
 #include "spatiumgl/gfx3d/Renderer.hpp"
-#include "spatiumgl/gfx3d/RenderObject.hpp"
-#include "spatiumgl/gfx3d/Camera.hpp"
+#include "spatiumgl/gfx3d/OGLShaderProgram.hpp"
 
 namespace spatiumgl {
 	namespace gfx3d {
@@ -26,13 +25,13 @@ namespace spatiumgl {
 		public:
 			OGLRenderer(const RenderObject* renderObject)
 				: Renderer(renderObject)
-				, m_shaderProgram(0)
+				, m_shaderProgram()
 				, m_vao(0)
 				, m_vbo(0)
 			{}
 
 		protected:
-			unsigned int m_shaderProgram;
+			OGLShaderProgram m_shaderProgram;
 			unsigned int m_vao; // Vertex Array Object  GLuint
 			unsigned int m_vbo; // Vertex Buffer Object  GLuint
 		};

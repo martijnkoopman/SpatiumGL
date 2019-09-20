@@ -36,7 +36,7 @@ namespace spatiumgl {
 			/// \return Point cloud
 			const PointCloud* pointCloud() const;
 
-			void render(Camera* camera, float aspect) override;
+			void render(Camera* camera, double aspect) override;
 		};
 
 	} // namespace gfx3d

@@ -83,7 +83,7 @@ namespace spatiumgl {
 				return m_reader->read_point();
 			}
 
-			Vector3 lastReadPoint()
+			Vector3 lastReadPointPosition()
 			{
 				if (m_reader == nullptr)
 				{
@@ -94,6 +94,20 @@ namespace spatiumgl {
 				double y = m_reader->point.get_y();
 				double z = m_reader->point.get_z();
 				return Vector3(x, y, z);
+			}
+
+			Vector3 lastReadPointColor()
+			{
+				if (m_reader == nullptr)
+				{
+					return Vector3(0, 0, 0);
+				}
+
+				double r = static_cast<double>(m_reader->point.get_R()) / 0xFFFF;
+				double g = static_cast<double>(m_reader->point.get_G()) / 0xFFFF;
+				double b = static_cast<double>(m_reader->point.get_B()) / 0xFFFF;
+
+				return Vector3(r, g, b);
 			}
 
 			gfx3d::PointCloud readAllPoints()
@@ -224,9 +238,14 @@ namespace spatiumgl {
 			return m_pimpl->readSinglePoint();
 		}
 
-		Vector3 LasReader::lastReadPoint()
+		Vector3 LasReader::lastReadPointPosition()
 		{
-			return m_pimpl->lastReadPoint();
+			return m_pimpl->lastReadPointPosition();
+		}
+
+		Vector3 LasReader::lastReadPointColor()
+		{
+			return m_pimpl->lastReadPointColor();
 		}
 
 		long long int LasReader::pointCount() const
@@ -243,7 +262,6 @@ namespace spatiumgl {
 		{
 			return m_pimpl->hasNormals();
 		}
-
 
 		BoundingBox<SPATIUMGL_PRECISION> LasReader::bounds() const
 		{

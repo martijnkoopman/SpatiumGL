@@ -35,7 +35,7 @@ namespace spatiumgl {
 				return m_valid;
 			}
 
-			virtual void render(Camera* camera, float aspect) = 0;
+			virtual void render(Camera* camera, double aspect) = 0;
 
 		protected:
 			const RenderObject* m_renderObject;

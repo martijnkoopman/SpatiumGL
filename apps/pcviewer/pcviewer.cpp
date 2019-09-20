@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
 	}
 
 	spatiumgl::io::LasReader reader(path);
-	if (!reader.isActive())
+	if (!reader.isReady())
 	{
 		std::cerr << "Invalid input file: " << path << std::endl;
 		return 1;
@@ -38,12 +38,19 @@ int main(int argc, char* argv[])
 
 	spatiumgl::Vector3 min = reader.bounds().min();
 	std::vector<spatiumgl::Vector3> positions;
-	while (reader.readPoint())
+	std::vector<spatiumgl::Vector3> colors;
+	while (reader.readSinglePoint())
 	{
-		spatiumgl::Vector3 pt = reader.point() - min;
-		positions.push_back(pt);
+		spatiumgl::Vector3 position = reader.lastReadPointPosition() - min;
+		positions.push_back(position);
+
+		if (reader.hasColors())
+		{
+			spatiumgl::Vector3 color = reader.lastReadPointColor();
+			colors.push_back(color);
+		}
 	}
-	spatiumgl::gfx3d::PointCloud pointcloud(positions);
+	spatiumgl::gfx3d::PointCloud pointcloud(positions, colors);
 
 	// Optional: request OpenGL context version with glfwWindowHint()
 
