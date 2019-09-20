@@ -15,7 +15,6 @@
 #include "spatiumgl/gfx3d/OGLPointCloudRenderer.hpp"
 
 #include <string>
-#include <spatiumgl\gfx3d\OGLShaderProgram.hpp>
 #include <iostream>
 
 namespace spatiumgl {

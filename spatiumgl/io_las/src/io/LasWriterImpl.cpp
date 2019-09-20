@@ -12,6 +12,8 @@
 
 #include "LasWriterImpl.hpp"
 
+#include <memory> // std::unique_ptr
+
 namespace spatiumgl {
 	namespace io {
 		LasWriterImpl::LasWriterImpl(const std::string& path)
@@ -57,7 +59,7 @@ namespace spatiumgl {
 
 			// Init point 
 			LASpoint laspoint;
-			laspoint.init(&lasheader, lasheader.point_data_format, lasheader.point_data_record_length, 0);
+      laspoint.init(&lasheader, lasheader.point_data_format, lasheader.point_data_record_length, nullptr);
 
 			// Open laswriter
 			std::unique_ptr<LASwriter> laswriter(m_laswriteopener.open(&lasheader));
@@ -92,8 +94,7 @@ namespace spatiumgl {
 			laswriter->update_header(&lasheader, TRUE);
 
 			// close the writer
-			I64 total_bytes = laswriter->close();
-			// laswriter->p_count;
+      laswriter->close();
 
 			return true;
 		}

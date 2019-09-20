@@ -22,7 +22,7 @@ namespace spatiumgl {
 
 		/// \class LasWriterImpl
 		/// \brief Write point cloud to LAS/LAZ file.
-		class LasWriterImpl // SPATIUMGL_EXPORT
+    class LasWriterImpl
 		{
 		public:
 			/// Constructor

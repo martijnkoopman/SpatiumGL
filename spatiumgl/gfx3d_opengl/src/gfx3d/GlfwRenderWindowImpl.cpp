@@ -98,7 +98,7 @@ namespace spatiumgl {
 		bool GlfwRenderWindowImpl::createWindow(int width, int height)
 		{
 			// Create window with OpenGL context
-			m_window = glfwCreateWindow(width, height, "SpatiumGL Render Window", NULL, NULL);
+      m_window = glfwCreateWindow(width, height, "SpatiumGL Render Window", nullptr, nullptr);
 			if (!m_window)
 			{
 				fprintf(stderr, "Failed to create window or OpenGL context.\n");
@@ -131,7 +131,7 @@ namespace spatiumgl {
 			if (m_parent->m_debug)
 			{
 				glEnable(GL_DEBUG_OUTPUT);
-				glDebugMessageCallback(opengl_error_callback, NULL);
+        glDebugMessageCallback(opengl_error_callback, nullptr);
 			}
 
 			// Capture frame buffer resize event (is not equal to window size)
@@ -205,7 +205,7 @@ namespace spatiumgl {
 			glClearColor(0.227f, 0.227f, 0.227f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT); // Depth (Also glEnable(depth)
 
-			m_parent->m_renderer->render(m_parent->m_camera, (float)m_parent->m_framebufferSize[0] / (float)m_parent->m_framebufferSize[1]);
+      m_parent->m_renderer->render(m_parent->m_camera, static_cast<double>(m_parent->m_framebufferSize[0]) / static_cast<double>(m_parent->m_framebufferSize[1]));
 
 			// Swap front and back buffer (front = displayed, back = rendered)
 			glfwSwapBuffers(m_window);

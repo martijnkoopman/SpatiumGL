@@ -38,7 +38,7 @@ namespace spatiumgl {
 			glGetShaderiv(m_vertexShaderId, GL_COMPILE_STATUS, &success);
 			if (success == 0)
 			{
-				glGetShaderInfoLog(m_vertexShaderId, 512, NULL, infoLog);
+        glGetShaderInfoLog(m_vertexShaderId, 512, nullptr, infoLog);
 				errorMessage = infoLog;
 				return false;
 			}
@@ -47,7 +47,7 @@ namespace spatiumgl {
 			glGetShaderiv(m_fragmentShaderId, GL_COMPILE_STATUS, &success);
 			if (success == 0)
 			{
-				glGetShaderInfoLog(m_fragmentShaderId, 512, NULL, infoLog);
+        glGetShaderInfoLog(m_fragmentShaderId, 512, nullptr, infoLog);
 				errorMessage = infoLog;
 				return false;
 			}
@@ -56,7 +56,7 @@ namespace spatiumgl {
 			glGetProgramiv(m_shaderProgramId, GL_LINK_STATUS, &success);
 			if (success == 0)
 			{
-				glGetProgramInfoLog(m_shaderProgramId, 512, NULL, infoLog);
+        glGetProgramInfoLog(m_shaderProgramId, 512, nullptr, infoLog);
 				errorMessage = infoLog;
 				return false;
 			}

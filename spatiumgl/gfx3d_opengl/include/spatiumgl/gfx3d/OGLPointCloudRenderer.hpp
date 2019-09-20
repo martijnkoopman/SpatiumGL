@@ -29,7 +29,7 @@ namespace spatiumgl {
 			OGLPointCloudRenderer(const PointCloud* pointCloud);
 
 			/// Destructor
-			virtual ~OGLPointCloudRenderer();
+      virtual ~OGLPointCloudRenderer() override;
 
 			/// Get the point cloud.
 			///
