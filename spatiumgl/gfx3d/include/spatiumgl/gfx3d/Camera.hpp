@@ -19,7 +19,8 @@
 namespace spatiumgl {
 	namespace gfx3d {
 
-		class SPATIUMGL_EXPORT public SceneObject
+		class SPATIUMGL_EXPORT Camera : public SceneObject
+		{
 		public:
 			/// Constructor
 			///
