@@ -24,18 +24,12 @@ namespace spatiumgl {
 		public:
 			/// Constructor
 			///
-			/// \param[in] fov Field of view angle
 			/// \param[in] near Distance to near clipping plane
 			/// \param[in] far Distance to far clipping plane
-			Camera(double fov, double near, double far);
+			Camera(double near, double far);
 
 			/// Destructor
 			virtual ~Camera() = default;
-
-			/// Get the (vertical?) field of view angle (radians).
-			///
-			/// \return Field of view angle 
-			double fov() const;
 
 			/// Get the distance to the near clipping plane in world space.
 			///
@@ -60,17 +54,21 @@ namespace spatiumgl {
 			/// The resulting transformation matrix maps the reference point to the
 			/// negative z axis and the eye point to the origin.
 			///
-			/// \param[in] eye Camera/eye position
 			/// \param[in] target Target position
 			/// \param[in] up Up vector
 			///                May not be parallel with vector from eye to target
-			void lookAt(const Vector3& eye, const Vector3& target,
-				const Vector3& up);
+			/// \param[in] eye Camera/eye position
+			void lookAt(const Vector3& target, const Vector3& up, const Vector3& eye);
 
 			void orthogonalizeViewUp();
 
+			/// Get the projection matrix.
+			///
+			/// \param[in] aspect Aspect ratio (w/h)
+			/// \return Projection matrix
+			virtual Matrix4 projectionMatrix(double aspect) const = 0;
+
 		protected:
-			double m_fov;
 			double m_near;
 			double m_far;
 		};

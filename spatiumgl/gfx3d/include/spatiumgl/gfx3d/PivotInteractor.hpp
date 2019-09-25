@@ -15,6 +15,7 @@
 
 #include "spatiumglexport.hpp"
 #include "RenderWindowInteractor.hpp"
+#include "spatiumgl/Vector3.hpp"
 
 namespace spatiumgl {
 	namespace gfx3d {
@@ -22,12 +23,18 @@ namespace spatiumgl {
 		{
 		public:
 			PivotInteractor(RenderWindow* window);
-			virtual void OnMousePressed(MouseButton button, double x, double y) override;
-			virtual void OnMouseReleased(MouseButton button, double x, double y) override;
+
+			void setPivotPoint(const Vector3& pivotPoint);
+			Vector3 pivotPoint() const;
+
+			virtual void OnMouseButtonPressed(MouseButton button, double x, double y) override;
+			virtual void OnMouseButtonReleased(MouseButton button, double x, double y) override;
+			virtual void OnMouseWheelScrolled(double scroll) override;
 			virtual void OnMouseMoved(double deltaX, double deltaY) override;
 
 		protected:
 			bool m_pressed;
+			Vector3 m_pivotPoint;
 		};
 
 	} // namespace gfx3d

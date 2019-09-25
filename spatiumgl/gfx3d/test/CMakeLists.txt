@@ -1,6 +1,6 @@
 project(gfx3d_test LANGUAGES CXX)
 
-add_executable(gfx3d_test test_PointCloud.cpp)
+add_executable(gfx3d_test test_Transform.cpp test_PointCloud.cpp test_Camera.cpp)
 
 target_link_libraries(gfx3d_test PRIVATE spatiumgl GTest::gtest GTest::gtest_main)
 

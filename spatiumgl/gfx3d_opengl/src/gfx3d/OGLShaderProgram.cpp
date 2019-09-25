@@ -17,14 +17,28 @@
 namespace spatiumgl {
 	namespace gfx3d {
 
+		OGLShaderProgram::OGLShaderProgram()
+			: m_vertexShaderId(0)
+			, m_fragmentShaderId(0)
+			, m_shaderProgramId(0)
+		{
+		}
+
 		OGLShaderProgram::OGLShaderProgram(const std::string& vertexShaderSource,
 			const std::string& fragmentShaderSource)
 		{
 			createShaderProgram(vertexShaderSource, fragmentShaderSource);
 		}
 
+		OGLShaderProgram::~OGLShaderProgram()
+		{
+			free();
+		}
+
 		void OGLShaderProgram::setShaderSources(const std::string& vertexShaderSource, const std::string& fragmentShaderSource)
 		{
+			free();
+
 			createShaderProgram(vertexShaderSource, fragmentShaderSource);
 		}
 
@@ -38,7 +52,7 @@ namespace spatiumgl {
 			glGetShaderiv(m_vertexShaderId, GL_COMPILE_STATUS, &success);
 			if (success == 0)
 			{
-        glGetShaderInfoLog(m_vertexShaderId, 512, nullptr, infoLog);
+				glGetShaderInfoLog(m_vertexShaderId, 512, nullptr, infoLog);
 				errorMessage = infoLog;
 				return false;
 			}
@@ -47,7 +61,7 @@ namespace spatiumgl {
 			glGetShaderiv(m_fragmentShaderId, GL_COMPILE_STATUS, &success);
 			if (success == 0)
 			{
-        glGetShaderInfoLog(m_fragmentShaderId, 512, nullptr, infoLog);
+				glGetShaderInfoLog(m_fragmentShaderId, 512, nullptr, infoLog);
 				errorMessage = infoLog;
 				return false;
 			}
@@ -56,7 +70,7 @@ namespace spatiumgl {
 			glGetProgramiv(m_shaderProgramId, GL_LINK_STATUS, &success);
 			if (success == 0)
 			{
-        glGetProgramInfoLog(m_shaderProgramId, 512, nullptr, infoLog);
+				glGetProgramInfoLog(m_shaderProgramId, 512, nullptr, infoLog);
 				errorMessage = infoLog;
 				return false;
 			}
@@ -67,6 +81,17 @@ namespace spatiumgl {
 		void OGLShaderProgram::use()
 		{
 			glUseProgram(m_shaderProgramId);
+		}
+
+		void OGLShaderProgram::free()
+		{
+			if (m_shaderProgramId > 0)
+			{
+				glDeleteProgram(m_shaderProgramId);
+				m_shaderProgramId = 0;
+				m_vertexShaderId = 0;
+				m_fragmentShaderId = 0;
+			}
 		}
 
 		// Protected functions
@@ -96,6 +121,6 @@ namespace spatiumgl {
 			glDeleteShader(m_vertexShaderId);
 			glDeleteShader(m_fragmentShaderId);
 		}
-		
+
 	} // namespace gfx3d
 } // namespace spatiumgl

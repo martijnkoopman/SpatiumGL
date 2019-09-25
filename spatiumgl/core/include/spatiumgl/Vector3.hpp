@@ -32,12 +32,12 @@ namespace spatiumgl
 		/// \param[in] x X value
 		/// \param[in] y Y value
 		/// \param[in] z Z value
-    Vector(T x, T y, T z)
-      : VectorBase<T,3>()
+		Vector(T x, T y, T z)
+			: VectorBase<T, 3>()
 		{
-      this->m_data[0] = x;
-      this->m_data[1] = y;
-      this->m_data[2] = z;
+			this->m_data[0] = x;
+			this->m_data[1] = y;
+			this->m_data[2] = z;
 		}
 
 		/// Access X element by reference.
@@ -45,7 +45,7 @@ namespace spatiumgl
 		/// \return X element reference
 		T& x()
 		{
-      return this->m_data[0];
+			return this->m_data[0];
 		}
 
 		/// Access X element by const reference.
@@ -53,7 +53,7 @@ namespace spatiumgl
 		/// \return X element const reference
 		const T& x() const
 		{
-      return this->m_data[0];
+			return this->m_data[0];
 		}
 
 		/// Access Y element by reference.
@@ -61,7 +61,7 @@ namespace spatiumgl
 		/// \return Y element reference
 		T& y()
 		{
-      return this->m_data[1];
+			return this->m_data[1];
 		}
 
 		/// Access Y element by const reference.
@@ -69,7 +69,7 @@ namespace spatiumgl
 		/// \return Y element const reference
 		const T& y() const
 		{
-      return this->m_data[1];
+			return this->m_data[1];
 		}
 
 		/// Access Z element by reference.
@@ -77,7 +77,7 @@ namespace spatiumgl
 		/// \return Z element reference
 		T& z()
 		{
-      return this->m_data[2];
+			return this->m_data[2];
 		}
 
 		/// Access Z element by const reference.
@@ -85,7 +85,7 @@ namespace spatiumgl
 		/// \return Z element const reference
 		const T& z() const
 		{
-      return this->m_data[2];
+			return this->m_data[2];
 		}
 
 		// Compare operators
@@ -96,9 +96,9 @@ namespace spatiumgl
 		/// \return True if equal, otherwise false
 		bool operator==(const Vector<T, 3> & other) const
 		{
-      if (this->m_data[0] != other.m_data[0]
-        || this->m_data[1] != other.m_data[1]
-        || this->m_data[2] != other.m_data[2])
+			if (this->m_data[0] != other.m_data[0]
+				|| this->m_data[1] != other.m_data[1]
+				|| this->m_data[2] != other.m_data[2])
 			{
 				return false;
 			}
@@ -109,7 +109,7 @@ namespace spatiumgl
 		///
 		/// \param[in] other Other vector
 		/// \return True if unequal, otherwise false
-		bool operator!=(const Vector<T, 3> &other) const
+		bool operator!=(const Vector<T, 3> & other) const
 		{
 			return !(operator ==(other));
 		}
@@ -120,12 +120,12 @@ namespace spatiumgl
 		///
 		/// \param[in] other Vector to add
 		/// \return Added vector
-		Vector<T, 3> operator+(const Vector<T, 3> &other) const
+		Vector<T, 3> operator+(const Vector<T, 3> & other) const
 		{
 			Vector<T, 3> result;
-      result[0] = this->m_data[0] + other[0];
-      result[1] = this->m_data[1] + other[1];
-      result[2] = this->m_data[2] + other[2];
+			result[0] = this->m_data[0] + other[0];
+			result[1] = this->m_data[1] + other[1];
+			result[2] = this->m_data[2] + other[2];
 			return result;
 		}
 
@@ -136,9 +136,9 @@ namespace spatiumgl
 		Vector<T, 3> operator-(const Vector<T, 3> & other) const
 		{
 			Vector<T, 3> result;
-      result[0] = this->m_data[0] - other[0];
-      result[1] = this->m_data[1] - other[1];
-      result[2] = this->m_data[2] - other[2];
+			result[0] = this->m_data[0] - other[0];
+			result[1] = this->m_data[1] - other[1];
+			result[2] = this->m_data[2] - other[2];
 			return result;
 		}
 
@@ -149,9 +149,9 @@ namespace spatiumgl
 		Vector<T, 3> operator*(T scalar) const
 		{
 			Vector<T, 3> result;
-      result[0] = this->m_data[0] * scalar;
-      result[1] = this->m_data[1] * scalar;
-      result[2] = this->m_data[2] * scalar;
+			result[0] = this->m_data[0] * scalar;
+			result[1] = this->m_data[1] * scalar;
+			result[2] = this->m_data[2] * scalar;
 			return result;
 		}
 
@@ -162,9 +162,9 @@ namespace spatiumgl
 		Vector<T, 3> operator/(T scalar) const
 		{
 			Vector<T, 3> result;
-      result[0] = this->m_data[0] / scalar;
-      result[1] = this->m_data[1] / scalar;
-      result[2] = this->m_data[2] / scalar;
+			result[0] = this->m_data[0] / scalar;
+			result[1] = this->m_data[1] / scalar;
+			result[2] = this->m_data[2] / scalar;
 			return result;
 		}
 
@@ -174,9 +174,9 @@ namespace spatiumgl
 		constexpr T length() const
 		{
 			return sqrt(
-        this->m_data[0] * this->m_data[0] +
-        this->m_data[1] * this->m_data[1] +
-        this->m_data[2] * this->m_data[2]);
+				this->m_data[0] * this->m_data[0] +
+				this->m_data[1] * this->m_data[1] +
+				this->m_data[2] * this->m_data[2]);
 		}
 
 		/// Normalize the vector.
@@ -184,9 +184,9 @@ namespace spatiumgl
 		void normalize()
 		{
 			const T l = length();
-      this->m_data[0] = this->m_data[0] / l;
-      this->m_data[1] = this->m_data[1] / l;
-      this->m_data[2] = this->m_data[2] / l;
+			this->m_data[0] = this->m_data[0] / l;
+			this->m_data[1] = this->m_data[1] / l;
+			this->m_data[2] = this->m_data[2] / l;
 		}
 
 		/// Get normalized copy of vector.
@@ -197,9 +197,9 @@ namespace spatiumgl
 		{
 			const T l = length();
 			Vector<T, 3> result;
-      result[0] = this->m_data[0] / l;
-      result[1] = this->m_data[1] / l;
-      result[2] = this->m_data[2] / l;
+			result[0] = this->m_data[0] / l;
+			result[1] = this->m_data[1] / l;
+			result[2] = this->m_data[2] / l;
 			return result;
 		}
 
@@ -211,11 +211,11 @@ namespace spatiumgl
 		///
 		/// \param[in] other Other vector
 		/// \return Dot product
-		constexpr T dot(const Vector<T, 3>& other) const
+		constexpr T dot(const Vector<T, 3> & other) const
 		{
-      return (this->m_data[0] * other[0] +
-        this->m_data[1] * other[1] +
-        this->m_data[2] * other[2]);
+			return (this->m_data[0] * other[0] +
+				this->m_data[1] * other[1] +
+				this->m_data[2] * other[2]);
 		}
 
 		/// Calculate cross product with vector.
@@ -237,7 +237,7 @@ namespace spatiumgl
 		///
 		/// \param[in] other Other vector
 		/// \return Angle in radians
-		constexpr T angle(const Vector<T, 3>& other) const
+		constexpr T angle(const Vector<T, 3> & other) const
 		{
 			return acos((this->dot(other)) / (this->length() * other.length()));
 		}
@@ -246,13 +246,13 @@ namespace spatiumgl
 		///
 		/// \param[in] other Vector to project
 		/// \return Projected vector
-		Vector<T, 3> project(const Vector<T, 3>& other) const
+		Vector<T, 3> project(const Vector<T, 3> & other) const
 		{
 			return this->normalized() * (other.dot(*this) / this->length());
 		}
 
 		/// Output to ostream
-		friend std::ostream& operator<<(std::ostream& os, const Vector<T, 3>& vector)
+		friend std::ostream& operator<<(std::ostream& os, const Vector<T, 3> & vector)
 		{
 			os << "(" << vector[0] << ", " << vector[1] << ", " << vector[2] << ")";
 			return os;

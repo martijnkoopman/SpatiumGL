@@ -14,17 +14,11 @@
 
 namespace spatiumgl {
 	namespace gfx3d {
-		Camera::Camera(double fov, double near, double far)
+		Camera::Camera(double near, double far)
 			: SceneObject()
-			, m_fov(fov)
 			, m_near(near)
 			, m_far(far)
 		{
-		}
-
-		double Camera::fov() const
-		{
-			return m_fov;
 		}
 
 		/// Get the distance to the near clipping plane in world space.
@@ -53,7 +47,7 @@ namespace spatiumgl {
 		void Camera::lookAt(const Vector3& target, const Vector3& up)
 		{
 			// Compute vector from target to eye
-			Vector3 back = (m_transform.position() - target).normalized();
+			Vector3 back = (m_transform.translation() - target).normalized();
 
 			// Normalize and orthogonalize view up vector
 			Vector3 right = Vector3(up.normalized()).cross(back);
@@ -61,7 +55,7 @@ namespace spatiumgl {
 
 			// Set rotation of transformation matrix based on view direction and view
 			// up vector.
-			Matrix4x4 M = m_transform.matrix();
+			Matrix4 M = m_transform.matrix();
 
 			// First COLUMN is right vector
 			M[0] = Vector4(right, 0.0);
@@ -83,10 +77,10 @@ namespace spatiumgl {
 		/// \param[in] target Target position
 		/// \param[in] up Up vector
 		///                May not be parallel with vector from eye to target
-		void Camera::lookAt(const Vector3& eye, const Vector3& target,
-			const Vector3& up)
+		void Camera::lookAt(const Vector3& target, const Vector3& up, 
+			const Vector3& eye)
 		{
-			m_transform.setPosition(eye);
+			m_transform.setTranslation(eye);
 			lookAt(target, up);
 		}
 
@@ -115,7 +109,7 @@ namespace spatiumgl {
 		{
 			Vector3 upOrtho = m_transform.back().cross(m_transform.right());
 
-			Matrix4x4 M = m_transform.matrix();
+			Matrix4 M = m_transform.matrix();
 
 			// Second COLUMN is up vector
 			M[1] = Vector4(upOrtho, 0.0);

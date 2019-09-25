@@ -16,12 +16,8 @@ namespace spatiumgl {
 	namespace gfx3d {
 
 		Transform::Transform()
-			: m_matrix() // identity matrix
+			: m_matrix(1) // identity matrix
 		{
-			m_matrix[0][0] = 1.0f;
-			m_matrix[1][1] = 1.0f;
-			m_matrix[2][2] = 1.0f;
-			m_matrix[3][3] = 1.0f;
 		}
 
 		Vector3 Transform::right() const
@@ -39,14 +35,19 @@ namespace spatiumgl {
 			return { m_matrix[2][0], m_matrix[2][1], m_matrix[2][2] };
 		}
 
-		Vector3 Transform::position() const
+		Vector3 Transform::translation() const
 		{
 			return { m_matrix[3][0], m_matrix[3][1], m_matrix[3][2] };
 		}
 
-		void Transform::setPosition(const Vector3& position)
+		void Transform::setTranslation(const Vector3& translation)
 		{
-			m_matrix[3] = Vector4(position, 1.0f);
+			m_matrix[3] = Vector4(translation, 1.0);
+		}
+
+		void Transform::applyTranslation(const Vector3& translation)
+		{
+			m_matrix[3] = m_matrix[3] + Vector4(translation, 1.0);
 		}
 
 		/*
@@ -65,7 +66,7 @@ namespace spatiumgl {
 		/// \return Scale on x, y and z axis
 		geom3d::Vector3 scale() const
 		{
-		  const geom3d::Matrix4x4 &M = m_matrix;
+		  const geom3d::Matrix4 &M = m_matrix;
 		  double x = geom3d::Vector3(M(0,0), M(1,0), M(2,0)).length(); // 1st column
 		  double y = geom3d::Vector3(M(0,1), M(1,1), M(2,1)).length(); // 2nd column
 		  double z = geom3d::Vector3(M(0,2), M(1,2), M(2,2)).length(); // 3rd column
@@ -78,7 +79,7 @@ namespace spatiumgl {
 		void rotate(const geom3d::Vector3 &euler)
 		{
 		  ///\todo This doesn't work... Use TRS?
-		  m_matrix = m_matrix * geom3d::Matrix4x4::rotation(euler.x(), euler.y(), euler.z());
+		  m_matrix = m_matrix * geom3d::Matrix4::rotation(euler.x(), euler.y(), euler.z());
 		}
 
 		/// Rotate around axis (relative to self/object space)
@@ -87,7 +88,7 @@ namespace spatiumgl {
 		/// \param[in] angle Angle in radians
 		void rotateAround(const geom3d::Vector3 &axis, double angle)
 		{
-		  m_matrix = geom3d::Matrix4x4::rotationAround(axis, angle) * m_matrix;
+		  m_matrix = geom3d::Matrix4::rotationAround(axis, angle) * m_matrix;
 		}
 
 		/// Set the rotation in world space
@@ -100,9 +101,9 @@ namespace spatiumgl {
 		  geom3d::Point3 t = position();
 
 		  // Create translation, rotation and scale matrix
-		  geom3d::Matrix4x4 T = geom3d::Matrix4x4::translation(t.x(), t.y(), t.z());
-		  geom3d::Matrix4x4 R = geom3d::Matrix4x4::rotation(euler.x(), euler.y(), euler.z());
-		  geom3d::Matrix4x4 S = geom3d::Matrix4x4::scaling(s.x(), s.y(), s.z());
+		  geom3d::Matrix4 T = geom3d::Matrix4::translation(t.x(), t.y(), t.z());
+		  geom3d::Matrix4 R = geom3d::Matrix4::rotation(euler.x(), euler.y(), euler.z());
+		  geom3d::Matrix4 S = geom3d::Matrix4::scaling(s.x(), s.y(), s.z());
 
 		  // Constrcut matrix (scale first, then rotate, then translate)
 		  m_matrix = T * R * S;
@@ -117,7 +118,7 @@ namespace spatiumgl {
 
 		  // Extract euler angles from matrix
 		  double x, y, z;
-		  const geom3d::Matrix4x4 &M = m_matrix;
+		  const geom3d::Matrix4 &M = m_matrix;
 		  if (M(2,0) != 1 && M(2,0) != -1) ///\todo Unsafe compare
 		  {
 			y = -asin(M(2,0));
@@ -150,12 +151,17 @@ namespace spatiumgl {
 		}
 		*/
 
-		void Transform::setMatrix(const Matrix4x4& matrix)
+		void Transform::setMatrix(const Matrix4& matrix)
 		{
 			m_matrix = matrix;
 		}
 
-		Matrix4x4 Transform::matrix() const
+		Matrix4& Transform::matrix()
+		{
+			return m_matrix;
+		}
+
+		const Matrix4& Transform::matrix() const
 		{
 			return m_matrix;
 		}

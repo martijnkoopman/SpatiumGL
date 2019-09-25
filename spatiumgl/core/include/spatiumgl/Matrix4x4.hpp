@@ -27,27 +27,27 @@ namespace spatiumgl
 		/// Default constructor
 		///
 		/// Sets all elements to 0.
-    Matrix() = default;
+		Matrix() = default;
 
 		/// Constructor
 		///
 		/// Sets all elements to 0 except diagonal elements.
 		///
 		/// \param[in] diagional Diagonal value
-    Matrix(T diagional)
-      : MatrixBase<T,4,4>()
+		Matrix(T diagional)
+			: MatrixBase<T, 4, 4>()
 		{
-      this->m_data[0][0] = diagional;
-      this->m_data[1][1] = diagional;
-      this->m_data[2][2] = diagional;
-      this->m_data[3][3] = diagional;
+			this->m_data[0][0] = diagional;
+			this->m_data[1][1] = diagional;
+			this->m_data[2][2] = diagional;
+			this->m_data[3][3] = diagional;
 		}
 
 		/// Constructor
 		///
 		/// \param[in] Data Initializer list with column-major ordering.
 		constexpr Matrix(std::initializer_list<std::initializer_list<T>> data)
-      : MatrixBase<T,4,4>(data)
+			: MatrixBase<T, 4, 4>(data)
 		{
 		}
 
@@ -59,10 +59,10 @@ namespace spatiumgl
 		/// \return True if equal, otherwise false
 		bool operator==(const Matrix<T, 4, 4> & other) const
 		{
-      if (this->m_data[0] != other.m_data[0]
-        || this->m_data[1] != other.m_data[1]
-        || this->m_data[2] != other.m_data[2]
-        || this->m_data[3] != other.m_data[3])
+			if (this->m_data[0] != other.m_data[0]
+				|| this->m_data[1] != other.m_data[1]
+				|| this->m_data[2] != other.m_data[2]
+				|| this->m_data[3] != other.m_data[3])
 			{
 				return false;
 			}
@@ -87,22 +87,22 @@ namespace spatiumgl
 		Matrix<T, 4, 4> operator+(const Matrix<T, 4, 4> & other) const
 		{
 			Matrix<T, 4, 4> result;
-      result[0][0] = this->m_data[0][0] + other[0][0];
-      result[0][1] = this->m_data[0][1] + other[0][1];
-      result[0][2] = this->m_data[0][2] + other[0][2];
-      result[0][3] = this->m_data[0][3] + other[0][3];
-      result[1][0] = this->m_data[1][0] + other[1][0];
-      result[1][1] = this->m_data[1][1] + other[1][1];
-      result[1][2] = this->m_data[1][2] + other[1][2];
-      result[1][3] = this->m_data[1][3] + other[1][3];
-      result[2][0] = this->m_data[2][0] + other[2][0];
-      result[2][1] = this->m_data[2][1] + other[2][1];
-      result[2][2] = this->m_data[2][2] + other[2][2];
-      result[2][3] = this->m_data[2][3] + other[2][3];
-      result[3][0] = this->m_data[3][0] + other[3][0];
-      result[3][1] = this->m_data[3][1] + other[3][1];
-      result[3][2] = this->m_data[3][2] + other[3][2];
-      result[3][3] = this->m_data[3][3] + other[3][3];
+			result[0][0] = this->m_data[0][0] + other[0][0];
+			result[0][1] = this->m_data[0][1] + other[0][1];
+			result[0][2] = this->m_data[0][2] + other[0][2];
+			result[0][3] = this->m_data[0][3] + other[0][3];
+			result[1][0] = this->m_data[1][0] + other[1][0];
+			result[1][1] = this->m_data[1][1] + other[1][1];
+			result[1][2] = this->m_data[1][2] + other[1][2];
+			result[1][3] = this->m_data[1][3] + other[1][3];
+			result[2][0] = this->m_data[2][0] + other[2][0];
+			result[2][1] = this->m_data[2][1] + other[2][1];
+			result[2][2] = this->m_data[2][2] + other[2][2];
+			result[2][3] = this->m_data[2][3] + other[2][3];
+			result[3][0] = this->m_data[3][0] + other[3][0];
+			result[3][1] = this->m_data[3][1] + other[3][1];
+			result[3][2] = this->m_data[3][2] + other[3][2];
+			result[3][3] = this->m_data[3][3] + other[3][3];
 			return result;
 		}
 
@@ -113,22 +113,22 @@ namespace spatiumgl
 		Matrix<T, 4, 4> operator-(const Matrix<T, 4, 4> & other) const
 		{
 			Matrix<T, 4, 4> result;
-      result[0][0] = this->m_data[0][0] - other[0][0];
-      result[0][1] = this->m_data[0][1] - other[0][1];
-      result[0][2] = this->m_data[0][2] - other[0][2];
-      result[0][3] = this->m_data[0][3] - other[0][3];
-      result[1][0] = this->m_data[1][0] - other[1][0];
-      result[1][1] = this->m_data[1][1] - other[1][1];
-      result[1][2] = this->m_data[1][2] - other[1][2];
-      result[1][3] = this->m_data[1][3] - other[1][3];
-      result[2][0] = this->m_data[2][0] - other[2][0];
-      result[2][1] = this->m_data[2][1] - other[2][1];
-      result[2][2] = this->m_data[2][2] - other[2][2];
-      result[2][3] = this->m_data[2][3] - other[2][3];
-      result[3][0] = this->m_data[3][0] - other[3][0];
-      result[3][1] = this->m_data[3][1] - other[3][1];
-      result[3][2] = this->m_data[3][2] - other[3][2];
-      result[3][3] = this->m_data[3][3] - other[3][3];
+			result[0][0] = this->m_data[0][0] - other[0][0];
+			result[0][1] = this->m_data[0][1] - other[0][1];
+			result[0][2] = this->m_data[0][2] - other[0][2];
+			result[0][3] = this->m_data[0][3] - other[0][3];
+			result[1][0] = this->m_data[1][0] - other[1][0];
+			result[1][1] = this->m_data[1][1] - other[1][1];
+			result[1][2] = this->m_data[1][2] - other[1][2];
+			result[1][3] = this->m_data[1][3] - other[1][3];
+			result[2][0] = this->m_data[2][0] - other[2][0];
+			result[2][1] = this->m_data[2][1] - other[2][1];
+			result[2][2] = this->m_data[2][2] - other[2][2];
+			result[2][3] = this->m_data[2][3] - other[2][3];
+			result[3][0] = this->m_data[3][0] - other[3][0];
+			result[3][1] = this->m_data[3][1] - other[3][1];
+			result[3][2] = this->m_data[3][2] - other[3][2];
+			result[3][3] = this->m_data[3][3] - other[3][3];
 			return result;
 		}
 
@@ -139,13 +139,13 @@ namespace spatiumgl
 		///
 		/// \param[in] vector Vector to multiply with
 		/// \return Multiplied vector
-    Vector<T, 4> operator*(const Vector<T, 4> & vector) const
+		Vector<T, 4> operator*(const Vector<T, 4> & vector) const
 		{
 			Vector<T, 4> result;
-      result[0] = this->m_data[0][0] * vector[0] + this->m_data[1][0] * vector[1] + this->m_data[2][0] * vector[2] + this->m_data[3][0] * vector[3];
-      result[1] = this->m_data[0][1] * vector[0] + this->m_data[1][1] * vector[1] + this->m_data[2][1] * vector[2] + this->m_data[3][1] * vector[3];
-      result[2] = this->m_data[0][2] * vector[0] + this->m_data[1][2] * vector[1] + this->m_data[2][2] * vector[2] + this->m_data[3][2] * vector[3];
-      result[3] = this->m_data[0][3] * vector[0] + this->m_data[1][3] * vector[1] + this->m_data[2][3] * vector[2] + this->m_data[3][3] * vector[3];
+			result[0] = this->m_data[0][0] * vector[0] + this->m_data[1][0] * vector[1] + this->m_data[2][0] * vector[2] + this->m_data[3][0] * vector[3];
+			result[1] = this->m_data[0][1] * vector[0] + this->m_data[1][1] * vector[1] + this->m_data[2][1] * vector[2] + this->m_data[3][1] * vector[3];
+			result[2] = this->m_data[0][2] * vector[0] + this->m_data[1][2] * vector[1] + this->m_data[2][2] * vector[2] + this->m_data[3][2] * vector[3];
+			result[3] = this->m_data[0][3] * vector[0] + this->m_data[1][3] * vector[1] + this->m_data[2][3] * vector[2] + this->m_data[3][3] * vector[3];
 			return result;
 		}
 
@@ -157,25 +157,25 @@ namespace spatiumgl
 		/// Get transposed matrix.
 		///
 		/// \return Transposed matrix
-    Matrix<T, 3, 3> transposed() const
+		Matrix<T, 3, 3> transposed() const
 		{
 			Matrix<T, 3, 3> result;
-      result[0][0] = this->m_data[0][0];
-      result[0][1] = this->m_data[1][0];
-      result[0][2] = this->m_data[2][0];
-      result[0][3] = this->m_data[3][0];
-      result[1][0] = this->m_data[0][1];
-      result[1][1] = this->m_data[1][1];
-      result[1][2] = this->m_data[2][1];
-      result[1][3] = this->m_data[3][1];
-      result[2][0] = this->m_data[0][2];
-      result[2][1] = this->m_data[1][2];
-      result[2][2] = this->m_data[2][2];
-      result[2][3] = this->m_data[3][2];
-      result[3][0] = this->m_data[0][3];
-      result[3][1] = this->m_data[1][3];
-      result[3][2] = this->m_data[2][3];
-      result[3][3] = this->m_data[3][3];
+			result[0][0] = this->m_data[0][0];
+			result[0][1] = this->m_data[1][0];
+			result[0][2] = this->m_data[2][0];
+			result[0][3] = this->m_data[3][0];
+			result[1][0] = this->m_data[0][1];
+			result[1][1] = this->m_data[1][1];
+			result[1][2] = this->m_data[2][1];
+			result[1][3] = this->m_data[3][1];
+			result[2][0] = this->m_data[0][2];
+			result[2][1] = this->m_data[1][2];
+			result[2][2] = this->m_data[2][2];
+			result[2][3] = this->m_data[3][2];
+			result[3][0] = this->m_data[0][3];
+			result[3][1] = this->m_data[1][3];
+			result[3][2] = this->m_data[2][3];
+			result[3][3] = this->m_data[3][3];
 			return result;
 		}
 
@@ -184,7 +184,7 @@ namespace spatiumgl
 		/// \param[in] row Row to omit
 		/// \param[out] col Column to omit
 		/// \return Matrix with omitted row and column
-    Matrix<T, 3, 3> omit(size_t col, size_t row) const
+		Matrix<T, 3, 3> omit(size_t col, size_t row) const
 		{
 			Matrix<T, 3, 3> result;
 			size_t colCount = 0, rowCount = 0;
@@ -197,7 +197,7 @@ namespace spatiumgl
 					{
 						if (j != col)
 						{
-              result[colCount][rowCount] = this->m_data[j][i];
+							result[colCount][rowCount] = this->m_data[j][i];
 							colCount++;
 						}
 					}
@@ -211,13 +211,13 @@ namespace spatiumgl
 		/// Calculate determinant.
 		///
 		/// \return Determinant
-    T determinant() const
+		T determinant() const
 		{
 			T det = 0;
 			for (size_t i = 0; i < 4; i++)
 			{
 				Matrix<T, 3, 3> minor = omit(i, 0);
-        det += (i % 2 == 1 ? -1.0 : 1.0) * this->m_data[i][0] * minor.determinant();
+				det += (i % 2 == 1 ? -1.0 : 1.0) * this->m_data[i][0] * minor.determinant();
 			}
 			return det;
 		}
@@ -230,7 +230,7 @@ namespace spatiumgl
 		/// \param[in] row Row to omit
 		/// \param[out] col Column to omit
 		/// \return Minor
-    T minor(size_t col, size_t row) const
+		T minor(size_t col, size_t row) const
 		{
 			const Matrix<T, 3, 3> t = omit(col, row);
 			return t.determinant();
@@ -240,7 +240,7 @@ namespace spatiumgl
 		///
 		/// \throw std::out_of_range Matrix has no inverse
 		/// \return Inverse of matrix
-    Matrix<T, 4, 4> inverse() const
+		Matrix<T, 4, 4> inverse() const
 		{
 			const T det = determinant();
 			if (det == 0)
@@ -267,10 +267,54 @@ namespace spatiumgl
 
 		// Geometric operations
 
-    static Matrix<T, 4, 4> perspective(T fovy, T aspect, T near, T far)
+		static Matrix<T, 4, 4> perspective(T fovy, T aspect, T near, T far)
+		{
+			Matrix<T, 4, 4> result(1);
+			// TODO: Compute fields
+			return result;
+		}
+
+		/// Create orthographic projection matrix
+		///
+		/// \param[in] size Frustum size (box)
+		/// \param[in] aspect Aspect ratio (w/h)
+		/// \param[in] near Near clipping plane distance
+		/// \param[in] far Far clipping plane distance
+		static Matrix<T, 4, 4> ortho(T size, T aspect, T near, T far)
 		{
 			Matrix<T, 4, 4> result;
-			// TODO: Compute fields
+			
+			const T n = -near;
+			const T f = -far;
+			const T r = size * 0.5 * aspect;
+			const T l = -r;
+			const T t = size * 0.5;
+			const T b = -t;
+
+			// Column 0
+			result[0][0] = 2 / (r - l);
+			result[0][1] = 0;
+			result[0][2] = 0;
+			result[0][3] = 0;
+
+			// Column 1
+			result[1][0] = 0;
+			result[1][1] = 2 / (t - b);
+			result[1][2] = 0;
+			result[1][3] = 0;
+
+			// Column 2
+			result[2][0] = 0;
+			result[2][1] = 0;
+			result[2][2] = -2 / (n - f);
+			result[2][3] = 0;
+
+			// Column 3
+			result[3][0] = -(r + l) / (r - l);
+			result[3][1] = -(t + b) / (t - b);
+			result[3][2] = -(n + f) / (n - f);
+			result[3][3] = 1;
+
 			return result;
 		}
 	};

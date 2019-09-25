@@ -10,7 +10,7 @@ target_include_directories(gfx3d_opengl PUBLIC
 	$<INSTALL_INTERFACE:include>)
 	
 target_link_libraries(gfx3d_opengl PRIVATE core gfx3d)
-
+ 
 find_package(OpenGL REQUIRED)
 
 target_include_directories(gfx3d_opengl PRIVATE ${OPENGL_INCLUDE_DIR})

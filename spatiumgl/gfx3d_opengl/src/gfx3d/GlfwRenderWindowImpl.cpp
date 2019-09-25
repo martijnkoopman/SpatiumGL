@@ -16,6 +16,8 @@
 #include <GLFW/glfw3.h> // GLFWwindow
 
 #include <iostream>
+#include <iomanip> // std::setprecision
+#include <string>
 
 namespace spatiumgl {
 	namespace gfx3d {
@@ -98,10 +100,12 @@ namespace spatiumgl {
 		bool GlfwRenderWindowImpl::createWindow(int width, int height)
 		{
 			// Create window with OpenGL context
-      m_window = glfwCreateWindow(width, height, "SpatiumGL Render Window", nullptr, nullptr);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+			m_window = glfwCreateWindow(width, height, "SpatiumGL Render Window", nullptr, nullptr);
 			if (!m_window)
 			{
-				fprintf(stderr, "Failed to create window or OpenGL context.\n");
+				std::cerr << "Failed to create window or OpenGL context." << std::endl;
 
 				// Release resources of GLFW
 				glfwTerminate();
@@ -116,12 +120,15 @@ namespace spatiumgl {
 			GLenum glewError = glewInit();
 			if (glewError != GLEW_OK)
 			{
-				fprintf(stderr, "Error: %s\n", glewGetErrorString(glewError));
+				std::cerr << "Error: " << glewGetErrorString(glewError) << std::endl;
 
 				// Exit
 				glfwTerminate();
 				return false;
 			}
+
+			// Enable depth buffer
+			glEnable(GL_DEPTH_TEST);
 
 			// Print OpenGL version in use
 			std::cout << "OpenGL version: " << reinterpret_cast<char const*>(glGetString(GL_VERSION)) << std::endl;
@@ -131,7 +138,7 @@ namespace spatiumgl {
 			if (m_parent->m_debug)
 			{
 				glEnable(GL_DEBUG_OUTPUT);
-        glDebugMessageCallback(opengl_error_callback, nullptr);
+				glDebugMessageCallback(opengl_error_callback, nullptr);
 			}
 
 			// Capture frame buffer resize event (is not equal to window size)
@@ -141,7 +148,7 @@ namespace spatiumgl {
 				});
 
 			// Get current frame buffer size
-			glfwGetFramebufferSize(m_window, &m_parent->m_framebufferSize[0], &m_parent->m_framebufferSize[1]); // m_framebufferSize.data(), m_framebufferSize.data() + 1);
+			glfwGetFramebufferSize(m_window, &m_parent->m_framebufferSize[0], &m_parent->m_framebufferSize[1]);
 
 			// Set swap interval of front and back buffer to 1 frame instead of 0 (immediate)
 			glfwSwapInterval(1);
@@ -164,6 +171,12 @@ namespace spatiumgl {
 			glfwSetScrollCallback(m_window, [](GLFWwindow* win, double xOff, double yOff)
 				{
 					static_cast<GlfwRenderWindowImpl*>(glfwGetWindowUserPointer(win))->glfw_scroll_callback(win, xOff, yOff);
+				});
+
+			// Input event: keys
+			glfwSetKeyCallback(m_window, [](GLFWwindow* win, int key, int scan, int act, int mod)
+				{
+					static_cast<GlfwRenderWindowImpl*>(glfwGetWindowUserPointer(win))->glfw_key_callback(win, key, scan, act, mod);
 				});
 
 			return true;
@@ -190,7 +203,7 @@ namespace spatiumgl {
 				// Draw frame
 				draw();
 
-				processUserInput();
+				//processUserInput();
 
 				// Process events
 				glfwPollEvents();
@@ -203,14 +216,15 @@ namespace spatiumgl {
 		{
 			// Clear color buffer (dark gray)
 			glClearColor(0.227f, 0.227f, 0.227f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT); // Depth (Also glEnable(depth)
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-      m_parent->m_renderer->render(m_parent->m_camera, static_cast<double>(m_parent->m_framebufferSize[0]) / static_cast<double>(m_parent->m_framebufferSize[1]));
+			m_parent->m_renderer->render(m_parent->m_camera, static_cast<double>(m_parent->m_framebufferSize[0]) / static_cast<double>(m_parent->m_framebufferSize[1]));
 
 			// Swap front and back buffer (front = displayed, back = rendered)
 			glfwSwapBuffers(m_window);
 		}
 
+		/*
 		void GlfwRenderWindowImpl::processUserInput()
 		{
 			// Check keyboard input
@@ -246,6 +260,7 @@ namespace spatiumgl {
 			prevMouseX = mousePosX;
 			prevMouseY = mousePosY;
 		}
+		*/
 
 		// GLFW callback functions:
 
@@ -269,12 +284,21 @@ namespace spatiumgl {
 
 		void GlfwRenderWindowImpl::glfw_cursor_pos_callback(GLFWwindow* window, double xpos, double ypos)
 		{
-			std::cout << "Cursor " << xpos << " " << ypos << std::endl;
+			double deltaX = xpos - prevMouseX;
+			double deltaY = ypos - prevMouseY;
+			prevMouseX = xpos;
+			prevMouseY = ypos;
+			m_parent->m_interactor->OnMouseMoved(deltaX, deltaY);
 		}
 
 		void GlfwRenderWindowImpl::glfw_scroll_callback(GLFWwindow* window, double xOffset, double yOffset)
 		{
-			std::cout << "Scroll " << xOffset << " " << xOffset << std::endl;
+			m_parent->m_interactor->OnMouseWheelScrolled(yOffset);
+		}
+
+		void GlfwRenderWindowImpl::glfw_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+		{
+			std::cout << "Key " << key << " " << scancode << " " << action << " " << mods << std::endl;
 		}
 
 		void GlfwRenderWindowImpl::glfw_error_callback(int error, const char* description)

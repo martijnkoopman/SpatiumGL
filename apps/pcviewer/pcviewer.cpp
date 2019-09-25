@@ -1,11 +1,13 @@
 #include <spatiumgl/Vector.hpp>
 #include <spatiumgl/Matrix.hpp>
 #include <spatiumgl/Math.hpp>
-#include <spatiumgl/gfx3d/Camera.hpp>
+#include <spatiumgl/gfx3d/OrthographicCamera.hpp>
 #include <spatiumgl/gfx3d/PointCloud.hpp>
 #include <spatiumgl/io/LasReader.hpp>
 #include <spatiumgl/gfx3d/OGLPointCloudRenderer.hpp>
 #include <spatiumgl/gfx3d/GlfwRenderWindow.hpp>
+
+#include <spatiumgl/gfx3d/OGLTriangleRenderer.hpp>
 
 #include <iostream>
 
@@ -50,7 +52,7 @@ int main(int argc, char* argv[])
 			colors.push_back(color);
 		}
 	}
-	spatiumgl::gfx3d::PointCloud pointcloud(positions, colors);
+	spatiumgl::gfx3d::PointCloud pointcloud(positions);//, colors);
 
 	// Optional: request OpenGL context version with glfwWindowHint()
 
@@ -73,8 +75,8 @@ int main(int argc, char* argv[])
 
 	// BEGIN: OpenGL rendering stuff...
 	
-	spatiumgl::gfx3d::Camera camera(45.0 * spatiumgl::Deg2Rad<double>(), 1.0, 10000.0);
-	camera.lookAt(spatiumgl::Vector3(0, -10, 0), spatiumgl::Vector3(0, 0, 0), spatiumgl::Vector3(0,0,1));
+	spatiumgl::gfx3d::OrthographicCamera camera(8, 0.1, 10);
+	camera.lookAt(spatiumgl::Vector3(0, 0, 0), spatiumgl::Vector3(0, 1, 0), spatiumgl::Vector3(0,0,4));
 	//std::cout << glm::to_string(camera->transform().matrix()) << std::endl;
 	//std::cout << "Camera pos: " << camera->transform().position().x << " " << camera->transform().position().y << " " << camera->transform().position().z << std::endl;
 	//std::cout << "Camera up: " << camera->transform().up().x << " " << camera->transform().up().y << " " << camera->transform().up().z << std::endl;
@@ -92,7 +94,7 @@ int main(int argc, char* argv[])
 	//	{ 0.0f, 0.0f, 1.0f }
 	//};
 	// Create point cloud renderer
-	spatiumgl::gfx3d::OGLPointCloudRenderer renderer(&pointcloud);
+	spatiumgl::gfx3d::OGLTriangleRenderer renderer;
 	if (!renderer.isValid())
 	{
 		// Exit

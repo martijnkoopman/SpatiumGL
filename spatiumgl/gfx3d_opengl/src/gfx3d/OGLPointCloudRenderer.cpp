@@ -23,8 +23,6 @@ namespace spatiumgl {
 		OGLPointCloudRenderer::OGLPointCloudRenderer(const PointCloud* pointCloud)
 			: OGLRenderer(pointCloud)
 		{
-			m_valid = true;
-
 			std::string vertexShaderSrc, fragmentShaderSrc;
 			if (pointCloud->hasColors())
 			{
@@ -39,7 +37,7 @@ namespace spatiumgl {
 					"{\n"
 					"   gl_Position = projectionMatrix * viewMatrix * vec4(pos, 1.0);\n"
 					"   vertexColor = color;\n"
-					"}\0";
+					"}\n\0";
 
 				fragmentShaderSrc =
 					"#version 330 core\n"
@@ -83,14 +81,12 @@ namespace spatiumgl {
 				return;
 			}
 
-			// Create vertex buffer object (VBO) and vertex array object (VAO)
+			// Create vertex array object (VAO) and bind
 			glGenVertexArrays(1, &m_vao);
-			glGenBuffers(1, &m_vbo);
-
-			// Bind VAO object first
 			glBindVertexArray(m_vao);
 
-			// Bind VBO object
+			// Create vertex buffer object (VBO) and bind
+			glGenBuffers(1, &m_vbo);
 			glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
 
 			// Allocate vertex attributes buffer
@@ -124,12 +120,12 @@ namespace spatiumgl {
 			// Unbind for now to prevent unintended overwriting
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 			glBindVertexArray(0);
+
+			m_valid = true;
 		}
 
 		OGLPointCloudRenderer::~OGLPointCloudRenderer()
 		{
-			// TODO: Delete shader?
-
 			glDeleteVertexArrays(1, &m_vao);
 			glDeleteBuffers(1, &m_vbo);
 		}
@@ -143,14 +139,19 @@ namespace spatiumgl {
 		{
 			m_shaderProgram.use();
 
+			// Coordinate transformations:
+			// Local --(Model matrix)--> World
+			// World -->(View matrix)--> View (= camera space; view matrix is inverse of camera transform)
+			// View --(Projection matrix)--> Clip (Range -1; 1)
+
 			// Set shader uniform values: view and projection matrix
-			const spatiumgl::Matrix4x4 viewMatrix = camera->transform().matrix().inverse();
-			int viewMatrixLoc = glGetUniformLocation(m_shaderProgram.shaderProgamId(), "viewMatrix");
+			const spatiumgl::Matrix4 viewMatrix = camera->transform().matrix().inverse();
+			int viewMatrixLoc = glGetUniformLocation(m_shaderProgram.shaderProgamId(), "viewMatrix"); // notification
 			glUniformMatrix4dv(viewMatrixLoc, 1, GL_FALSE, (const double*)viewMatrix.data());
 
-			const spatiumgl::Matrix<SPATIUMGL_PRECISION, 4, 4> projectionMatrix = spatiumgl::Matrix4x4::perspective(camera->fov(), aspect, camera->near(), camera->far());
-			int projectionMatrixLoc = glGetUniformLocation(m_shaderProgram.shaderProgamId(), "projectionMatrix");
-			glUniformMatrix4dv(projectionMatrixLoc, 1, GL_FALSE, (double*)projectionMatrix.data());
+			const spatiumgl::Matrix4 projectionMatrix = camera->projectionMatrix(aspect);
+			int projectionMatrixLoc = glGetUniformLocation(m_shaderProgram.shaderProgamId(), "projectionMatrix"); // error
+			glUniformMatrix4dv(projectionMatrixLoc, 1, GL_FALSE, (const double*)projectionMatrix.data());
 
 			// Bind vertex array object
 			glBindVertexArray(m_vao);

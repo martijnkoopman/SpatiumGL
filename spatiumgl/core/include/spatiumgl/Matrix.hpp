@@ -125,9 +125,13 @@ namespace spatiumgl
 
 namespace spatiumgl
 {
-	using Matrix2x2 = Matrix<SPATIUMGL_PRECISION, 2, 2>;
-	using Matrix3x3 = Matrix<SPATIUMGL_PRECISION, 3, 3>;
-	using Matrix4x4 = Matrix<SPATIUMGL_PRECISION, 4, 4>;
+	using Matrix2 = Matrix<double, 2, 2>;
+	using Matrix3 = Matrix<double, 3, 3>;
+	using Matrix4 = Matrix<double, 4, 4>;
+
+	using Matrix2f = Matrix<float, 2, 2>;
+	using Matrix3f = Matrix<float, 3, 3>;
+	using Matrix4f = Matrix<float, 4, 4>;
 }
 
 /* OLD

@@ -28,7 +28,7 @@ namespace spatiumgl {
 		public:
 			SceneObject();
 
-			/// Get the transformation
+			/// Get the transformation (by reference)
 			///
 			/// \return transformation
 			Transform& transform();

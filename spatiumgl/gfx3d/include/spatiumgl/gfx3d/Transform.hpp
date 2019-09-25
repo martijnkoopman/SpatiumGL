@@ -23,7 +23,7 @@ namespace spatiumgl {
 		/// \class Transform
 		/// \brief Tranformation in 3D space.
 		///
-		/// Default transformation (identity).
+		/// Default transformation matrix (identity):
 		///
 		/// 1 0 0 x
 		/// 0 1 0 y
@@ -37,6 +37,7 @@ namespace spatiumgl {
 		class SPATIUMGL_EXPORT Transform
 		{
 		public:
+			/// Default constructor
 			Transform();
 
 			/// Get the vector pointing to the right (positive X axis)
@@ -57,21 +58,36 @@ namespace spatiumgl {
 			/// Get the position in world space (translation)
 			///
 			/// \return Position
-			Vector3 position() const;
+			Vector3 translation() const;
 
 			/// Set the position in world space (translation)
 			///
 			/// \param[in] position Position
-			void setPosition(const Vector3& position);
+			void setTranslation(const Vector3& translation);
+
+			/// Apply translation.
+			///
+			/// The translation is added.
+			///
+			/// \param[in] translation Translation
+			void applyTranslation(const Vector3& translation);
+
+			/// \TODO setRotation(), rotation(), applyRotation(), setScale(), scale(), applyScale()
+
 			/// Set the transformation matrix
 			///
 			/// \param[in] matrix Transformation matrix
-			void setMatrix(const Matrix4x4& matrix);
+			void setMatrix(const Matrix4& matrix);
 
-			/// Get the transformation matrix
+			/// Get the transformation matrix (by reference)
 			///
 			/// \return Transformation matrix
-			Matrix4x4 matrix() const;
+			Matrix4& matrix();
+
+			/// Get the transformation matrix (by const reference)
+			///
+			/// \return Transformation matrix
+			const Matrix4& matrix() const;
 
 			/// Convert 3D Cartesian point coordinates from object space to world space.
 			/// Object coordinates are defined with respect to the object's local
@@ -95,7 +111,7 @@ namespace spatiumgl {
 
 		protected:
 			/// Transformation matrix
-			Matrix4x4 m_matrix;
+			Matrix4 m_matrix;
 		};
 
 	} // namespace gfx3d

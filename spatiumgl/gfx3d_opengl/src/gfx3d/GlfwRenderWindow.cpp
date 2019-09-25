@@ -21,10 +21,10 @@ namespace spatiumgl {
 		{
 		}
 
-		// Destructor body must be defined in CPP file because otherwise type 
-		// GlfwRenderWindowImpl is incomplete and cannot be deleted.
 		GlfwRenderWindow::~GlfwRenderWindow()
 		{
+			// Destructor body must be defined in CPP file because otherwise type 
+			// GlfwRenderWindowImpl is incomplete and cannot be deleted.
 		}
 
 		bool GlfwRenderWindow::init()

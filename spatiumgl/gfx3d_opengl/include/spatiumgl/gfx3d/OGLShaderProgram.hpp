@@ -24,7 +24,7 @@ namespace spatiumgl {
 		{
 		public:
 			/// Default constructor
-			OGLShaderProgram() = default;
+			OGLShaderProgram();
 
 			/// Constructor
 			///
@@ -32,6 +32,9 @@ namespace spatiumgl {
 			/// \param[in] fragmentShaderSource Fragment shader source
 			OGLShaderProgram(const std::string & vertexShaderSource,
 				const std::string &fragmentShaderSource);
+
+			/// Destructor
+			~OGLShaderProgram();
 
 			/// Set shader sources
 			///
@@ -48,6 +51,9 @@ namespace spatiumgl {
 
 			/// Use the shader program.
 			void use();
+
+			/// Free the shader program (delete).
+			void free();
 
 			/// Get the vertex shader ID.
 			///

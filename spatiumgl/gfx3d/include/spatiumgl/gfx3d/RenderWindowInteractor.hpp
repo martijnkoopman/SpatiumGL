@@ -38,9 +38,16 @@ namespace spatiumgl {
 				: m_window(window)
 			{}
 
-			virtual void OnMousePressed(MouseButton button, double x, double y) = 0;
-			virtual void OnMouseReleased(MouseButton button, double x, double y) = 0;
+			// Pure virtual functions to be implemented by subclasses.
+
+			virtual void OnMouseButtonPressed(MouseButton button, double x, double y) = 0;
+			virtual void OnMouseButtonReleased(MouseButton button, double x, double y) = 0;
+			virtual void OnMouseWheelScrolled(double scroll) = 0;
 			virtual void OnMouseMoved(double deltaX, double deltaY) = 0;
+
+			//virtual void OnKeyPressed(int key) = 0;
+			//virtual void OnKeyRepeated(int key) = 0;
+			//virtual void OnKeyReleased(int key) = 0;
 
 		protected:
 			RenderWindow* m_window;

@@ -55,7 +55,7 @@ namespace spatiumgl {
 			void setRenderer(Renderer* renderer); // TODO: addRenderer
 			Vector2i framebufferSize() const;
 
-			// Pure virtual functions to be implemented by subclasses
+			// Pure virtual functions to be implemented by subclasses.
 
 			/// Initialize the library responsible for window and OpenGL 
 			/// context creation.

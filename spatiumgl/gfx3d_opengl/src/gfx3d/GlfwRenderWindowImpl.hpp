@@ -40,13 +40,14 @@ namespace spatiumgl {
 
 		protected:
 			void draw();
-			void processUserInput();
+			//void processUserInput();
 
 			// GLFW callback functions
 			void glfw_framebuffer_size_callback(GLFWwindow* window, int width, int height);
 			void glfw_mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 			void glfw_cursor_pos_callback(GLFWwindow* window, double xpos, double ypos);
 			void glfw_scroll_callback(GLFWwindow* window, double xOffset, double yOffset);
+			void glfw_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 			static void glfw_error_callback(int error, const char* description);
 
 			GlfwRenderWindow* m_parent;
