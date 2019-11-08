@@ -15,9 +15,9 @@ TEST(PointCloud, constructor)
 	const spatiumgl::gfx3d::PointCloud pointcloud(std::move(positions));
 
 	EXPECT_EQ(pointcloud.pointCount(), 3);
-	EXPECT_EQ(pointcloud.translation(0), point1);
-	EXPECT_EQ(pointcloud.translation(1), point2);
-	EXPECT_EQ(pointcloud.translation(2), point3);
+	EXPECT_EQ(pointcloud.position(0), point1);
+	EXPECT_EQ(pointcloud.position(1), point2);
+	EXPECT_EQ(pointcloud.position(2), point3);
 }
 
 TEST(PointCloud, addPoint)
@@ -32,7 +32,7 @@ TEST(PointCloud, addPoint)
 	pointcloud.addPoint(point3);
 
 	EXPECT_EQ(pointcloud.pointCount(), 3);
-	EXPECT_EQ(pointcloud.translation(0), point1);
-	EXPECT_EQ(pointcloud.translation(1), point2);
-	EXPECT_EQ(pointcloud.translation(2), point3);
+	EXPECT_EQ(pointcloud.position(0), point1);
+	EXPECT_EQ(pointcloud.position(1), point2);
+	EXPECT_EQ(pointcloud.position(2), point3);
 }

@@ -4,4 +4,5 @@
 
 TEST(PointCloudRenderer, constructor)
 {
+	/// \TODO Unit testing with offscreen rendering for resulting images
 }

@@ -24,13 +24,25 @@ namespace spatiumgl {
 		public:
 			PivotInteractor(RenderWindow* window);
 
+			/// Set the pivot point.
+			///
+			/// This is the point around which the view rotates.
+			///
+			/// \param[in] pivotPoint Pivot point
 			void setPivotPoint(const Vector3& pivotPoint);
+
+			/// Get pivot point.
+			///
+			/// \return Pivot point
 			Vector3 pivotPoint() const;
 
 			virtual void OnMouseButtonPressed(MouseButton button, double x, double y) override;
 			virtual void OnMouseButtonReleased(MouseButton button, double x, double y) override;
 			virtual void OnMouseWheelScrolled(double scroll) override;
 			virtual void OnMouseMoved(double deltaX, double deltaY) override;
+
+			virtual void resetCamera() override;
+			virtual void resetCameraClipping() override;
 
 		protected:
 			bool m_pressed;

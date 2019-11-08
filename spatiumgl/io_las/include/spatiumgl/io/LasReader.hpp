@@ -29,7 +29,7 @@ namespace spatiumgl {
 			/// Constructor
 			///
 			/// \param[in] path Path to LAS/LAZ file
-			LasReader(const std::string& path = "");
+			LasReader(const std::string& path = "", const bool shiftToOrigin = false);
 
 			/// Destructor
 			virtual ~LasReader(); // Must be virtual for PIMPL pattern

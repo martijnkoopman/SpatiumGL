@@ -17,6 +17,7 @@
 #include "RenderObject.hpp"
 
 #include <vector>
+#include <ostream>
 
 namespace spatiumgl {
 	namespace gfx3d {
@@ -37,28 +38,6 @@ namespace spatiumgl {
 			/// Destructor
 			virtual ~Mesh() = default;
 
-			/// Get vertex count.
-			///
-			/// \return vertex count
-			size_t vertexCount() const;
-
-			/// Get triangle count.
-			///
-			/// \return triangle count
-			size_t triangleCount() const;
-
-			/// Get a vertex position.
-			///
-			/// \param[in] index Vertex index
-			/// \return Vertex position (x,y,z)
-			Vector3 vertex(size_t index) const;
-
-			/// Get a triangle (triplet of vertex indices).
-			///
-			/// \param[in] index Triangle index
-			/// \return Triangle vertex indices
-			Vector<size_t, 3> triangle(size_t index) const;
-
 			/// Get all vertex positions (by reference)
 			///
 			/// \return All vertex positions
@@ -68,6 +47,108 @@ namespace spatiumgl {
 			///
 			/// \return All triangle vertex indices
 			const std::vector<Vector<size_t, 3>> & triangles() const;
+
+			/// Construct quad mesh
+			///
+			/// \param[in] radius Quad radius (default = 1)
+			/// \return Quad mesh
+			static Mesh quad(double radius = 1)
+			{
+				const std::vector<Vector3> vertices = {
+					{ -radius, -radius,  0 },
+					{  radius, -radius,  0 },
+					{  radius,  radius,  0 },
+					{ -radius,  radius,  0 },
+				};
+
+				const std::vector<Vector<size_t, 3>> triangles = {
+					{ 0, 1, 2 },
+					{ 2, 3, 0 }
+				};
+
+				return Mesh(vertices, triangles);
+			}
+
+			/// Construct far quad mesh (debugging only)
+			///
+			/// \param[in] radius Quad radius (default = 1)
+			/// \return Quad mesh
+			static Mesh quadFar(double radius = 1)
+			{
+				const std::vector<Vector3> vertices = {
+					{ -radius, -radius,  -0.5 },
+					{  radius, -radius,  -0.5 },
+					{  radius,  radius,  -0.5 },
+					{ -radius,  radius,  -0.5 },
+				};
+
+				const std::vector<Vector<size_t, 3>> triangles = {
+					{ 0, 1, 2 },
+					{ 2, 3, 0 }
+				};
+
+				return Mesh(vertices, triangles);
+			}
+
+			/// Construct cube mesh
+			///
+			/// \param[in] radius Cube radius (default = 1)
+			/// \return Cube mesh
+			static Mesh cube(double radius = 1)
+			{
+				const std::vector<Vector3> vertices = {
+					// front
+					{ -radius, -radius,  radius },
+					{  radius, -radius,  radius },
+					{  radius,  radius,  radius },
+					{ -radius,  radius,  radius },
+					// back
+					{ -radius, -radius, -radius },
+					{ radius, -radius, -radius },
+					{ radius,  radius, -radius },
+					{ -radius,  radius, -radius }
+				};
+
+				const std::vector<Vector<size_t, 3>> triangles = {
+					// front
+					{ 0, 1, 2 },
+					{ 2, 3, 0 },
+					// right
+					{ 1, 5, 6 },
+					{ 6, 2, 1 },
+					// back
+					{ 7, 6, 5 },
+					{ 5, 4, 7 },
+					// left
+					{ 4, 0, 3 },
+					{ 3, 7, 4 },
+					// bottom
+					{ 4, 5, 1 },
+					{ 1, 0, 4 },
+					// top
+					{ 3, 2, 6 },
+					{ 6, 7, 3 }
+				};
+
+				return Mesh(vertices, triangles);
+			}
+
+		/// Output to ostream
+		friend std::ostream& operator<<(std::ostream& os, const Mesh &mesh)
+		{
+			os << "Vertices: [";
+			for (const Vector3 vertex : mesh.m_vertices)
+			{
+				os << vertex;
+			}
+			os << "] Triangles: [";
+			for (const Vector<size_t, 3> triangle : mesh.m_triangles)
+			{
+				os << triangle;
+			}
+			os << "]" << "\n";
+			return os;
+		}
 
 		protected:
 			std::vector<Vector3> m_vertices;

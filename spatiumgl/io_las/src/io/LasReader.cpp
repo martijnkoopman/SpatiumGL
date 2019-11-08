@@ -20,9 +20,10 @@ namespace spatiumgl {
 		class LasReader::Impl
 		{
 		public:
-			Impl(const std::string& path)
+			Impl(const std::string& path, const bool shiftToOrigin)
 				: m_lasreadopener()
 				, m_reader(nullptr)
+				, m_shiftToOrigin(shiftToOrigin)
 			{
 				m_lasreadopener.set_file_name(path.c_str());
 			}
@@ -73,42 +74,42 @@ namespace spatiumgl {
 				}
 			}
 
-			bool readSinglePoint()
-			{
-				if (m_reader == nullptr)
-				{
-					return false;
-				}
+			//bool readSinglePoint()
+			//{
+			//	if (m_reader == nullptr)
+			//	{
+			//		return false;
+			//	}
 
-				return m_reader->read_point();
-			}
+			//	return m_reader->read_point();
+			//}
 
-			Vector3 lastReadPointPosition()
-			{
-				if (m_reader == nullptr)
-				{
-					return Vector3(0, 0, 0);
-				}
+			//Vector3 lastReadPointPosition()
+			//{
+			//	if (m_reader == nullptr)
+			//	{
+			//		return Vector3(0, 0, 0);
+			//	}
 
-				double x = m_reader->point.get_x();
-				double y = m_reader->point.get_y();
-				double z = m_reader->point.get_z();
-				return Vector3(x, y, z);
-			}
+			//	double x = m_reader->point.get_x();
+			//	double y = m_reader->point.get_y();
+			//	double z = m_reader->point.get_z();
+			//	return Vector3(x, y, z);
+			//}
 
-			Vector3 lastReadPointColor()
-			{
-				if (m_reader == nullptr)
-				{
-					return Vector3(0, 0, 0);
-				}
+			//Vector3 lastReadPointColor()
+			//{
+			//	if (m_reader == nullptr)
+			//	{
+			//		return Vector3(0, 0, 0);
+			//	}
 
-				double r = static_cast<double>(m_reader->point.get_R()) / 0xFFFF;
-				double g = static_cast<double>(m_reader->point.get_G()) / 0xFFFF;
-				double b = static_cast<double>(m_reader->point.get_B()) / 0xFFFF;
+			//	double r = static_cast<double>(m_reader->point.get_R()) / 0xFFFF;
+			//	double g = static_cast<double>(m_reader->point.get_G()) / 0xFFFF;
+			//	double b = static_cast<double>(m_reader->point.get_B()) / 0xFFFF;
 
-				return Vector3(r, g, b);
-			}
+			//	return Vector3(r, g, b);
+			//}
 
 			gfx3d::PointCloud readAllPoints()
 			{
@@ -118,6 +119,10 @@ namespace spatiumgl {
 				}
 				else
 				{
+					const double x_min = m_reader->get_min_x();
+					const double y_min = m_reader->get_min_y();
+					const double z_min = m_reader->get_min_z();
+
 					const bool hasColor = hasColors();
 					gfx3d::PointCloud pointCloud(m_reader->npoints, hasColor);
 					while (m_reader->read_point())
@@ -126,8 +131,16 @@ namespace spatiumgl {
 						double y = m_reader->point.get_y();
 						double z = m_reader->point.get_z();
 
+						if (m_shiftToOrigin)
+						{
+							x -= x_min;
+							y -= y_min;
+							z -= z_min;
+						}
+
 						if (hasColor)
 						{
+							/// \TODO RGB is always black
 							double r = static_cast<double>(m_reader->point.get_R()) / 0xFFFF;
 							double g = static_cast<double>(m_reader->point.get_G()) / 0xFFFF;
 							double b = static_cast<double>(m_reader->point.get_B()) / 0xFFFF;
@@ -189,10 +202,11 @@ namespace spatiumgl {
 		private:
 			LASreadOpener m_lasreadopener;
 			LASreader* m_reader;
+			bool m_shiftToOrigin;
 		};
 
-		LasReader::LasReader(const std::string& path)
-			: m_pimpl{ std::unique_ptr<Impl>(new Impl(path)) }
+		LasReader::LasReader(const std::string& path, const bool shiftToOrigin)
+			: m_pimpl{ std::unique_ptr<Impl>(new Impl(path, shiftToOrigin)) }
 		{
 		}
 
@@ -233,20 +247,20 @@ namespace spatiumgl {
 			m_pimpl->close();
 		}
 
-		bool LasReader::readSinglePoint()
-		{
-			return m_pimpl->readSinglePoint();
-		}
+		//bool LasReader::readSinglePoint()
+		//{
+		//	return m_pimpl->readSinglePoint();
+		//}
 
-		Vector3 LasReader::lastReadPointPosition()
-		{
-			return m_pimpl->lastReadPointPosition();
-		}
+		//Vector3 LasReader::lastReadPointPosition()
+		//{
+		//	return m_pimpl->lastReadPointPosition();
+		//}
 
-		Vector3 LasReader::lastReadPointColor()
-		{
-			return m_pimpl->lastReadPointColor();
-		}
+		//Vector3 LasReader::lastReadPointColor()
+		//{
+		//	return m_pimpl->lastReadPointColor();
+		//}
 
 		long long int LasReader::pointCount() const
 		{

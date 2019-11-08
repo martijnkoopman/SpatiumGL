@@ -16,7 +16,6 @@
 #include <GLFW/glfw3.h> // GLFWwindow
 
 #include <iostream>
-#include <iomanip> // std::setprecision
 #include <string>
 
 namespace spatiumgl {
@@ -72,11 +71,11 @@ namespace spatiumgl {
 				", message = " << message << std::endl;
 		}
 
-
 		// Constructor
 		GlfwRenderWindowImpl::GlfwRenderWindowImpl(GlfwRenderWindow* parent, bool debug)
 			: m_parent(parent)
 			, m_window(nullptr)
+			, m_drawTime(0)
 			, prevMouseState(GLFW_RELEASE)
 			, prevMouseX(0)
 			, prevMouseY(0)
@@ -203,8 +202,6 @@ namespace spatiumgl {
 				// Draw frame
 				draw();
 
-				//processUserInput();
-
 				// Process events
 				glfwPollEvents();
 			}
@@ -214,53 +211,30 @@ namespace spatiumgl {
 
 		void GlfwRenderWindowImpl::draw()
 		{
+			// Compute delta time since last draw
+			const double drawTime = glfwGetTime();
+			const double deltaTime = drawTime - m_drawTime;
+			m_drawTime = drawTime;
+
+			// Trigger all animators
+			for (Animator* animator : m_parent->m_animators)
+			{
+				animator->animate(deltaTime);
+			}
+
 			// Clear color buffer (dark gray)
 			glClearColor(0.227f, 0.227f, 0.227f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			m_parent->m_renderer->render(m_parent->m_camera, static_cast<double>(m_parent->m_framebufferSize[0]) / static_cast<double>(m_parent->m_framebufferSize[1]));
+			// Trigger all renderers
+			for (Renderer* renderer : m_parent->m_renderers)
+			{
+				renderer->render(m_parent->m_camera, static_cast<double>(m_parent->m_framebufferSize[0]) / static_cast<double>(m_parent->m_framebufferSize[1]));
+			}
 
 			// Swap front and back buffer (front = displayed, back = rendered)
 			glfwSwapBuffers(m_window);
 		}
-
-		/*
-		void GlfwRenderWindowImpl::processUserInput()
-		{
-			// Check keyboard input
-			if (glfwGetKey(m_window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-			{
-				glfwSetWindowShouldClose(m_window, true);
-			}
-
-			// Check mouse movement
-			double mousePosX, mousePosY;
-			glfwGetCursorPos(m_window, &mousePosX, &mousePosY);
-
-			// Emit mouse left button state changed
-			int state = glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_LEFT);
-			if (state == GLFW_PRESS && prevMouseState == GLFW_RELEASE)
-			{
-				m_parent->m_interactor->OnMousePressed(RenderWindowInteractor::MOUSE_BUTTON_LEFT, mousePosX, mousePosY);
-			}
-			else if (state == GLFW_RELEASE && prevMouseState == GLFW_PRESS)
-			{
-				m_parent->m_interactor->OnMouseReleased(RenderWindowInteractor::MOUSE_BUTTON_LEFT, mousePosX, mousePosY);
-			}
-
-			// Emit mouse moved
-			double deltaX = mousePosX - prevMouseX;
-			double deltaY = mousePosY - prevMouseY;
-			if (deltaX > 0.00 || deltaX < -0.00 || deltaY > 0.00 || deltaY < -0.00)
-			{
-				m_parent->m_interactor->OnMouseMoved(deltaX, deltaY);
-			}
-
-			prevMouseState = state;
-			prevMouseX = mousePosX;
-			prevMouseY = mousePosY;
-		}
-		*/
 
 		// GLFW callback functions:
 
@@ -279,21 +253,58 @@ namespace spatiumgl {
 
 		void GlfwRenderWindowImpl::glfw_mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 		{
-			std::cout << "Button " << button << " " << action << " " << mods << std::endl;
+			if (m_parent->m_interactor != nullptr)
+			{
+
+				enum RenderWindowInteractor::MouseButton b;
+				if (button == GLFW_MOUSE_BUTTON_LEFT)
+				{
+					b = RenderWindowInteractor::MouseButton::MOUSE_BUTTON_LEFT;
+				}
+				else if (button == GLFW_MOUSE_BUTTON_RIGHT)
+				{
+					b = RenderWindowInteractor::MouseButton::MOUSE_BUTTON_RIGHT;
+				}
+				else // GLFW_MOUSE_BUTTON_MIDDLE
+				{
+					b = RenderWindowInteractor::MouseButton::MOUSE_BUTTON_MIDDLE;
+				}
+
+				if (action == GLFW_PRESS)
+				{
+					m_parent->m_interactor->OnMouseButtonPressed(b, 0, 0);
+				}
+				else
+				{
+					m_parent->m_interactor->OnMouseButtonReleased(b, 0, 0);
+				}
+
+				draw();
+			}
 		}
 
 		void GlfwRenderWindowImpl::glfw_cursor_pos_callback(GLFWwindow* window, double xpos, double ypos)
 		{
-			double deltaX = xpos - prevMouseX;
-			double deltaY = ypos - prevMouseY;
-			prevMouseX = xpos;
-			prevMouseY = ypos;
-			m_parent->m_interactor->OnMouseMoved(deltaX, deltaY);
+			if (m_parent->m_interactor != nullptr)
+			{
+				double deltaX = xpos - prevMouseX;
+				double deltaY = ypos - prevMouseY;
+				prevMouseX = xpos;
+				prevMouseY = ypos;
+				m_parent->m_interactor->OnMouseMoved(deltaX, deltaY);
+
+				draw();
+			}
 		}
 
 		void GlfwRenderWindowImpl::glfw_scroll_callback(GLFWwindow* window, double xOffset, double yOffset)
 		{
-			m_parent->m_interactor->OnMouseWheelScrolled(yOffset);
+			if (m_parent->m_interactor != nullptr)
+			{
+				m_parent->m_interactor->OnMouseWheelScrolled(yOffset);
+
+				draw();
+			}
 		}
 
 		void GlfwRenderWindowImpl::glfw_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)

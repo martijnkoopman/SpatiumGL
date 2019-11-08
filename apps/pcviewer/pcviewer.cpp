@@ -1,31 +1,31 @@
-#include <spatiumgl/Vector.hpp>
-#include <spatiumgl/Matrix.hpp>
 #include <spatiumgl/Math.hpp>
-#include <spatiumgl/gfx3d/OrthographicCamera.hpp>
+#include <spatiumgl/gfx3d/PerspectiveCamera.hpp>
 #include <spatiumgl/gfx3d/PointCloud.hpp>
 #include <spatiumgl/io/LasReader.hpp>
 #include <spatiumgl/gfx3d/OGLPointCloudRenderer.hpp>
 #include <spatiumgl/gfx3d/GlfwRenderWindow.hpp>
-
-#include <spatiumgl/gfx3d/OGLTriangleRenderer.hpp>
+#include <spatiumgl/gfx3d/PivotInteractor.hpp>
 
 #include <iostream>
 
+namespace spgl = spatiumgl;
+
 int main(int argc, char* argv[])
 {
-	std::string path;
 	// Get path from command line arguments
+	std::string path;
 	if (argc != 2)
 	{
-		std::cerr << "usage: pcviewer file.las" << std::endl;
-		//return 1;
-		path = "C:\\Users\\Martijn\\Downloads\\autzen_sub.laz";
+		std::cerr << "usage: pcviewer <file.las/laz>" << std::endl;
+		return 1;
 	}
-	else {
+	else
+	{
 		path = argv[1];
 	}
 
-	spatiumgl::io::LasReader reader(path);
+	// Construct point cloud reader
+	spgl::io::LasReader reader(path, true);
 	if (!reader.isReady())
 	{
 		std::cerr << "Invalid input file: " << path << std::endl;
@@ -38,25 +38,11 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	spatiumgl::Vector3 min = reader.bounds().min();
-	std::vector<spatiumgl::Vector3> positions;
-	std::vector<spatiumgl::Vector3> colors;
-	while (reader.readSinglePoint())
-	{
-		spatiumgl::Vector3 position = reader.lastReadPointPosition() - min;
-		positions.push_back(position);
+	// Read all points from file
+	spgl::gfx3d::PointCloud pointCloud = reader.readAllPoints();
 
-		if (reader.hasColors())
-		{
-			spatiumgl::Vector3 color = reader.lastReadPointColor();
-			colors.push_back(color);
-		}
-	}
-	spatiumgl::gfx3d::PointCloud pointcloud(positions);//, colors);
-
-	// Optional: request OpenGL context version with glfwWindowHint()
-
-	spatiumgl::gfx3d::GlfwRenderWindow renderWindow(true);
+	// Create and initialize render window
+	spgl::gfx3d::GlfwRenderWindow renderWindow(true);
 	if (!renderWindow.init())
 	{
 		std::cerr << "Failed to initialize GLFW." << std::endl;
@@ -73,28 +59,16 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	// BEGIN: OpenGL rendering stuff...
-	
-	spatiumgl::gfx3d::OrthographicCamera camera(8, 0.1, 10);
-	camera.lookAt(spatiumgl::Vector3(0, 0, 0), spatiumgl::Vector3(0, 1, 0), spatiumgl::Vector3(0,0,4));
-	//std::cout << glm::to_string(camera->transform().matrix()) << std::endl;
-	//std::cout << "Camera pos: " << camera->transform().position().x << " " << camera->transform().position().y << " " << camera->transform().position().z << std::endl;
-	//std::cout << "Camera up: " << camera->transform().up().x << " " << camera->transform().up().y << " " << camera->transform().up().z << std::endl;
-	//std::cout << "Camera right: " << camera->transform().right().x << " " << camera->transform().right().y << " " << camera->transform().right().z << std::endl;
-	//std::cout << "Camera back: " << camera->transform().back().x << " " << camera->transform().back().y << " " << camera->transform().back().z << std::endl;
+	// Set up camera
+	spgl::gfx3d::PerspectiveCamera camera;
 	renderWindow.setCamera(&camera);
 
-	// Create point cloud
-	//std::vector<glm::vec3> positions = { {0.0f,  0.0f, 1.0f },
-	//									{ 1.0f,  0.0f, -1.0f },
-	//									{ -1.0f, 0.0f, -1.0f } };
-	//std::vector<glm::vec3> colors = {
-	//	{ 1.0f, 0.0f, 0.0f },
-	//	{ 0.0f, 1.0f, 0.0f },
-	//	{ 0.0f, 0.0f, 1.0f }
-	//};
+	// Set up render window interactor
+	spgl::gfx3d::PivotInteractor interactor(&renderWindow);
+	renderWindow.setInteractor(&interactor);
+
 	// Create point cloud renderer
-	spatiumgl::gfx3d::OGLTriangleRenderer renderer;
+	spgl::gfx3d::OGLPointCloudRenderer renderer(&pointCloud);
 	if (!renderer.isValid())
 	{
 		// Exit
@@ -102,10 +76,18 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	renderWindow.setRenderer(&renderer);
+	// Add renderer to window
+	renderWindow.addRenderer(&renderer);
+
+	// Point camera to dataset
+	interactor.resetCamera();
+
+	// Show window
 	renderWindow.show();
 
+	// Destroy window
 	renderWindow.destroyWindow();
+
 	// Release resources
 	renderWindow.terminate();
 

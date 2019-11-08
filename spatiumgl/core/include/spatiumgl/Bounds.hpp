@@ -19,6 +19,10 @@
 
 namespace spatiumgl {
 
+	/// \class BoundsCenter
+	/// \brief Boundaries with a center (all of them).
+	///
+	/// This class cannot be instantiated directly, it must be inherited.
 	template<typename T, size_t N>
 	struct SPATIUMGL_EXPORT BoundsCenter
 	{
@@ -57,6 +61,10 @@ namespace spatiumgl {
 		Vector<T, N> m_center;
 	};
 
+	/// \class BoundsRadii
+	/// \brief Boundaries with radii (all of them).
+	///
+	/// This class cannot be instantiated directly, it must be inherited.
 	template<typename T, size_t N>
 	struct SPATIUMGL_EXPORT BoundsRadii
 	{
@@ -104,6 +112,12 @@ namespace spatiumgl {
 		Vector<T, N> m_radii;
 	};
 
+	/// \class BoundsRadii<T,1>
+	/// \brief Boundaries with 1 radius.
+	///
+	/// Examples: circle, square, square, cube, etc.
+	///
+	/// This class cannot be instantiated directly, it must be inherited.
 	template<typename T>
 	struct SPATIUMGL_EXPORT BoundsRadii<T, 1>
 	{
@@ -150,6 +164,10 @@ namespace spatiumgl {
 		T m_radius;
 	};
 
+	/// \class BoundsOrientation
+	/// \brief Boundaries with orientation
+	///
+	/// This class cannot be instantiated directly, it must be inherited.
 	template<typename T, size_t N>
 	struct SPATIUMGL_EXPORT BoundsOrientation
 	{
@@ -342,46 +360,68 @@ namespace spatiumgl {
 	using OrientedBoundingRectangle = OrientedBoundingBoxT<SPATIUMGL_PRECISION, size_t(2)>;
 	*/
 
+	/// \class BoundingCircle
+	/// \brief Minimum bounding circle (2D)
 	template<typename T>
 	struct BoundingCircle : public BoundsCenter<T, 2>, public BoundsRadii<T, 1>
 	{};
 
+	/// \class BoundingEllipse
+	/// \brief Minimum bounding ellipse (2D)
 	template<typename T>
 	struct BoundingEllipse : public BoundsCenter<T, 2>, public BoundsRadii<T, 2>
 	{};
 
+	/// \class BoundingSquare
+	/// \brief Minimum bounding square (2D)
 	template<typename T>
 	struct BoundingSquare : public BoundsCenter<T, 2>, public BoundsRadii<T, 1>
 	{};
 
+	/// \class BoundingRectangle
+	/// \brief Minimum bounding rectangle (2D)
 	template<typename T>
 	struct BoundingRectangle : public BoundsCenter<T, 2>, public BoundsRadii<T, 2>
 	{};
 
+	/// \class OrientedBoundingEllipse
+	/// \brief Minimum bounding oriented ellipse (2D)
 	template<typename T>
 	struct OrientedBoundingEllipse : public BoundsCenter<T, 2>, public BoundsRadii<T, 2>, public BoundsOrientation<T, 2>
 	{};
 
+	/// \class OrientedBoundingSquare
+	/// \brief Minimum bounding oriented square (2D)
 	template<typename T>
 	struct OrientedBoundingSquare : public BoundsCenter<T, 2>, public BoundsRadii<T, 1>, public BoundsOrientation<T, 2>
 	{};
 
+	/// \class OrientedBoundingRectangle
+	/// \brief Minimum bounding oriented rectangle (2D)
 	template<typename T>
 	struct OrientedBoundingRectangle : public BoundsCenter<T, 2>, public BoundsRadii<T, 2>, public BoundsOrientation<T, 2>
 	{};
 
+	/// \class BoundingSphere
+	/// \brief Minimum bounding sphere (3D)
 	template<typename T>
 	struct BoundingSphere : public BoundsCenter<T, 3>, public BoundsRadii<T, 1>
 	{};
 
+	/// \class BoundingEllipsoid
+	/// \brief Minimum bounding ellipsoid (3D)
 	template<typename T>
 	struct BoundingEllipsoid : public BoundsCenter<T, 3>, public BoundsRadii<T, 3>
 	{};
 
+	/// \class BoundingCube
+	/// \brief Minimum bounding cube (3D)
 	template<typename T>
 	struct BoundingCube : public BoundsCenter<T, 3>, public BoundsRadii<T, 1>
 	{};
 
+	/// \class BoundingBox
+	/// \brief Minimum bounding box (3D)
 	template<typename T>
 	struct BoundingBox : public BoundsCenter<T, 3>, public BoundsRadii<T, 3>
 	{
@@ -483,8 +523,9 @@ namespace spatiumgl {
 
 		void include(const Vector<T, 3> & point)
 		{
-			Vector3 minVal = min();
-			Vector3 maxVal = max();
+			// Get min and max values
+			Vector<T, 3> minVal = min();
+			Vector<T, 3> maxVal = max();
 
 			// Update min and max
 			for (size_t i = 0; i < 3; i++)
@@ -497,7 +538,39 @@ namespace spatiumgl {
 				}
 			}
 
+			// Construct new box
 			const auto box = BoundingBox<T>::fromMinMax(minVal, maxVal);
+
+			// Update values
+			this->m_center = box.center();
+			this->m_radii = box.radii();
+		}
+
+		void include(const BoundingBox& bounds)
+		{
+			// Get min and max values
+			Vector<T, 3> minVal = min();
+			Vector<T, 3> maxVal = max();
+
+			// Get min and max of other bounding box
+			const Vector<T, 3> otherMinVal = bounds.min();
+			const Vector<T, 3> otherMaxVal = bounds.max();
+
+			// Update min and max
+			for (size_t i = 0; i < 3; i++)
+			{
+				if (otherMinVal[i] < minVal[i]) {
+					minVal[i] = otherMinVal[i];
+				}
+				else if (otherMaxVal[i] > maxVal[i]) {
+					maxVal[i] = otherMaxVal[i];
+				}
+			}
+
+			// Construct new box
+			const auto box = BoundingBox<T>::fromMinMax(minVal, maxVal);
+
+			// Update values
 			this->m_center = box.center();
 			this->m_radii = box.radii();
 		}
@@ -510,18 +583,24 @@ namespace spatiumgl {
 		}
 	};
 
+	/// \class OrientedBoundingEllipsoid
+	/// \brief Minimum bounding oriented ellipsoid (3D)
 	template<typename T>
 	struct OrientedBoundingEllipsoid : public BoundsCenter<T, 3>, public BoundsRadii<T, 3>, public BoundsOrientation<T, 3>
 	{};
 
+	/// \class OrientedBoundingCube
+	/// \brief Minimum bounding oriented cube (3D)
 	template<typename T>
 	struct OrientedBoundingCube : public BoundsCenter<T, 3>, public BoundsRadii<T, 1>, public BoundsOrientation<T, 3>
 	{};
 
+	/// \class OrientedBoundingBox
+	/// \brief Minimum bounding oriented box (3D)
 	template<typename T>
 	struct OrientedBoundingBox : public BoundsCenter<T, 3>, public BoundsRadii<T, 3>, public BoundsOrientation<T, 3>
 	{};
 
-} // namespace spatium
+} // namespace spatiumgl
 
 #endif // SPATIUMGL_GFX3D_BOUNDS_H

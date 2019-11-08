@@ -16,16 +16,16 @@
 namespace spatiumgl {
 	namespace gfx3d {
 		RenderWindow::RenderWindow(bool debug)
-			: m_interactor(new PivotInteractor(this))
+			: m_interactor(nullptr)
 			, m_camera(nullptr)
-			, m_renderer(nullptr)
+			, m_renderers()
+			, m_animators()
 			, m_framebufferSize{ 0, 0 }
 			, m_debug(debug)
 		{}
 
 		RenderWindow::~RenderWindow()
 		{
-			delete m_interactor;
 		}
 
 		void RenderWindow::setInteractor(RenderWindowInteractor* interactor)
@@ -48,9 +48,28 @@ namespace spatiumgl {
 			return m_camera;
 		}
 
-		void RenderWindow::setRenderer(Renderer* renderer)
+		void RenderWindow::addRenderer(Renderer* renderer)
 		{
-			m_renderer = renderer;
+			m_renderers.push_back(renderer);
+
+			if (m_renderers.size() == 1)
+			{
+				m_bounds = renderer->renderObject().bounds();
+			}
+			else
+			{
+				m_bounds.include(renderer->renderObject().bounds());
+			}
+		}
+
+		BoundingBox<SPATIUMGL_PRECISION> RenderWindow::bounds() const
+		{ 
+			return m_bounds;
+		}
+
+		void RenderWindow::addAnimator(Animator* animator)
+		{
+			m_animators.push_back(animator);
 		}
 
 		Vector2i RenderWindow::framebufferSize() const

@@ -55,6 +55,11 @@ namespace spatiumgl {
 			/// \return Back vector
 			Vector3 back() const;
 
+			/// Clear the transformation.
+			///
+			/// Reset transformation matrix to identity matrix.
+			void clear();
+
 			/// Get the position in world space (translation)
 			///
 			/// \return Position
@@ -70,16 +75,51 @@ namespace spatiumgl {
 			/// The translation is added.
 			///
 			/// \param[in] translation Translation
-			void applyTranslation(const Vector3& translation);
+			void translate(const Vector3& translation);
 
 			/// \TODO setRotation(), rotation(), applyRotation(), setScale(), scale(), applyScale()
 
-			/// Set the transformation matrix
+			/// Rotate around axis (relative to self/object space)
+			///
+			/// \param[in] axis Axis vector
+			/// \param[in] angle Angle in radians
+			void rotateAround(const Vector3& axis, const double angle);
+
+			/// Rotate around X, Y and Z axis. 
+			///
+			/// In that order. (relative to self/object space)
+			///
+			/// \param[in] x Angle around X axis in radians
+			/// \param[in] y Angle around Y axis in radians
+			/// \param[in] z Angle around Z axis in radians
+			void rotate(const double x, const double y, const double z);
+
+			/// Rotate around X axis (relative to self/object space)
+			///
+			/// \param[in] angle Angle in radians
+			void rotateX(const double angle);
+
+			/// Rotate around Y axis (relative to self/object space)
+			///
+			/// \param[in] angle Angle in radians
+			void rotateY(const double angle);
+
+			/// Rotate around Z axis (relative to self/object space)
+			///
+			/// \param[in] angle Angle in radians
+			void rotateZ(const double angle);
+
+			/// Set the transformation matrix.
 			///
 			/// \param[in] matrix Transformation matrix
 			void setMatrix(const Matrix4& matrix);
 
 			/// Get the transformation matrix (by reference)
+			///
+			/// Beware: Direct manipulation of the matrix might invalidate the 
+			/// transformation, making it impossible to render the object. It 
+			/// is safer to make use of the convenience functions provided by 
+			/// this Transform class.
 			///
 			/// \return Transformation matrix
 			Matrix4& matrix();
@@ -90,6 +130,7 @@ namespace spatiumgl {
 			const Matrix4& matrix() const;
 
 			/// Convert 3D Cartesian point coordinates from object space to world space.
+			///
 			/// Object coordinates are defined with respect to the object's local
 			/// coordinate system.
 			/// World coordinates are defined with resect to the world's global
@@ -100,6 +141,7 @@ namespace spatiumgl {
 			Vector3 objectPointToWorldPoint(const Vector3& point) const;
 
 			/// Convert 3D Cartesian point coordinates from world space to object space.
+			///
 			/// World coordinates are defined with resect to the world's global
 			/// cordinate system. (Origin = [0,0,0])
 			/// Object coordinates are defined with respect to the object's local

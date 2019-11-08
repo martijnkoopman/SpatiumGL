@@ -32,7 +32,7 @@ namespace spatiumgl {
 
 		Matrix4 OrthographicCamera::projectionMatrix(double aspect) const
 		{
-			return Matrix4::ortho(m_size, aspect, m_near, m_far);
+			return Matrix4::ortho(m_size, aspect, m_near, m_far);// ??? -m_near, -m_far);
 		}
 
 	} // namespace gfx3d

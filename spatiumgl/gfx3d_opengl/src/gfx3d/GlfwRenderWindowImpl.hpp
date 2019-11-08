@@ -52,6 +52,7 @@ namespace spatiumgl {
 
 			GlfwRenderWindow* m_parent;
 			GLFWwindow* m_window;
+			double m_drawTime;
 			int prevMouseState = GLFW_RELEASE;
 			double prevMouseX, prevMouseY;
 		};

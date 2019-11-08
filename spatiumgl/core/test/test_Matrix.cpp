@@ -2,6 +2,8 @@
 
 #include <spatiumgl/Matrix.hpp>
 
+namespace spgl = spatiumgl;
+
 // constructor
 // constructorEmpty
 // constructorDiagonal
@@ -28,7 +30,25 @@
 // inverse
 // output
 
-//
+TEST(Matrix, constructor)
+{
+	spgl::Matrix<double, 2, 4> matrix;
+
+	// Check dimensions
+	EXPECT_EQ(matrix.cols(), 2);
+	EXPECT_EQ(matrix.rows(), 4);
+
+	// Check default empty values
+	EXPECT_EQ(matrix[0][0], 0);
+	EXPECT_EQ(matrix[0][1], 0);
+	EXPECT_EQ(matrix[0][2], 0);
+	EXPECT_EQ(matrix[0][3], 0);
+	EXPECT_EQ(matrix[0][0], 0);
+	EXPECT_EQ(matrix[0][1], 0);
+	EXPECT_EQ(matrix[0][2], 0);
+	EXPECT_EQ(matrix[0][3], 0);
+}
+
 //TEST(Matrix, Matrix_data)
 //{
 //	spatiumgl::Matrix<SPATIUMGL_PRECISION, size_t(3), size_t(3)> matrix = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };

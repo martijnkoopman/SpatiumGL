@@ -12,6 +12,8 @@
 
 #include "spatiumgl/gfx3d/Camera.hpp"
 
+#include <algorithm> // std::max
+
 namespace spatiumgl {
 	namespace gfx3d {
 		Camera::Camera(double near, double far)
@@ -84,27 +86,6 @@ namespace spatiumgl {
 			lookAt(target, up);
 		}
 
-		/*
-		/// Set camera position and set view direction towards target position.
-		/// The resulting transformation matrix maps the reference point to the
-		/// negative z axis and the eye point to the origin.
-		///
-		/// \param[in] eye Camera/eye position
-		/// \param[in] target Target position
-		/// \param[in] up Up vector
-		///                May not be parallel with vector from eye to target
-		void lookAt(const glm::vec3& eye, const glm::vec3& target,
-			const glm::vec3& up)
-		{
-			// Normalize and orthogonalize view up vector
-			//glm::vec3 back = glm::normalize(eye - target);
-			//glm::vec3 right = glm::cross(glm::normalize(up), back);
-			//glm::vec3 upOrtho = glm::cross(back, right);
-
-			m_transform.setMatrix(glm::lookAt(eye, target, up));
-		}
-		*/
-
 		void Camera::orthogonalizeViewUp()
 		{
 			Vector3 upOrtho = m_transform.back().cross(m_transform.right());
@@ -116,5 +97,35 @@ namespace spatiumgl {
 
 			m_transform.setMatrix(M);
 		}
+
+		void Camera::setNearAndFarFromBounds(const BoundingBox<SPATIUMGL_PRECISION>& bounds)
+		{
+			// Compute radius from bounds
+			const Vector3 radii = bounds.radii();
+			const double radius = std::max({ radii[0], radii[1], radii[2] });
+
+			// Check camera in bounds?
+			const Vector3 cameraTranslation = m_transform.translation();
+			if (bounds.isInside(cameraTranslation))
+			{
+				// Compute and set near and far clipping plane distances
+				m_far = 2 * radius;
+				m_near = m_far / 1000;
+			}
+			else
+			{
+				// Compute distance to center of bounds
+				const double distance = (bounds.center() - cameraTranslation).length();
+
+				// Compute and set near and far clipping plane distances
+				m_far = distance + radius;
+				m_near = distance - radius;
+				if (m_near <= 0)
+				{
+					m_near = m_far / 1000;
+				}
+			}
+		}
+
 	} // namespace gfx3d
 } // namespace spatiumgl

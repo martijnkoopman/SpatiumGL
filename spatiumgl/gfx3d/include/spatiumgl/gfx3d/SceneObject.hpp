@@ -26,12 +26,19 @@ namespace spatiumgl {
 		class SPATIUMGL_EXPORT SceneObject
 		{
 		public:
+
+			/// Default constructor
 			SceneObject();
 
 			/// Get the transformation (by reference)
 			///
 			/// \return transformation
 			Transform& transform();
+
+			/// Get the transformation (by const reference)
+			///
+			/// \return transformation
+			const Transform& transform() const;
 
 		protected:
 			Transform m_transform;

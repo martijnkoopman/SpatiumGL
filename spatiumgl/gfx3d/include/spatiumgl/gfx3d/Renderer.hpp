@@ -30,11 +30,31 @@ namespace spatiumgl {
 
 			virtual ~Renderer() = default;
 
+			/// Get boolean indicator if renderer is valid.
+			///
+			/// A renderer may be invalid, for example, if its capabilites aren't 
+			/// supported by the GPU hardware.
+			/// 
+			/// \return True if valid, false otherwise.
 			bool isValid() const
 			{
 				return m_valid;
 			}
 
+			/// Get the render object (by const reference)
+			///
+			/// \return Render object
+			const RenderObject& renderObject() const
+			{
+				return *m_renderObject;
+			}
+
+			/// Render the render object.
+			///
+			/// This function should be called by the RenderWindow.
+			///
+			/// \param[in] camera Camera
+			/// \param[in] aspect Aspect ratio (w/h)
 			virtual void render(Camera* camera, double aspect) = 0;
 
 		protected:

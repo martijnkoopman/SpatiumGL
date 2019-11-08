@@ -12,8 +12,10 @@
 
 #include "spatiumgl/gfx3d/PivotInteractor.hpp"
 #include "spatiumgl/gfx3d/RenderWindow.hpp"
+#include "spatiumgl/gfx3d/OrthographicCamera.hpp"
+#include "spatiumgl/Math.hpp"
 
-#include <iostream>
+#include <algorithm> // std::max
 
 namespace spatiumgl {
 	namespace gfx3d {
@@ -56,16 +58,30 @@ namespace spatiumgl {
 			Camera* camera = m_window->camera();
 			if (camera != nullptr)
 			{
-				Vector3 directionOfProjection = camera->transform().translation() - m_pivotPoint;
-				Vector3 translation = directionOfProjection / (scroll * 2);
+				Vector3 directionOfProjection = (camera->transform().translation() - m_pivotPoint);
 
-				std::cout << "Pivot: " << m_pivotPoint << std::endl;
-				std::cout << "Camera: " << camera->transform().translation() << std::endl;
-				std::cout << "Vector: " << directionOfProjection << std::endl;
-				std::cout << "Scroll: " << scroll << std::endl;
-				std::cout << "Translation: " << translation << std::endl;
+				if (scroll < 0)
+				{
+					// Zoom out
+					Vector3 translation = directionOfProjection * -scroll;
+					camera->transform().translate(translation);
+				}
+				else if (scroll > 0)
+				{
+					// Zoom in
+					Vector3 translation = directionOfProjection / (-scroll*2);
+					camera->transform().translate(translation);
+				}
+				
+				// Update camera clipping distances based on scene content.
+				camera->setNearAndFarFromBounds(m_window->bounds());
 
-				camera->transform().applyTranslation(translation);
+				// Update orthographic camera size
+				OrthographicCamera* orthoCamera = dynamic_cast<OrthographicCamera*>(camera);
+				if (orthoCamera != nullptr)
+				{
+					orthoCamera->setSize(directionOfProjection.length());
+				}
 			}
 		}
 
@@ -73,28 +89,47 @@ namespace spatiumgl {
 		{
 			if (m_pressed)
 			{
-				std::cout << deltaX << " " << deltaY << std::endl;
-
-				// Get viewport size
-				//int viewport[4];
-				//glGetIntegerv(GL_VIEWPORT, viewport);
-
 				Vector2i framebufferSize = m_window->framebufferSize();
 				Camera* camera = m_window->camera();
 				if (framebufferSize[0] > 0 && framebufferSize[1] > 0 && camera != nullptr)
 				{
-					//// Get rotation angles
-					//float angleX = deltaX * spatiumgl::pi<float>() / framebufferSize[0];
-					//float angleY = deltaY * spatiumgl::pi<float>() / framebufferSize[1];
+					// Get rotation angles
+					double angleX = deltaX * PI<double>() / framebufferSize[0];
+					double angleY = deltaY * PI<double>() / framebufferSize[1];
 
-					//// Rotate
-					//spatiumgl::Matrix4 rotationX = spatiumgl::Matrix4::rotation(angleX, camera->transform().up());
-					//camera->transform().setMatrix(rotationX * camera->transform().matrix());
-					//spatiumgl::Matrix4 rotationY = spatiumgl::Matrix4::rotation(angleY, camera->transform().right());
-					//camera->transform().setMatrix(rotationY * camera->transform().matrix());
-					////m_camera->orthogonalizeViewUp();
+					// Translate pivot point to origin 
+					camera->transform().translate(m_pivotPoint * -1);
+
+					// Rotate around horizontal and vertical axes
+					camera->transform().rotateAround(camera->transform().up(), -angleX);
+					camera->transform().rotateAround(camera->transform().right(), -angleY);
+
+					// Translate back to pivot point
+					camera->transform().translate(m_pivotPoint);
+
+					//camera->orthogonalizeViewUp();
 				}
 			}
+		}
+
+		void PivotInteractor::resetCamera()
+		{
+			// Set pivot point to center of bounds
+			m_pivotPoint = m_window->bounds().center();
+
+			// Compute radius from bounds
+			const Vector3 radii = m_window->bounds().radii();
+			const double radius = std::max({ radii[0], radii[1], radii[2] });
+
+			// Position camera above, looking down with Y+ up vector.
+			m_window->camera()->lookAt(m_pivotPoint, Vector3(0, 1, 0), m_pivotPoint + Vector3(0, 0, radius));
+
+			resetCameraClipping();
+		}
+
+		void PivotInteractor::resetCameraClipping()
+		{
+			m_window->camera()->setNearAndFarFromBounds(m_window->bounds());
 		}
 
 	} // namespace gfx3d

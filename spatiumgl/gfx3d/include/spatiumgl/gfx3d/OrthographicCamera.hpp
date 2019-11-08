@@ -24,19 +24,27 @@ namespace spatiumgl {
 		public:
 			/// Constructor
 			///
-			/// \param[in] size Orthographic size
-			/// \param[in] near Distance to near clipping plane
-			/// \param[in] far Distance to far clipping plane
+			/// \param[in] size Orthographic size (y axis)
+			/// \param[in] near Distance to near clipping plane (positive, 
+			///                 absolute value)
+			/// \param[in] far Distance to far clipping plane (positive, 
+			///                absolute value)
 			OrthographicCamera(double size, double near, double far);
 
 			/// Destructor
 			~OrthographicCamera() override = default;
 
+			/// Set orthographic size.
+			///
+			/// \param[in] size Orthographic size
 			void setSize(double size);
 
+			/// Get orthographic size.
+			///
+			/// \return Orthographic size
 			double size() const;
 
-			/// Get the orthographic projection matrix.
+			/// Get orthographic projection matrix.
 			///
 			/// \param[in] aspect Aspect ratio (w/h)
 			/// \return Orthographic projection matrix

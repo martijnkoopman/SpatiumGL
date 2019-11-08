@@ -24,5 +24,10 @@ namespace spatiumgl {
 			return m_transform;
 		}
 
+		const Transform& SceneObject::transform() const
+		{
+			return m_transform;
+		}
+
 	} // namespace gfx3d
 } // namespace spatiumgl

@@ -27,22 +27,22 @@ namespace spatiumgl {
 			/// \param[in] fov Field of view angle
 			/// \param[in] near Distance to near clipping plane
 			/// \param[in] far Distance to far clipping plane
-			PerspectiveCamera(double fov, double near, double far);
+			PerspectiveCamera(double fov = 45, double near = 1, double far = 10);
 
 			/// Destructor
 			virtual ~PerspectiveCamera() override = default;
 
-			/// Set the field of view angle (vertical) (radians).
+			/// Set field of view angle (vertical) (radians).
 			///
 			/// \param[in] field of view angle
 			void setFov(double fov);
 
-			/// Get the vield of view angle (vertical) (radians).
+			/// Get vield of view angle (vertical) (radians).
 			///
 			/// \return Field of view angle 
 			double fov() const;
 
-			/// Get the perspective projection matrix.
+			/// Get perspective projection matrix.
 			///
 			/// \param[in] aspect Aspect ratio (w/h)
 			/// \return Perspective projection matrix

@@ -51,6 +51,41 @@ namespace spatiumgl
 		{
 		}
 
+		/// Cast to matrix with different element type (static_cast).
+		///
+		/// \return Matrix with cast element type
+		template<typename T2>
+		Matrix<T2, 4, 4> staticCast() const
+		{
+			Matrix<T2, 4, 4> result;
+
+			// Column 0
+			result[0][0] = static_cast<T2>(this->m_data[0][0]);
+			result[0][1] = static_cast<T2>(this->m_data[0][1]);
+			result[0][2] = static_cast<T2>(this->m_data[0][2]);
+			result[0][3] = static_cast<T2>(this->m_data[0][3]);
+
+			// Column 1
+			result[1][0] = static_cast<T2>(this->m_data[1][0]);
+			result[1][1] = static_cast<T2>(this->m_data[1][1]);
+			result[1][2] = static_cast<T2>(this->m_data[1][2]);
+			result[1][3] = static_cast<T2>(this->m_data[1][3]);
+
+			// Column 2
+			result[2][0] = static_cast<T2>(this->m_data[2][0]);
+			result[2][1] = static_cast<T2>(this->m_data[2][1]);
+			result[2][2] = static_cast<T2>(this->m_data[2][2]);
+			result[2][3] = static_cast<T2>(this->m_data[2][3]);
+
+			// Column 3
+			result[3][0] = static_cast<T2>(this->m_data[3][0]);
+			result[3][1] = static_cast<T2>(this->m_data[3][1]);
+			result[3][2] = static_cast<T2>(this->m_data[3][2]);
+			result[3][3] = static_cast<T2>(this->m_data[3][3]);
+
+			return result;
+		}
+
 		// Compare operators
 
 		/// Compare operator. Is equal.
@@ -135,6 +170,9 @@ namespace spatiumgl
 		/// Multiply by scalar.
 		// TODO
 
+		/// Divide by scalar.
+		// TODO
+
 		/// Multiply by vector.
 		///
 		/// \param[in] vector Vector to multiply with
@@ -149,17 +187,39 @@ namespace spatiumgl
 			return result;
 		}
 
-		/// Divide by scalar.
-		// TODO
+		/// Multiply by matrix.
+		///
+		/// \param[in] other Matrix to multiply with
+		/// \return Multiplied matrix
+		template<size_t W2>
+		Matrix<T, 4, W2> operator*(const Matrix<T, W2, 4> & other) const
+		{
+			Matrix<T, 4, W2> result;
+
+			for (size_t i = 0; i < 4; i++)
+			{
+				for (size_t j = 0; j < W2; j++)
+				{
+					T val = 0;
+					for (size_t k = 0; k < 4; k++)
+					{
+						val += this->m_data[k][i] * other[j][k];
+					}
+					result[j][i] = val;
+				}
+			}
+
+			return result;
+		}
 
 		// Matrix operations
 
 		/// Get transposed matrix.
 		///
 		/// \return Transposed matrix
-		Matrix<T, 3, 3> transposed() const
+		Matrix<T, 4, 4> transposed() const
 		{
-			Matrix<T, 3, 3> result;
+			Matrix<T, 4, 4> result;
 			result[0][0] = this->m_data[0][0];
 			result[0][1] = this->m_data[1][0];
 			result[0][2] = this->m_data[2][0];
@@ -267,55 +327,231 @@ namespace spatiumgl
 
 		// Geometric operations
 
-		static Matrix<T, 4, 4> perspective(T fovy, T aspect, T near, T far)
-		{
-			Matrix<T, 4, 4> result(1);
-			// TODO: Compute fields
-			return result;
-		}
+		// Projections
 
 		/// Create orthographic projection matrix
 		///
-		/// \param[in] size Frustum size (box)
+		/// Project from orthographic view volume to canonical view volume.
+		///
+		/// Beware: near and far should be negative and the following is true:
+		/// 0 > near > far 
+		/// far is a negative number of larger absolute value than near.
+		///
+		/// \param[in] size Orthographic size
 		/// \param[in] aspect Aspect ratio (w/h)
-		/// \param[in] near Near clipping plane distance
-		/// \param[in] far Far clipping plane distance
-		static Matrix<T, 4, 4> ortho(T size, T aspect, T near, T far)
+		/// \param[in] near Distance to near clipping plane (Z coordinate)
+		/// \param[in] far Distance to far clipping plane (Z coordinate)
+		/// \return Orthographic projection matrix
+		static Matrix<T, 4, 4> ortho(const T size, const T aspect, const T near, const T far)
+		{
+			const T top = size * static_cast<T>(0.5);
+			const T bottom = -top;
+			const T right = size * static_cast<T>(0.5) * aspect;
+			const T left = -right;
+
+			return Matrix<T, 4, 4>::ortho(left, right, bottom, top, near, far);
+		}
+
+		/// Create orthographic projection matrix.
+		///
+		/// Project from orthographic view volume to canonical view volume.
+		///
+		/// \param[in] left Coordinate of left vertical clipping plane.
+		/// \param[in] right Coordinate of right vertical clipping plane.
+		/// \param[in] bottom Coordinate of bottom horizontal clipping plane.
+		/// \param[in] top Coordinate of horizontal clipping plane.
+		/// \param[in] near Distance to nearer depth clipping plane.
+		/// \param[in] far Distances to farther depth clipping plane.
+		/// \return Orthographic projection matrix
+		static Matrix<T, 4, 4> ortho(const T left, const T right, const T bottom, const T top, const T near, const T far)
+		{
+			Matrix<T, 4, 4> result(1);
+
+			result[0][0] = static_cast<T>(2) / (right - left);
+			result[1][1] = static_cast<T>(2) / (top - bottom);
+			result[2][2] = -static_cast<T>(2) / (far - near);
+			result[3][0] = -(right + left) / (right - left);
+			result[3][1] = -(top + bottom) / (top - bottom);
+			result[3][2] = -(far + near) / (far - near);
+
+			return result;
+		}
+
+		/// Create perspective projection matrix.
+		///
+		/// Project from view frustrum to canonical view volumne.
+		///
+		/// \param[in] fovy Vertical field of view angle (radians)
+		/// \param[in] aspect Aspect ratio (w/h)
+		/// \param[in] near Distance to near clipping plane (Z coordinate)
+		/// \param[in] far Distance to far clipping plane (Z coordinate)
+		/// \return Perspective projection matrix
+		static Matrix<T, 4, 4> perspective(const T fovy, const T aspect, const T near, const T far)
 		{
 			Matrix<T, 4, 4> result;
-			
-			const T n = -near;
-			const T f = -far;
-			const T r = size * 0.5 * aspect;
-			const T l = -r;
-			const T t = size * 0.5;
-			const T b = -t;
+
+			const T tanHalfFovy = tan(fovy / static_cast<T>(2));
+
+			result[0][0] = static_cast<T>(1) / (aspect * tanHalfFovy);
+			result[1][1] = static_cast<T>(1) / (tanHalfFovy);
+			result[2][2] = -(far + near) / (far - near);
+			result[2][3] = -static_cast<T>(1);
+			result[3][2] = -(static_cast<T>(2) * far * near) / (far - near);
+
+			return result;
+		}
+
+		// Construct affine transformation Matrix4x4
+
+		/// Construct translation matrix.
+		///
+		/// \param[in] x Translation on X axis
+		/// \param[in] y Translation on Y axis
+		/// \param[in] z Translation on Z axis
+		/// \return Translation matrix
+		static Matrix<T, 4, 4> translation(const T x, const T y, const T z)
+		{
+			Matrix<T, 4, 4> result;
+			result[3][0] = x;
+			result[3][1] = y;
+			result[3][2] = z;
+			result[0][0] = static_cast<T>(1);
+			result[1][1] = static_cast<T>(1);
+			result[2][2] = static_cast<T>(1);
+			result[3][3] = static_cast<T>(1);
+			return result;
+		}
+
+		/// Construct scaling matrix.
+		///
+		/// \param[in] x Scaling on X axis
+		/// \param[in] y Scaling on Y axis
+		/// \param[in] z Scaling on Z axis
+		/// \return Scaling matrix
+		static Matrix<T, 4, 4> scaling(const T x, const T y, const T z)
+		{
+			Matrix<T, 4, 4> result;
+			result[0][0] = x;
+			result[1][1] = y;
+			result[2][2] = z;
+			result[3][3] = static_cast<T>(1);
+			return result;
+		}
+
+		/// Construct rotation matrix (counterclockwise).
+		///
+		/// Rotation ordering: X -> Y -> Z
+		///
+		/// \param[in] x Rotation on X axis
+		/// \param[in] y Rotation on Y axis
+		/// \param[in] z Rotation on Z axis
+		/// \return Rotation matrix
+		static Matrix<T, 4, 4> rotation(const T x, const T y, const T z)
+		{
+			return Matrix<T, 4, 4>::rotationZ(z)
+				* Matrix<T, 4, 4>::rotationY(y)
+				* Matrix<T, 4, 4>::rotationX(x);
+		}
+
+		/// Construct matrix for rotation around X axis (counterclockwise).
+		///
+		/// \param[in] angle Angle in radians
+		/// \return Rotation matrix
+		static Matrix<T, 4, 4> rotationX(const T angle)
+		{
+			Matrix<T, 4, 4> result;
+			result[0][0] = static_cast<T>(1);
+			result[1][1] = cos(angle);
+			result[2][1] = -sin(angle); // +?
+			result[1][2] = sin(angle); // -?
+			result[2][2] = cos(angle);
+			result[3][3] = static_cast<T>(1);
+			return result;
+		}
+
+		/// Construct matrix for rotation around Y axis (counterclockwise).
+		///
+		/// \param[in] angle Angle in radians
+		/// \return Rotation matrix
+		static Matrix<T, 4, 4> rotationY(const T angle)
+		{
+			Matrix<T, 4, 4> result;
+			result[0][0] = cos(angle);
+			result[1][1] = static_cast<T>(1);
+			result[2][0] = sin(angle);
+			result[0][2] = -sin(angle);
+			result[2][2] = cos(angle);
+			result[3][3] = static_cast<T>(1);
+			return result;
+		}
+
+		/// Construct matrix for rotation around Z axis (counterclockwise).
+		///
+		/// \param[in] angle Angle in radians
+		/// \return Rotation matrix
+		static Matrix<T, 4, 4> rotationZ(const T angle)
+		{
+			Matrix<T, 4, 4> result;
+			result[0][0] = cos(angle);
+			result[1][0] = -sin(angle); // +?
+			result[0][1] = sin(angle); // -?
+			result[1][1] = cos(angle);
+			result[2][2] = static_cast<T>(1);
+			result[3][3] = static_cast<T>(1);
+			return result;
+		}
+
+		/// Construct matrix for rotation around axis (counterclockwise).
+		///
+		/// \param[in] axis Axis vector
+		/// \param[in] angle Angle in radians
+		/// \return Rotation matrix
+		static Matrix<T, 4, 4> rotationAround(const Vector<T,3>& axis, T angle)
+		{
+			Matrix<T, 4, 4> result;
+
+			const Vector<T, 3> axisNormalized = axis.normalized();
+			const T q0 = cos(angle / 2);
+			const T q1 = sin(angle / 2) * axisNormalized.x();
+			const T q2 = sin(angle / 2) * axisNormalized.y();
+			const T q3 = sin(angle / 2) * axisNormalized.z();
 
 			// Column 0
-			result[0][0] = 2 / (r - l);
-			result[0][1] = 0;
-			result[0][2] = 0;
+			result[0][0] = q0 * q0 + q1 * q1 - q2 * q2 - q3 * q3;
+			result[0][1] = 2 * (q2 * q1 + q0 * q3);
+			result[0][2] = 2 * (q3 * q1 - q0 * q2);
 			result[0][3] = 0;
 
 			// Column 1
-			result[1][0] = 0;
-			result[1][1] = 2 / (t - b);
-			result[1][2] = 0;
+			result[1][0] = 2 * (q1 * q2 - q0 * q3);
+			result[1][1] = (q0 * q0 - q1 * q1 + q2 * q2 - q3 * q3);
+			result[1][2] = 2 * (q3 * q2 + q0 * q1);
 			result[1][3] = 0;
 
 			// Column 2
-			result[2][0] = 0;
-			result[2][1] = 0;
-			result[2][2] = -2 / (n - f);
+			result[2][0] = 2 * (q1 * q3 + q0 * q2);
+			result[2][1] = 2 * (q2 * q3 - q0 * q1);
+			result[2][2] = (q0 * q0 - q1 * q1 - q2 * q2 + q3 * q3);
 			result[2][3] = 0;
 
 			// Column 3
-			result[3][0] = -(r + l) / (r - l);
-			result[3][1] = -(t + b) / (t - b);
-			result[3][2] = -(n + f) / (n - f);
+			result[3][0] = 0;
+			result[3][1] = 0;
+			result[3][2] = 0;
 			result[3][3] = 1;
 
 			return result;
+		}
+
+		/// Output to ostream
+		friend std::ostream& operator<<(std::ostream& os, const Matrix<T, 4, 4>& matrix)
+		{
+			os << "Matrix(4,4)" << "\n";
+			os << matrix[0][0] << " " << matrix[1][0] << " " << matrix[2][0] << " " << matrix[3][0] << "\n";
+			os << matrix[0][1] << " " << matrix[1][1] << " " << matrix[2][1] << " " << matrix[3][1] << "\n";
+			os << matrix[0][2] << " " << matrix[1][2] << " " << matrix[2][2] << " " << matrix[3][2] << "\n";
+			os << matrix[0][3] << " " << matrix[1][3] << " " << matrix[2][3] << " " << matrix[3][3] << "\n";
+			return os;
 		}
 	};
 }

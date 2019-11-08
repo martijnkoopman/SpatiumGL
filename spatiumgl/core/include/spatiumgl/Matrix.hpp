@@ -16,6 +16,8 @@
 #include "spatiumglexport.hpp"
 #include "Vector.hpp"
 
+#include <ostream>
+
 namespace spatiumgl
 {
 	template<typename T, size_t W, size_t H>
@@ -78,11 +80,11 @@ namespace spatiumgl
 
 	protected:
 		// Hide constructor to prevent declaration
-    MatrixBase()
+		MatrixBase()
 			: m_data()
 		{}
 
-    MatrixBase(std::initializer_list<std::initializer_list<T>> data)
+		MatrixBase(std::initializer_list<std::initializer_list<T>> data)
 			: m_data()
 		{
 			// Iterate columns
@@ -112,10 +114,75 @@ namespace spatiumgl
 		Vector<T, H> m_data[W];
 	};
 
+	/// \class Matrix
+	///
+	/// Internally a matrix is stored as an array of column vectors.
+	/// 
+	/// Example layout:
+	/// | 00 04 08 12 |
+	/// | 01 05 09 13 |
+	/// | 02 06 10 14 |
+	/// | 03 07 11 15 |
+	/// 
+	///  Memory layout:
+	/// [00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15]
+	///
+	/// Element access:
+	/// matrix[col][row] returns a reference or value (if matrix is const).
+	///
+	/// Fast iteration over a matrix:
+	/// Matrix<T,W,H> matrix;
+	/// for (size_t col = 0; col < W; col++)
+	/// {
+	///   Vector<T,H> &column = matrix[col]; // reference to column vector
+	///	  for (size_t row = 0; row < H; row++)
+	///   {
+	///     T& val = column[row]; // reference to element
+	///     // Do something with val...
+	///   }
+	/// }
 	template<typename T, size_t W, size_t H>
 	struct SPATIUMGL_EXPORT Matrix : public MatrixBase<T, W, H>
 	{
 		constexpr Matrix() = default;
+
+		/// \TODO Add all matrix functionality that is also in Matrix2, Matrix3 and Matrix4
+
+		template<typename T2>
+		Matrix<T2, W, H> staticCast(const Matrix<T, W, H>& other) const
+		{
+			Matrix<T2, W, H> result;
+
+			for (size_t col = 0; col < W; col++)
+			{
+				const Vector<T, H>& columnIn = this->m_data[col];
+				Vector<T, H>& columnOut = result[col];
+
+				for (size_t row = 0; row < H; row++)
+				{
+					columnOut[row] = static_cast<T2>(columnIn[row]);
+				}
+			}
+
+			return result;
+		}
+
+		/// Output to ostream (untested)
+		friend std::ostream& operator<<(std::ostream& os, const Matrix<T, W, H>& matrix)
+		{
+			os << "Matrix(" << W << ", " << H << ")" << "\n";
+			for (size_t row = 0; row < H; row++)
+			{
+				for (size_t col = 0; col < W; col++)
+				{
+					os << matrix[col][row] << " ";
+				}
+				if (col == W - 1) {
+					os << "\n";
+				}
+			}
+			return os;
+		}
 	};
 }
 
@@ -178,7 +245,7 @@ namespace spatiumgl {
 				++col;
 			}
 		}
-		
+
 		/// Compare operator. Is equal.
 		///
 		/// \param[in] other Other matrix
@@ -482,7 +549,7 @@ namespace spatiumgl {
 			: MatrixTN(diagonal)
 		{
 		}
-		
+
 		/// Copy constructor
 		///
 		/// \param[in] vector Vector

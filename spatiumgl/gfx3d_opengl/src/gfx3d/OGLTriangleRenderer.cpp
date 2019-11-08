@@ -53,9 +53,10 @@ namespace spatiumgl {
 
 			// Vertices
 			float vertices[] = {
-				-0.5, -0.5, 0.0,
-				 0.5, -0.5, 0.0,
-				 0.0,  0.5, 0.0
+				-0.5, -0.5, -1,
+				 0.5, -0.5, -1,
+				 0.0,  0.5, -1,
+				 0.0,  0.0, -1
 						};
 
 			glGenVertexArrays(1, &m_vao);
@@ -85,36 +86,22 @@ namespace spatiumgl {
 			m_shaderProgram.use();
 
 			// Set view matrix
-			const spatiumgl::Matrix4 viewMatrix = camera->transform().matrix().inverse();
+			const spatiumgl::Matrix4 viewMatrix = camera->transform().matrix().inverse(); // MAY THROW EXCEPTION!
 			int viewMatrixLoc = glGetUniformLocation(m_shaderProgram.shaderProgamId(), "view");
-			float viewMatrixData[16];
-			for (size_t i = 0; i < 16; i++)
-			{
-				size_t x = i % 4;
-				size_t y = i / 4;
-
-				viewMatrixData[i] = static_cast<float>(viewMatrix[x][y]);
-			}
-			glUniformMatrix4fv(viewMatrixLoc, 1, GL_FALSE, viewMatrixData);
+			const spatiumgl::Matrix4f viewMatrixF = viewMatrix.staticCast<float>();
+			glUniformMatrix4fv(viewMatrixLoc, 1, GL_FALSE, viewMatrixF.data());
 
 			// Set projection matrix
 			const spatiumgl::Matrix4 projectionMatrix = camera->projectionMatrix(aspect);
 			int projectionMatrixLoc = glGetUniformLocation(m_shaderProgram.shaderProgamId(), "projection");
-			float projectionMatrixData[16];
-			for (size_t i = 0; i < 16; i++)
-			{
-				size_t x = i % 4;
-				size_t y = i / 4;
-
-				projectionMatrixData[i] = static_cast<float>(projectionMatrix[x][y]);
-			}
-			glUniformMatrix4fv(projectionMatrixLoc, 1, GL_FALSE, projectionMatrixData);
+			const spatiumgl::Matrix4f projectionMatrixF = projectionMatrix.staticCast<float>();
+			glUniformMatrix4fv(projectionMatrixLoc, 1, GL_FALSE, projectionMatrixF.data());
 
 			// Bind vertex array object
 			glBindVertexArray(m_vao);
 
 			// Draw
-			glDrawArrays(GL_TRIANGLES, 0, 3);
+			glDrawArrays(GL_POINTS, 0, 4);
 		}
 
 	} // namespace gfx3d

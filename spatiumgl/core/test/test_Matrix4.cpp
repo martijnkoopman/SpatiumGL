@@ -2,6 +2,10 @@
 
 #include <spatiumgl/Matrix4x4.hpp>
 
+#include <iostream>
+
+namespace spgl = spatiumgl;
+
 TEST(Matrix4, constructorDefault)
 {
 	const spatiumgl::Matrix4 result;
@@ -78,3 +82,44 @@ TEST(Matrix4, inverse)
 }
 
 // output
+
+TEST(Matrix4, ortho)
+{
+	const double left = -10;
+	const double right = 20;
+	const double bottom = -30;
+	const double top = 40;
+	const double near = 10;
+	const double far = 100;
+
+	const spgl::Matrix4 matrix = spgl::Matrix4::ortho(left, right, bottom, top, near, far);
+
+	std::cout << matrix << std::endl;
+	// Transposed!
+
+	// Should be
+	//0.040000 0.000000 0.000000 0.000000
+	//0.000000 0.033333 0.000000 0.000000
+	//0.000000 0.000000 -0.028571 0.000000
+	//-1.400000 -1.666667 -1.857143 1.000000
+
+	EXPECT_EQ(matrix[0][0], 0.04);
+	EXPECT_EQ(matrix[0][1], 0);
+	EXPECT_EQ(matrix[0][2], 0);
+	EXPECT_EQ(matrix[0][3], -1.4);
+
+	EXPECT_EQ(matrix[1][0], 0);
+	EXPECT_NEAR(matrix[1][1], 0.033333, 0.001);
+	EXPECT_EQ(matrix[1][2], 0);
+	EXPECT_NEAR(matrix[1][3], -1.666667, 0.001);
+
+	EXPECT_EQ(matrix[2][0], 0);
+	EXPECT_EQ(matrix[2][1], 0);
+	EXPECT_NEAR(matrix[2][2], -0.028571, 0.001);
+	EXPECT_NEAR(matrix[2][3], -1.857143, 0.001);
+
+	EXPECT_EQ(matrix[3][0], 0);
+	EXPECT_EQ(matrix[3][1], 0);
+	EXPECT_EQ(matrix[3][2], 0);
+	EXPECT_EQ(matrix[3][3], 1);
+}

@@ -94,7 +94,7 @@ namespace spatiumgl
 		/// \return Data pointer
 		T* data() noexcept
 		{
-			return &m_data;
+			return &m_data[0];
 		}
 
 		/// Get const pointer to data.
@@ -143,6 +143,22 @@ namespace spatiumgl
 	{
 		/// Default constructor
 		constexpr Vector() = default;
+
+		/// Cast to vector with different element type (static_cast).
+		///
+		/// \return Vector with cast element type
+		template<typename T2>
+		Vector<T2, N> staticCast() const
+		{
+			Vector<T2, N> result;
+
+			for (size_t row = 0; row < N; row++)
+			{
+				result[row] = static_cast<T2>(this->m_data[row]);
+			}
+
+			return result;
+		}
 
 		/// Compare operator. Is equal.
 		///
@@ -197,10 +213,20 @@ namespace spatiumgl
 
 namespace spatiumgl
 {
+	/// Vector of 2 integer coordinates (x,y) 
 	using Vector2i = Vector<int, 2>;
-	using Vector2 = Vector<SPATIUMGL_PRECISION, 2>;
-	using Vector3 = Vector<SPATIUMGL_PRECISION, 3>;
-	using Vector4 = Vector<SPATIUMGL_PRECISION, 4>;
+
+	/// Vector of 2 double precision coordinates (x,y)
+	using Vector2 = Vector<double, 2>;
+
+	/// Vector of 3 double precision coordinates (x,y,z)
+	using Vector3 = Vector<double, 3>;
+
+	/// Vector of 3 single precision coordinates (x,y,z)
+	using Vector3f = Vector<float, 3>;
+
+	/// Vector of 4 double precision coordinates (x,y,z,w)
+	using Vector4 = Vector<double, 4>;
 }
 
 /* OLD

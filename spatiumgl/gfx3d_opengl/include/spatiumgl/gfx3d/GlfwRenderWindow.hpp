@@ -36,7 +36,7 @@ namespace spatiumgl {
 			GlfwRenderWindow(bool debug = false);
 
 			/// Destructor
-      virtual ~GlfwRenderWindow() override;
+			virtual ~GlfwRenderWindow() override;
 
 			/// Initialize GLFW.
 			///

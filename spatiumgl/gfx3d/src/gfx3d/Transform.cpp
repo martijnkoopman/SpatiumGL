@@ -35,6 +35,11 @@ namespace spatiumgl {
 			return { m_matrix[2][0], m_matrix[2][1], m_matrix[2][2] };
 		}
 
+		void Transform::clear()
+		{
+			m_matrix = Matrix4(1);
+		}
+
 		Vector3 Transform::translation() const
 		{
 			return { m_matrix[3][0], m_matrix[3][1], m_matrix[3][2] };
@@ -45,9 +50,10 @@ namespace spatiumgl {
 			m_matrix[3] = Vector4(translation, 1.0);
 		}
 
-		void Transform::applyTranslation(const Vector3& translation)
+		void Transform::translate(const Vector3& translation)
 		{
-			m_matrix[3] = m_matrix[3] + Vector4(translation, 1.0);
+			m_matrix[3] = m_matrix[3] + Vector4(translation, 0);
+			//m_matrix[3][3] = 1;
 		}
 
 		/*
@@ -81,16 +87,34 @@ namespace spatiumgl {
 		  ///\todo This doesn't work... Use TRS?
 		  m_matrix = m_matrix * geom3d::Matrix4::rotation(euler.x(), euler.y(), euler.z());
 		}
+		*/
 
-		/// Rotate around axis (relative to self/object space)
-		///
-		/// \param[in] axis Axis vector
-		/// \param[in] angle Angle in radians
-		void rotateAround(const geom3d::Vector3 &axis, double angle)
+		void Transform::rotateAround(const Vector3& axis, const double angle)
 		{
-		  m_matrix = geom3d::Matrix4::rotationAround(axis, angle) * m_matrix;
+			m_matrix = Matrix4::rotationAround(axis, angle) * m_matrix;
 		}
 
+		void Transform::rotate(const double x, const double y, const double z)
+		{
+			m_matrix = Matrix4::rotation(x, y, z) * m_matrix;
+		}
+
+		void Transform::rotateX(const double angle)
+		{
+			m_matrix = Matrix4::rotationX(angle) * m_matrix;
+		}
+
+		void Transform::rotateY(const double angle)
+		{
+			m_matrix = Matrix4::rotationY(angle) * m_matrix;
+		}
+
+		void Transform::rotateZ(const double angle)
+		{
+			m_matrix = Matrix4::rotationZ(angle) * m_matrix;
+		}
+
+		/*
 		/// Set the rotation in world space
 		///
 		/// \param[in] euler Rotation in euler angles
@@ -168,13 +192,14 @@ namespace spatiumgl {
 
 		Vector3 Transform::objectPointToWorldPoint(const Vector3& point) const
 		{
-			Vector4 result = m_matrix * Vector4(point, 1.0f);
-			return { result[0], result[1], result[2] };
+			Vector4 result = m_matrix * Vector4(point, 1.0);
+			return Vector3(result[0], result[1], result[2]);
 		}
 
 		Vector3 Transform::worldPointToObjectPoint(const Vector3& point) const
 		{
-			return Vector3(0, 0, 0);// m_matrix.inverse()* Vector4(point, 1.0f);
+			Vector4 result = m_matrix.inverse() * Vector4(point, 1.0);
+			return Vector3(result[0], result[1], result[2]);
 		}
 
 	} // namespace gfx3d

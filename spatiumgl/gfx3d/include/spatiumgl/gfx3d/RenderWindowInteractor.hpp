@@ -49,6 +49,16 @@ namespace spatiumgl {
 			//virtual void OnKeyRepeated(int key) = 0;
 			//virtual void OnKeyReleased(int key) = 0;
 
+			/// Reset camera transform and clipping distances.
+			///
+			/// Reposition the camera and ensure the scene isn't clipped.
+			virtual void resetCamera() = 0;
+
+			/// Reset camera clipping distances.
+			///
+			/// Ensure the scene isn't clipped.
+			virtual void resetCameraClipping() = 0;
+
 		protected:
 			RenderWindow* m_window;
 		};

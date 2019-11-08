@@ -17,7 +17,10 @@
 #include "spatiumgl/gfx3d/RenderWindowInteractor.hpp"
 #include "spatiumgl/gfx3d/Camera.hpp"
 #include "spatiumgl/gfx3d/Renderer.hpp"
+#include "spatiumgl/gfx3d/Animator.hpp"
 #include "spatiumgl/Vector.hpp"
+
+#include <vector> // std::vector
 
 namespace spatiumgl {
 	namespace gfx3d {
@@ -52,7 +55,22 @@ namespace spatiumgl {
 			/// \return Camera
 			Camera* camera() const;
 
-			void setRenderer(Renderer* renderer); // TODO: addRenderer
+			/// Add a renderer 
+			///
+			/// \param[in] renderer Renderer
+			void addRenderer(Renderer* renderer);
+
+			/// Get the boundaries of all renderers combined, i.e., the entire 
+			/// scene.
+			/// 
+			/// \return Scene boundaries
+			BoundingBox<SPATIUMGL_PRECISION> bounds() const;
+
+			/// Add an animator
+			///
+			/// \param[in] animator Animator
+			void addAnimator(Animator* animator);
+
 			Vector2i framebufferSize() const;
 
 			// Pure virtual functions to be implemented by subclasses.
@@ -89,8 +107,11 @@ namespace spatiumgl {
 
 		protected:
 			RenderWindowInteractor* m_interactor;
-			Renderer* m_renderer;
 			Camera* m_camera;
+			std::vector<Renderer*> m_renderers;
+			std::vector<Animator*> m_animators;
+
+			BoundingBox<SPATIUMGL_PRECISION> m_bounds;
 
 			Vector2i m_framebufferSize;
 			bool m_debug;

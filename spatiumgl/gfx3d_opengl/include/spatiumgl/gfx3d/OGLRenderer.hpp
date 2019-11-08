@@ -32,8 +32,8 @@ namespace spatiumgl {
 
 		protected:
 			OGLShaderProgram m_shaderProgram;
-			unsigned int m_vao; // Vertex Array Object  GLuint
-			unsigned int m_vbo; // Vertex Buffer Object  GLuint
+			unsigned int m_vao; // Vertex Array Object (GLuint)
+			unsigned int m_vbo; // Vertex Buffer Object (GLuint)
 		};
 
 	} // namespace gfx3d

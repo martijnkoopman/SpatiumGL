@@ -30,12 +30,13 @@ namespace spatiumgl {
 					"#version 330 core\n"
 					"layout (location = 0) in vec3 pos;\n"
 					"layout (location = 1) in vec3 color;\n"
-					"uniform mat4 viewMatrix;\n"
-					"uniform mat4 projectionMatrix;\n"
+					"uniform mat4 model;\n"
+					"uniform mat4 view;\n"
+					"uniform mat4 projection;\n"
 					"out vec3 vertexColor;\n"
 					"void main()\n"
 					"{\n"
-					"   gl_Position = projectionMatrix * viewMatrix * vec4(pos, 1.0);\n"
+					"   gl_Position = projection * view * model * vec4(pos.xyz, 1.0); \n"
 					"   vertexColor = color;\n"
 					"}\n\0";
 
@@ -50,23 +51,23 @@ namespace spatiumgl {
 			}
 			else
 			{
-				vertexShaderSrc =
-					"#version 330 core\n"
-					"layout (location = 0) in vec3 pos;\n"
-					"uniform mat4 viewMatrix;\n"
-					"uniform mat4 projectionMatrix;\n"
+				// Shader
+				vertexShaderSrc = "#version 330 core\n"
+					"layout(location = 0) in vec3 aPos;\n"
+					"uniform mat4 model;\n"
+					"uniform mat4 view;\n"
+					"uniform mat4 projection;\n"
 					"void main()\n"
 					"{\n"
-					"   gl_Position = projectionMatrix * viewMatrix * vec4(pos, 1.0);\n"
-					"}\n\0";
+					"gl_Position = projection * view * model * vec4(aPos, 1.0);\n"
+					"}";
 
-				fragmentShaderSrc =
-					"#version 330 core\n"
+				fragmentShaderSrc = "#version 330 core\n"
 					"out vec4 FragColor;\n"
 					"void main()\n"
 					"{\n"
-					"   FragColor = vec4(1.0f, 1.0f, 0.0f, 1.0);\n"
-					"}\n\0";
+					"FragColor = vec4(1.0f, 0.5f, 0.5f, 1.0f);\n"
+					"}";
 			}
 
 			// Create shader program with vertex and fragment shader
@@ -89,31 +90,41 @@ namespace spatiumgl {
 			glGenBuffers(1, &m_vbo);
 			glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
 
-			// Allocate vertex attributes buffer
 			const size_t pointCount = pointCloud->positions().size();
-			const size_t pointBufferSize = pointCount * sizeof(double) * 3;
+			std::vector<Vector3f> verticesFloat(pointCount);
+			for (size_t i = 0; i < pointCount; i++)
+				verticesFloat[i] = pointCloud->positions()[i].staticCast<float>();
+
+			// Allocate vertex attributes buffer
+			const size_t pointBufferSize = pointCount * sizeof(float) * 3;
 			if (pointCloud->colors().size() == pointCount)
 			{
+				// THESE DOUBLES ARE NOT WORKING.
+
+				std::vector<Vector3f> colorsFloat(pointCount);
+				for (size_t i = 0; i < pointCount; i++)
+					colorsFloat[i] = pointCloud->colors()[i].staticCast<float>();
+
 				// Allocate vertex attributes buffer for points + colors
 				glBufferData(GL_ARRAY_BUFFER, 2 * pointBufferSize, nullptr, GL_STATIC_DRAW);
 
 				// Fill vertex attributes with positions and colors
-				glBufferSubData(GL_ARRAY_BUFFER, 0, pointBufferSize, (void*)pointCloud->positions().data());
-				glBufferSubData(GL_ARRAY_BUFFER, pointBufferSize, pointBufferSize, (void*)pointCloud->colors().data());
+				glBufferSubData(GL_ARRAY_BUFFER, 0, pointBufferSize, (void*)verticesFloat.data());
+				glBufferSubData(GL_ARRAY_BUFFER, pointBufferSize, pointBufferSize, (void*)colorsFloat.data());
 
 				// Specify strucutre of a single vertex attribute, and enable
-				glVertexAttribPointer(0, 3, GL_DOUBLE, GL_FALSE, 3 * sizeof(double), (void*)0); // positions
+				glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0); // positions
 				glEnableVertexAttribArray(0);
-				glVertexAttribPointer(1, 3, GL_DOUBLE, GL_FALSE, 3 * sizeof(double), (void*)(pointBufferSize)); // colors
+				glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)(pointBufferSize)); // colors
 				glEnableVertexAttribArray(1);
 			}
 			else
 			{
 				// Allocate vertex attributes buffer for points
-				glBufferData(GL_ARRAY_BUFFER, pointBufferSize, pointCloud->positions().data(), GL_STATIC_DRAW);
+				glBufferData(GL_ARRAY_BUFFER, pointBufferSize, verticesFloat.data(), GL_STATIC_DRAW);
 
 				// Specify strucutre of a single vertex attribute, and enable
-				glVertexAttribPointer(0, 3, GL_DOUBLE, GL_FALSE, 3 * sizeof(double), (void*)0);
+				glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 				glEnableVertexAttribArray(0);
 			}
 
@@ -139,25 +150,38 @@ namespace spatiumgl {
 		{
 			m_shaderProgram.use();
 
-			// Coordinate transformations:
-			// Local --(Model matrix)--> World
-			// World -->(View matrix)--> View (= camera space; view matrix is inverse of camera transform)
-			// View --(Projection matrix)--> Clip (Range -1; 1)
+			{
+				// Set model matrix
+				const spatiumgl::Matrix4 modelMatrix = m_renderObject->transform().matrix();
+				int modelMatrixLoc = glGetUniformLocation(m_shaderProgram.shaderProgamId(), "model");
+				const spatiumgl::Matrix4f modelMatrixF = modelMatrix.staticCast<float>();
+				glUniformMatrix4fv(modelMatrixLoc, 1, GL_FALSE, modelMatrixF.data());
+			}
 
-			// Set shader uniform values: view and projection matrix
-			const spatiumgl::Matrix4 viewMatrix = camera->transform().matrix().inverse();
-			int viewMatrixLoc = glGetUniformLocation(m_shaderProgram.shaderProgamId(), "viewMatrix"); // notification
-			glUniformMatrix4dv(viewMatrixLoc, 1, GL_FALSE, (const double*)viewMatrix.data());
+			{
+				// Set view matrix
+				const spatiumgl::Matrix4 viewMatrix = camera->transform().matrix().inverse(); // MAY THROW EXCEPTION!
+				int viewMatrixLoc = glGetUniformLocation(m_shaderProgram.shaderProgamId(), "view");
+				const spatiumgl::Matrix4f viewMatrixF = viewMatrix.staticCast<float>();
+				glUniformMatrix4fv(viewMatrixLoc, 1, GL_FALSE, viewMatrixF.data());
+			}
 
-			const spatiumgl::Matrix4 projectionMatrix = camera->projectionMatrix(aspect);
-			int projectionMatrixLoc = glGetUniformLocation(m_shaderProgram.shaderProgamId(), "projectionMatrix"); // error
-			glUniformMatrix4dv(projectionMatrixLoc, 1, GL_FALSE, (const double*)projectionMatrix.data());
+			{
+				// Set projection matrix
+				const spatiumgl::Matrix4 projectionMatrix = camera->projectionMatrix(aspect);
+				int projectionMatrixLoc = glGetUniformLocation(m_shaderProgram.shaderProgamId(), "projection");
+				const spatiumgl::Matrix4f projectionMatrixF = projectionMatrix.staticCast<float>();
+				glUniformMatrix4fv(projectionMatrixLoc, 1, GL_FALSE, projectionMatrixF.data());
+			}
 
 			// Bind vertex array object
 			glBindVertexArray(m_vao);
 
 			// Draw
 			glDrawArrays(GL_POINTS, 0, pointCloud()->pointCount());
+
+			// Unbind vertex array object
+			glBindVertexArray(0);
 		}
 
 	} // namespace gfx3d

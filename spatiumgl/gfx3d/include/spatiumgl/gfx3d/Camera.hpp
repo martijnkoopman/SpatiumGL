@@ -15,6 +15,7 @@
 
 #include "spatiumglexport.hpp"
 #include "SceneObject.hpp"
+#include "spatiumgl/Bounds.hpp"
 
 namespace spatiumgl {
 	namespace gfx3d {
@@ -61,6 +62,12 @@ namespace spatiumgl {
 			void lookAt(const Vector3& target, const Vector3& up, const Vector3& eye);
 
 			void orthogonalizeViewUp();
+
+			/// Set the near and far clipping plane distances to include certain
+			/// boundaries.
+			///
+			/// \param[in] bounds Boundaries
+			void setNearAndFarFromBounds(const BoundingBox<SPATIUMGL_PRECISION> &bounds);
 
 			/// Get the projection matrix.
 			///

@@ -113,6 +113,22 @@ namespace spatiumgl
 			return this->m_data[3];
 		}
 
+		/// Cast to vector with different element type (static_cast).
+		///
+		/// \return Vector with cast element type
+		template<typename T2>
+		Vector<T2, 4> staticCast() const
+		{
+			Vector<T2, 4> result;
+
+			result[0] = static_cast<T2>(this->m_data[0]);
+			result[1] = static_cast<T2>(this->m_data[1]);
+			result[2] = static_cast<T2>(this->m_data[2]);
+			result[3] = static_cast<T2>(this->m_data[3]);
+
+			return result;
+		}
+
 		// Compare operators
 
 		/// Compare operator. Is equal.
