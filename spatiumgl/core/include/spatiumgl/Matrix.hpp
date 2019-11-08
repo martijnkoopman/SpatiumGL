@@ -177,9 +177,7 @@ namespace spatiumgl
 				{
 					os << matrix[col][row] << " ";
 				}
-				if (col == W - 1) {
-					os << "\n";
-				}
+				os << "\n";
 			}
 			return os;
 		}
