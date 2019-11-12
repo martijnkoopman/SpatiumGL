@@ -1,5 +1,10 @@
 cmake_minimum_required(VERSION 3.2.0)
 
+# Fix behavior of CMAKE_CXX_STANDARD when targeting macOS.
+if (POLICY CMP0025)
+  cmake_policy(SET CMP0025 NEW)
+endif ()
+
 project(spatiumgl VERSION 0.1.0 LANGUAGES CXX)
 
 option(BUILD_SHARED_LIBS "Build spatiumgl as shared library." ON)
