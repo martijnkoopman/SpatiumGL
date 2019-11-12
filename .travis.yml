@@ -21,7 +21,7 @@ matrix:
         - cmake --build . --target ALL_BUILD --config Release
         - ctest -C "Release"
     - os: osx
-      osx_image: xcode11
+      osx_image: xcode11.2
       compiler: clang
       before_script:
         - mkdir build
