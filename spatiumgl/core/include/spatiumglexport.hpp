@@ -11,20 +11,20 @@
  */
 
 #if defined(SPATIUMGL_SHARED)
-#  if defined(__linux__) || defined(__APPLE__)
-#    if defined(SPATIUMGL_LIBRARY)
-#      define SPATIUMGL_EXPORT __attribute__((visibility("default")))
-#    else
-#      define SPATIUMGL_EXPORT
-#    endif
-#  endif
-#  if defined(_WIN32)
-#    if defined(SPATIUMGL_LIBRARY)
-#      define SPATIUMGL_EXPORT __declspec(dllexport)
-#    else
-#      define SPATIUMGL_EXPORT __declspec(dllimport)
-#    endif
-#  endif
+#if defined(__linux__) || defined(__APPLE__)
+#if defined(SPATIUMGL_LIBRARY)
+#define SPATIUMGL_EXPORT __attribute__((visibility("default")))
 #else
-#  define SPATIUMGL_EXPORT
+#define SPATIUMGL_EXPORT
+#endif
+#endif
+#if defined(_WIN32)
+#if defined(SPATIUMGL_LIBRARY)
+#define SPATIUMGL_EXPORT __declspec(dllexport)
+#else
+#define SPATIUMGL_EXPORT __declspec(dllimport)
+#endif
+#endif
+#else
+#define SPATIUMGL_EXPORT
 #endif

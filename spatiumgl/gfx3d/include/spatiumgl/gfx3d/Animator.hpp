@@ -13,28 +13,28 @@
 #ifndef SPATIUMGL_GFX3D_ANIMATOR_H
 #define SPATIUMGL_GFX3D_ANIMATOR_H
 
-#include "spatiumglexport.hpp"
 #include "RenderObject.hpp"
+#include "spatiumglexport.hpp"
 
 namespace spatiumgl {
-	namespace gfx3d {
+namespace gfx3d {
 
-		class SPATIUMGL_EXPORT Animator
-		{
-		public:
-			Animator(RenderObject* renderObject)
-				: m_renderObject(renderObject)
-			{}
+class SPATIUMGL_EXPORT Animator
+{
+public:
+  Animator(RenderObject* renderObject)
+    : m_renderObject(renderObject)
+  {}
 
-			virtual ~Animator() = default;
+  virtual ~Animator() = default;
 
-			virtual void animate(double deltaTime) = 0;
+  virtual void animate(double deltaTime) = 0;
 
-		protected:
-			RenderObject* m_renderObject;
-		};
+protected:
+  RenderObject* m_renderObject;
+};
 
-	} // namespace gfx3d
+} // namespace gfx3d
 } // namespace spatiumgl
 
 #endif // SPATIUMGL_GFX3D_ANIMATION_H

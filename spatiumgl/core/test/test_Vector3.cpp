@@ -2,7 +2,7 @@
 
 #include <spatiumgl/Vector.hpp>
 
-// constructor 
+// constructor
 // constructorEmpty
 // constructorInitializerList
 // add
@@ -18,6 +18,4 @@
 // project
 // output
 
-TEST(Vector3, constructor)
-{
-}
+TEST(Vector3, constructor) {}

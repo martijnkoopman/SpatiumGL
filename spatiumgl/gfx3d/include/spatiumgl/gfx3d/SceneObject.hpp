@@ -13,38 +13,37 @@
 #ifndef SPATIUMGL_GFX3D_SCENEOBJECT_H
 #define SPATIUMGL_GFX3D_SCENEOBJECT_H
 
-#include "spatiumglexport.hpp"
 #include "Transform.hpp"
+#include "spatiumglexport.hpp"
 
 namespace spatiumgl {
-	namespace gfx3d {
+namespace gfx3d {
 
-		/// \class SceneObject
-		/// \brief Object in a 3D scene
-		///
-		/// A SceneObject is transformable in world space.
-		class SPATIUMGL_EXPORT SceneObject
-		{
-		public:
+/// \class SceneObject
+/// \brief Object in a 3D scene
+///
+/// A SceneObject is transformable in world space.
+class SPATIUMGL_EXPORT SceneObject
+{
+public:
+  /// Default constructor
+  SceneObject();
 
-			/// Default constructor
-			SceneObject();
+  /// Get the transformation (by reference)
+  ///
+  /// \return transformation
+  Transform& transform();
 
-			/// Get the transformation (by reference)
-			///
-			/// \return transformation
-			Transform& transform();
+  /// Get the transformation (by const reference)
+  ///
+  /// \return transformation
+  const Transform& transform() const;
 
-			/// Get the transformation (by const reference)
-			///
-			/// \return transformation
-			const Transform& transform() const;
+protected:
+  Transform m_transform;
+};
 
-		protected:
-			Transform m_transform;
-		};
-
-	} // namespace gfx3d
+} // namespace gfx3d
 } // namespace spatiumgl
 
 #endif // SPATIUMGL_GFX3D_SCENEOBJECT_H

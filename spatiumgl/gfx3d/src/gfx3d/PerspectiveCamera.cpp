@@ -13,27 +13,30 @@
 #include "spatiumgl/gfx3d/PerspectiveCamera.hpp"
 
 namespace spatiumgl {
-	namespace gfx3d {
-		PerspectiveCamera::PerspectiveCamera(double fov, double near, double far)
-			: Camera(near, far)
-			, m_fov(fov)
-		{
-		}
+namespace gfx3d {
 
-		void PerspectiveCamera::setFov(double fov)
-		{
-			m_fov = fov;
-		}
+PerspectiveCamera::PerspectiveCamera(double fov, double near, double far)
+  : Camera(near, far)
+  , m_fov(fov)
+{}
 
-		double PerspectiveCamera::fov() const
-		{
-			return m_fov;
-		}
+void
+PerspectiveCamera::setFov(double fov)
+{
+  m_fov = fov;
+}
 
-		Matrix4 PerspectiveCamera::projectionMatrix(double aspect) const
-		{
-			return Matrix4::perspective(m_fov, aspect, m_near, m_far);
-		}
+double
+PerspectiveCamera::fov() const
+{
+  return m_fov;
+}
 
-	} // namespace gfx3d
+Matrix4
+PerspectiveCamera::projectionMatrix(double aspect) const
+{
+  return Matrix4::perspective(m_fov, aspect, m_near, m_far);
+}
+
+} // namespace gfx3d
 } // namespace spatiumgl

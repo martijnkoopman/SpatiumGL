@@ -2,6 +2,4 @@
 
 #include <spatiumgl/Vector.hpp>
 
-TEST(Vector4, constructor)
-{
-}
+TEST(Vector4, constructor) {}

@@ -13,25 +13,25 @@
 #ifndef SPATIUMGL_GFX3D_OGLTRIANGLERENDERER_H
 #define SPATIUMGL_GFX3D_OGLTRIANGLERENDERER_H
 
-#include "spatiumglexport.hpp"
 #include "OGLRenderer.hpp"
+#include "spatiumglexport.hpp"
 
 namespace spatiumgl {
-	namespace gfx3d {
+namespace gfx3d {
 
-		class SPATIUMGL_EXPORT OGLTriangleRenderer : public OGLRenderer
-		{
-		public:
-			/// Constructor
-			OGLTriangleRenderer();
+class SPATIUMGL_EXPORT OGLTriangleRenderer : public OGLRenderer
+{
+public:
+  /// Constructor
+  OGLTriangleRenderer();
 
-			/// Destructor
-			virtual ~OGLTriangleRenderer() override;
+  /// Destructor
+  virtual ~OGLTriangleRenderer() override;
 
-			void render(Camera* camera, double aspect) override;
-		};
+  void render(Camera* camera, double aspect) override;
+};
 
-	} // namespace gfx3d
+} // namespace gfx3d
 } // namespace spatiumgl
 
 #endif // SPATIUMGL_GFX3D_OGLTRIANGLERENDERER_H

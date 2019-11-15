@@ -14,63 +14,68 @@
 #include "spatiumgl/gfx3d/PivotInteractor.hpp"
 
 namespace spatiumgl {
-	namespace gfx3d {
-		RenderWindow::RenderWindow(bool debug)
-			: m_interactor(nullptr)
-			, m_camera(nullptr)
-			, m_renderers()
-			, m_animators()
-			, m_framebufferSize{ 0, 0 }
-			, m_debug(debug)
-		{}
+namespace gfx3d {
+RenderWindow::RenderWindow(bool debug)
+  : m_interactor(nullptr)
+  , m_camera(nullptr)
+  , m_renderers()
+  , m_animators()
+  , m_framebufferSize{ 0, 0 }
+  , m_debug(debug)
+{}
 
-		void RenderWindow::setInteractor(RenderWindowInteractor* interactor)
-		{
-			m_interactor = interactor;
-		}
+void
+RenderWindow::setInteractor(RenderWindowInteractor* interactor)
+{
+  m_interactor = interactor;
+}
 
-		RenderWindowInteractor* RenderWindow::interactor() const
-		{
-			return m_interactor;
-		}
+RenderWindowInteractor*
+RenderWindow::interactor() const
+{
+  return m_interactor;
+}
 
-		void RenderWindow::setCamera(Camera* camera)
-		{
-			m_camera = camera;
-		}
+void
+RenderWindow::setCamera(Camera* camera)
+{
+  m_camera = camera;
+}
 
-		Camera* RenderWindow::camera() const
-		{
-			return m_camera;
-		}
+Camera*
+RenderWindow::camera() const
+{
+  return m_camera;
+}
 
-		void RenderWindow::addRenderer(Renderer* renderer)
-		{
-			m_renderers.push_back(renderer);
+void
+RenderWindow::addRenderer(Renderer* renderer)
+{
+  m_renderers.push_back(renderer);
 
-			if (m_renderers.size() == 1)
-			{
-				m_bounds = renderer->renderObject().bounds();
-			}
-			else
-			{
-				m_bounds.include(renderer->renderObject().bounds());
-			}
-		}
+  if (m_renderers.size() == 1) {
+    m_bounds = renderer->renderObject().bounds();
+  } else {
+    m_bounds.include(renderer->renderObject().bounds());
+  }
+}
 
-    BoundingBox<double> RenderWindow::bounds() const
-		{ 
-			return m_bounds;
-		}
+BoundingBox<double>
+RenderWindow::bounds() const
+{
+  return m_bounds;
+}
 
-		void RenderWindow::addAnimator(Animator* animator)
-		{
-			m_animators.push_back(animator);
-		}
+void
+RenderWindow::addAnimator(Animator* animator)
+{
+  m_animators.push_back(animator);
+}
 
-		Vector2i RenderWindow::framebufferSize() const
-		{
-			return m_framebufferSize;
-		}
-	} // namespace gfx3d
+Vector2i
+RenderWindow::framebufferSize() const
+{
+  return m_framebufferSize;
+}
+} // namespace gfx3d
 } // namespace spatiumgl

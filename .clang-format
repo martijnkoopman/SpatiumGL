@@ -1,0 +1,10 @@
+﻿# Run from directory spatiumgl and apps: 
+# find . -regex '.*\.\(cpp\|hpp\)' -exec clang-format -style=file -i {} \;
+---
+BasedOnStyle: Mozilla
+AccessModifierOffset: '-2'
+IndentWidth: '2'
+NamespaceIndentation: None
+TabWidth: '2'
+
+...

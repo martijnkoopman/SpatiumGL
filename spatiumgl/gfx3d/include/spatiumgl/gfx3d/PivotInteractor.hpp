@@ -13,55 +13,55 @@
 #ifndef SPATIUMGL_GFX3D_PIVOTINTERACTOR_H
 #define SPATIUMGL_GFX3D_PIVOTINTERACTOR_H
 
-#include "spatiumglexport.hpp"
 #include "RenderWindowInteractor.hpp"
 #include "spatiumgl/Vector3.hpp"
+#include "spatiumglexport.hpp"
 
 namespace spatiumgl {
-	namespace gfx3d {
-		class SPATIUMGL_EXPORT PivotInteractor : public RenderWindowInteractor
-		{
-		public:
-      /// Constructor
-      ///
-      /// \param[in] window Render window
-			PivotInteractor(RenderWindow* window);
+namespace gfx3d {
+class SPATIUMGL_EXPORT PivotInteractor : public RenderWindowInteractor
+{
+public:
+  /// Constructor
+  ///
+  /// \param[in] window Render window
+  PivotInteractor(RenderWindow* window);
 
-      /// Destructor
-      virtual ~PivotInteractor() override = default;
+  /// Destructor
+  virtual ~PivotInteractor() override = default;
 
-			/// Set the pivot point.
-			///
-			/// This is the point around which the view rotates.
-			///
-			/// \param[in] pivotPoint Pivot point
-			void setPivotPoint(const Vector3& pivotPoint);
+  /// Set the pivot point.
+  ///
+  /// This is the point around which the view rotates.
+  ///
+  /// \param[in] pivotPoint Pivot point
+  void setPivotPoint(const Vector3& pivotPoint);
 
-			/// Get pivot point.
-			///
-			/// \return Pivot point
-			Vector3 pivotPoint() const;
+  /// Get pivot point.
+  ///
+  /// \return Pivot point
+  Vector3 pivotPoint() const;
 
-      void OnMouseButtonPressed(MouseButton button, double x, double y) override;
-      void OnMouseButtonReleased(MouseButton button, double x, double y) override;
-      void OnMouseWheelScrolled(double scroll) override;
-      void OnMouseMoved(double deltaX, double deltaY) override;
+  void OnMouseButtonPressed(MouseButton button, double x, double y) override;
+  void OnMouseButtonReleased(MouseButton button, double x, double y) override;
+  void OnMouseWheelScrolled(double scroll) override;
+  void OnMouseMoved(double deltaX, double deltaY) override;
 
-      /// Reset camera transform and clipping distances.
-      ///
-      /// Reposition the camera and ensure the scene isn't clipped.
-      /// This places the camera above the scene (along the Z-axis) while
-      /// looking down and the positive Y-axis pointing up.
-      void resetCamera() override;
+  /// Reset camera transform and clipping distances.
+  ///
+  /// Reposition the camera and ensure the scene isn't clipped.
+  /// This places the camera above the scene (along the Z-axis) while
+  /// looking down and the positive Y-axis pointing up.
+  void resetCamera() override;
 
-      void resetCameraClipping() override;
+  void resetCameraClipping() override;
 
-		protected:
-			bool m_pressed;
-			Vector3 m_pivotPoint;
-		};
+protected:
+  bool m_pressed;
+  Vector3 m_pivotPoint;
+};
 
-	} // namespace gfx3d
+} // namespace gfx3d
 } // namespace spatiumgl
 
 #endif // SPATIUMGL_GFX3D_PIVOTINTERACTOR_H

@@ -13,38 +13,38 @@
 #ifndef SPATIUMGL_GFX3D_OGLMESHRENDERER_H
 #define SPATIUMGL_GFX3D_OGLMESHRENDERER_H
 
-#include "spatiumglexport.hpp"
 #include "OGLRenderer.hpp"
-#include "spatiumgl/gfx3d/Mesh.hpp"
 #include "spatiumgl/gfx3d/Material.hpp"
+#include "spatiumgl/gfx3d/Mesh.hpp"
+#include "spatiumglexport.hpp"
 
 namespace spatiumgl {
-	namespace gfx3d {
+namespace gfx3d {
 
-		class SPATIUMGL_EXPORT OGLMeshRenderer : public OGLRenderer
-		{
-		public:
-			/// Constructor
-			///
-			/// \param[in] mesh Mesh
-			OGLMeshRenderer(const Mesh* mesh, const Material &material);
+class SPATIUMGL_EXPORT OGLMeshRenderer : public OGLRenderer
+{
+public:
+  /// Constructor
+  ///
+  /// \param[in] mesh Mesh
+  OGLMeshRenderer(const Mesh* mesh, const Material& material);
 
-			/// Destructor
-			virtual ~OGLMeshRenderer() override;
+  /// Destructor
+  virtual ~OGLMeshRenderer() override;
 
-			/// Get the mesh.
-			///
-			/// \returnMesh
-			const Mesh* mesh() const;
+  /// Get the mesh.
+  ///
+  /// \returnMesh
+  const Mesh* mesh() const;
 
-			void render(Camera* camera, double aspect) override;
+  void render(Camera* camera, double aspect) override;
 
-		protected:
-			unsigned int m_ebo; // Element Buffer Object (GLuint)
-			Material m_material;
-		};
+protected:
+  unsigned int m_ebo; // Element Buffer Object (GLuint)
+  Material m_material;
+};
 
-	} // namespace gfx3d
+} // namespace gfx3d
 } // namespace spatiumgl
 
 #endif // SPATIUMGL_GFX3D_OGLMESHRENDERER_H

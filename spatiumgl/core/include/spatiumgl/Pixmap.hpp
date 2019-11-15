@@ -17,14 +17,13 @@
 
 namespace spatiumgl {
 
-	/// \class Pixmap
-	class SPATIUMGL_EXPORT Pixmap
-	{
-	public:
-
-    /// Constructor
-    Pixmap() = default;
-	};
+/// \class Pixmap
+class SPATIUMGL_EXPORT Pixmap
+{
+public:
+  /// Constructor
+  Pixmap() = default;
+};
 } // namespace spatium
 
 #endif // SPATIUMGL_PIXMAP_H

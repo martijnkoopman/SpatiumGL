@@ -15,22 +15,25 @@
 #include <iostream>
 
 namespace spatiumgl {
-	namespace gfx3d {
+namespace gfx3d {
 
-		TransformAnimator::TransformAnimator(RenderObject* renderObject, const Vector3& axis, const double speed, const bool local)
-			: Animator(renderObject)
-			, m_axis(axis)
-			, m_speed(speed)
-			, m_local(local)
-		{
-		}
+TransformAnimator::TransformAnimator(RenderObject* renderObject,
+                                     const Vector3& axis,
+                                     const double speed,
+                                     const bool local)
+  : Animator(renderObject)
+  , m_axis(axis)
+  , m_speed(speed)
+  , m_local(local)
+{}
 
-		void TransformAnimator::animate(double deltaTime)
-		{
-			double angle = deltaTime; // TODO. Incorporate speed
-			m_renderObject->transform().rotateAround(m_axis, angle);
-			// TODO: Local rotation
-		}
+void
+TransformAnimator::animate(double deltaTime)
+{
+  double angle = deltaTime; // TODO. Incorporate speed
+  m_renderObject->transform().rotateAround(m_axis, angle);
+  // TODO: Local rotation
+}
 
-	} // namespace gfx3d
+} // namespace gfx3d
 } // namespace spatiumgl
