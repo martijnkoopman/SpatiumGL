@@ -29,9 +29,11 @@ namespace spatiumgl {
 			, m_positions(positions)
 			, m_colors(colors)
 			, m_normals(normals)
-		{
+    {
+      /// \todo std::move semantics for vectors
+
 			// Update bounds
-			if (m_positions.size() > 0)
+      if (m_positions.empty() == false)
 			{
 				// First point
 				m_bounds.center() = m_positions[0];
@@ -70,7 +72,7 @@ namespace spatiumgl {
 
 		void PointCloud::addPoint(const Vector3& position)
 		{
-			if (m_positions.size() == 0)
+      if (m_positions.empty() == false)
 			{
 				// First point
 				m_bounds.center() = position;
@@ -115,7 +117,7 @@ namespace spatiumgl {
 
 		bool PointCloud::hasColors() const
 		{
-			return m_colors.size() > 0 && m_colors.size() == m_positions.size();
+      return m_colors.empty() == false && m_colors.size() == m_positions.size();
 		}
 
 		Vector3& PointCloud::color(size_t index)
@@ -139,7 +141,7 @@ namespace spatiumgl {
 
 		bool PointCloud::hasNormals() const
 		{
-			return m_normals.size() > 0 && m_normals.size() == m_normals.size();
+      return m_normals.empty() == false && m_normals.size() == m_normals.size();
 		}
 
 		Vector3& PointCloud::normal(size_t index)

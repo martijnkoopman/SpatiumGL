@@ -98,7 +98,7 @@ namespace spatiumgl {
 			m_transform.setMatrix(M);
 		}
 
-		void Camera::setNearAndFarFromBounds(const BoundingBox<SPATIUMGL_PRECISION>& bounds)
+    void Camera::setNearAndFarFromBounds(const BoundingBox<double>& bounds)
 		{
 			// Compute radius from bounds
 			const Vector3 radii = bounds.radii();

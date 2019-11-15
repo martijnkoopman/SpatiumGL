@@ -33,7 +33,7 @@ namespace spatiumgl {
 			RenderWindow(bool debug = false);
 
 			/// Destructor
-			virtual ~RenderWindow();
+      virtual ~RenderWindow() = default;
 
 			/// Set the render window interactor.
 			///
@@ -64,7 +64,7 @@ namespace spatiumgl {
 			/// scene.
 			/// 
 			/// \return Scene boundaries
-			BoundingBox<SPATIUMGL_PRECISION> bounds() const;
+      BoundingBox<double> bounds() const;
 
 			/// Add an animator
 			///
@@ -111,7 +111,7 @@ namespace spatiumgl {
 			std::vector<Renderer*> m_renderers;
 			std::vector<Animator*> m_animators;
 
-			BoundingBox<SPATIUMGL_PRECISION> m_bounds;
+      BoundingBox<double> m_bounds;
 
 			Vector2i m_framebufferSize;
 			bool m_debug;

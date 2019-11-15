@@ -28,7 +28,7 @@ namespace spatiumgl {
 			/// \param[in] axis Axis to rotate around
 			/// \param[in] speed Rotation speed (radians/second)
 			/// \param[in] local Indicator to rotate around local origin (default=false)
-			TransformAnimator(RenderObject* renderObject, const Vector3& axis, const double speed, const bool local=false);
+      TransformAnimator(RenderObject* renderObject, const Vector3& axis, double speed, bool local=false);
 
 			/// Destructor
 			virtual ~TransformAnimator() override = default;

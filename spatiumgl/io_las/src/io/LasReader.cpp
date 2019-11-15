@@ -187,14 +187,14 @@ namespace spatiumgl {
 				return false;
 			}
 
-			BoundingBox<SPATIUMGL_PRECISION> bounds() const
+      BoundingBox<double> bounds() const
 			{
 				if (m_reader == nullptr)
 				{
-					return BoundingBox<SPATIUMGL_PRECISION>();
+          return {};
 				}
 
-				return BoundingBox<SPATIUMGL_PRECISION>::fromMinMax(
+        return BoundingBox<double>::fromMinMax(
 					{ m_reader->get_min_x(), m_reader->get_min_y(), m_reader->get_min_z() },
 					{ m_reader->get_max_x(), m_reader->get_max_y(), m_reader->get_max_z() });
 			}
@@ -277,7 +277,7 @@ namespace spatiumgl {
 			return m_pimpl->hasNormals();
 		}
 
-		BoundingBox<SPATIUMGL_PRECISION> LasReader::bounds() const
+    BoundingBox<double> LasReader::bounds() const
 		{
 			return m_pimpl->bounds();
 		}

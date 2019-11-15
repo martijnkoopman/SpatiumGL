@@ -135,7 +135,7 @@ TEST(Vector2, angle)
 {
 	const spatiumgl::Vector2 v1(1, 0);
 	const spatiumgl::Vector2 v2(0, 1);
-	EXPECT_EQ(v1.angle(v2), 90 * spatiumgl::Deg2Rad<SPATIUMGL_PRECISION>());
+  EXPECT_EQ(v1.angle(v2), 90 * spatiumgl::Deg2Rad<double>());
 }
 
 TEST(Vector2, project)

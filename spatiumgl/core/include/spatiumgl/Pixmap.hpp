@@ -21,7 +21,9 @@ namespace spatiumgl {
 	class SPATIUMGL_EXPORT Pixmap
 	{
 	public:
-		Pixmap();
+
+    /// Constructor
+    Pixmap() = default;
 	};
 } // namespace spatium
 

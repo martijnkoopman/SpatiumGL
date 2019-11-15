@@ -51,9 +51,9 @@ TEST(Matrix, constructor)
 
 //TEST(Matrix, Matrix_data)
 //{
-//	spatiumgl::Matrix<SPATIUMGL_PRECISION, size_t(3), size_t(3)> matrix = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
+//	spatiumgl::Matrix<double, size_t(3), size_t(3)> matrix = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
 //	spatiumgl::Matrix3 matrix2 = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
-//	SPATIUMGL_PRECISION* ptr = matrix.data();
+//	double* ptr = matrix.data();
 //	EXPECT_EQ(*ptr, 1);
 //	EXPECT_EQ(*(ptr + 1), 2);
 //	EXPECT_EQ(*(ptr + 2), 3);

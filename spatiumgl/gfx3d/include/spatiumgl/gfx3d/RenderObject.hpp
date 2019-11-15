@@ -34,10 +34,10 @@ namespace spatiumgl {
 			/// Get boundaries of the object (axis aligned bounding box).
 			///
 			/// \return Boundaries
-			BoundingBox<SPATIUMGL_PRECISION> bounds() const;
+      BoundingBox<double> bounds() const;
 
 		protected:
-			BoundingBox<SPATIUMGL_PRECISION> m_bounds;
+      BoundingBox<double> m_bounds;
 		};
 
 	} // namespace gfx3d

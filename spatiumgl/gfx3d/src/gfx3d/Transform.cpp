@@ -193,13 +193,13 @@ namespace spatiumgl {
 		Vector3 Transform::objectPointToWorldPoint(const Vector3& point) const
 		{
 			Vector4 result = m_matrix * Vector4(point, 1.0);
-			return Vector3(result[0], result[1], result[2]);
+      return { result[0], result[1], result[2] };
 		}
 
 		Vector3 Transform::worldPointToObjectPoint(const Vector3& point) const
 		{
 			Vector4 result = m_matrix.inverse() * Vector4(point, 1.0);
-			return Vector3(result[0], result[1], result[2]);
+      return { result[0], result[1], result[2] };
 		}
 
 	} // namespace gfx3d

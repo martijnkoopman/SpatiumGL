@@ -13,12 +13,4 @@
 #include "spatiumgl/Pixmap.hpp"
 
 namespace spatiumgl {
-
-	Pixmap::Pixmap()
-	{
-		int i = 3;
-		return;
-
-	} // namespace spatiumgl
-
 }

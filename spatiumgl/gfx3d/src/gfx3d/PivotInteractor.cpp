@@ -13,6 +13,7 @@
 #include "spatiumgl/gfx3d/PivotInteractor.hpp"
 #include "spatiumgl/gfx3d/RenderWindow.hpp"
 #include "spatiumgl/gfx3d/OrthographicCamera.hpp"
+#include "spatiumgl/gfx3d/PerspectiveCamera.hpp"
 #include "spatiumgl/Math.hpp"
 
 #include <algorithm> // std::max
@@ -77,7 +78,7 @@ namespace spatiumgl {
 				camera->setNearAndFarFromBounds(m_window->bounds());
 
 				// Update orthographic camera size
-				OrthographicCamera* orthoCamera = dynamic_cast<OrthographicCamera*>(camera);
+        auto orthoCamera = dynamic_cast<OrthographicCamera*>(camera);
 				if (orthoCamera != nullptr)
 				{
 					orthoCamera->setSize(directionOfProjection.length());
@@ -117,12 +118,16 @@ namespace spatiumgl {
 			// Set pivot point to center of bounds
 			m_pivotPoint = m_window->bounds().center();
 
-			// Compute radius from bounds
-			const Vector3 radii = m_window->bounds().radii();
-			const double radius = std::max({ radii[0], radii[1], radii[2] });
+      auto perspectiveCamera = dynamic_cast<PerspectiveCamera*>(m_window->camera());
+      if (perspectiveCamera != nullptr)
+      {
+        // Compute distance to dataset to fit in view
+        const double z = m_window->bounds().max()[2] + (m_window->bounds().radii()[1] / tan(perspectiveCamera->fov()));
 
-			// Position camera above, looking down with Y+ up vector.
-			m_window->camera()->lookAt(m_pivotPoint, Vector3(0, 1, 0), m_pivotPoint + Vector3(0, 0, radius));
+        // Position camera above, looking down with Y+ up vector.
+        m_window->camera()->lookAt(m_pivotPoint, Vector3(0, 1, 0), m_pivotPoint + Vector3(0, 0, z));
+      }
+      /// \todo Implement for orthographic camera
 
 			resetCameraClipping();
 		}

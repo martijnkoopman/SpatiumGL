@@ -83,7 +83,7 @@ namespace spatiumgl {
 			///
 			/// \param[in] axis Axis vector
 			/// \param[in] angle Angle in radians
-			void rotateAround(const Vector3& axis, const double angle);
+      void rotateAround(const Vector3& axis, double angle);
 
 			/// Rotate around X, Y and Z axis. 
 			///
@@ -92,22 +92,22 @@ namespace spatiumgl {
 			/// \param[in] x Angle around X axis in radians
 			/// \param[in] y Angle around Y axis in radians
 			/// \param[in] z Angle around Z axis in radians
-			void rotate(const double x, const double y, const double z);
+      void rotate(double x, double y, double z);
 
 			/// Rotate around X axis (relative to self/object space)
 			///
 			/// \param[in] angle Angle in radians
-			void rotateX(const double angle);
+      void rotateX(double angle);
 
 			/// Rotate around Y axis (relative to self/object space)
 			///
 			/// \param[in] angle Angle in radians
-			void rotateY(const double angle);
+      void rotateY(double angle);
 
 			/// Rotate around Z axis (relative to self/object space)
 			///
 			/// \param[in] angle Angle in radians
-			void rotateZ(const double angle);
+      void rotateZ(double angle);
 
 			/// Set the transformation matrix.
 			///

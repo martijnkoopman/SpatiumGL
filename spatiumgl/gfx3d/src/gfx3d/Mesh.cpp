@@ -23,7 +23,9 @@ namespace spatiumgl {
 			: RenderObject()
 			, m_vertices(vertices)
 			, m_triangles(triangles)
-		{}
+    {
+      /// \todo std::move semantics for vectors
+    }
 
 		const std::vector<Vector3>& Mesh::vertices() const
 		{

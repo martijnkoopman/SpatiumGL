@@ -101,7 +101,10 @@ namespace spatiumgl
 			{
 				return false;
 			}
-			return true;
+      else
+      {
+        return true;
+      }
 		}
 
 		/// Compare operator. Is unequal.
@@ -200,7 +203,7 @@ namespace spatiumgl
 			{
 				for (size_t j = 0; j < W2; j++)
 				{
-					T val = 0;
+          T val = static_cast<T>(0);
 					for (size_t k = 0; k < 4; k++)
 					{
 						val += this->m_data[k][i] * other[j][k];
@@ -244,7 +247,7 @@ namespace spatiumgl
 		/// \param[in] row Row to omit
 		/// \param[out] col Column to omit
 		/// \return Matrix with omitted row and column
-		Matrix<T, 3, 3> omit(size_t col, size_t row) const
+    Matrix<T, 3, 3> omit(const size_t col, const size_t row) const
 		{
 			Matrix<T, 3, 3> result;
 			size_t colCount = 0, rowCount = 0;

@@ -84,7 +84,7 @@ namespace spatiumgl {
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, triangleCount * 3 * sizeof(unsigned int), indicesInt.data(), GL_STATIC_DRAW);
 
 			// Specify strucutre of a single vertex attribute, and enable
-			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+      glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)nullptr);
 			glEnableVertexAttribArray(0);
 
 			// Unbind for now to prevent unintended overwriting
@@ -146,7 +146,7 @@ namespace spatiumgl {
 			glBindVertexArray(m_vao);
 
 			// Draw
-			glDrawElements(GL_TRIANGLES, mesh()->triangles().size() * 3, GL_UNSIGNED_INT, 0);
+      glDrawElements(GL_TRIANGLES, mesh()->triangles().size() * 3, GL_UNSIGNED_INT, nullptr);
 
 			// Unbind vertex array object
 			glBindVertexArray(0);

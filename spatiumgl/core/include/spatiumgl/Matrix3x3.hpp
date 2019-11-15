@@ -90,7 +90,10 @@ namespace spatiumgl
 			{
 				return false;
 			}
-			return true;
+      else
+      {
+        return true;
+      }
 		}
 
 		/// Compare operator. Is unequal.
@@ -221,7 +224,8 @@ namespace spatiumgl
 		Matrix<T, 2, 2> omit(size_t col, size_t row) const
 		{
 			Matrix<T, 2, 2> result;
-			size_t colCount = 0, rowCount = 0;
+      size_t colCount = 0;
+      size_t rowCount = 0;
 			for (size_t i = 0; i < 3; i++)
 			{
 				if (i != row)

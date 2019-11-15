@@ -24,10 +24,6 @@ namespace spatiumgl {
 			, m_debug(debug)
 		{}
 
-		RenderWindow::~RenderWindow()
-		{
-		}
-
 		void RenderWindow::setInteractor(RenderWindowInteractor* interactor)
 		{
 			m_interactor = interactor;
@@ -62,7 +58,7 @@ namespace spatiumgl {
 			}
 		}
 
-		BoundingBox<SPATIUMGL_PRECISION> RenderWindow::bounds() const
+    BoundingBox<double> RenderWindow::bounds() const
 		{ 
 			return m_bounds;
 		}

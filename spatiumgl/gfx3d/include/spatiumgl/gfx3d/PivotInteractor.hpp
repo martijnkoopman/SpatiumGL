@@ -22,7 +22,13 @@ namespace spatiumgl {
 		class SPATIUMGL_EXPORT PivotInteractor : public RenderWindowInteractor
 		{
 		public:
+      /// Constructor
+      ///
+      /// \param[in] window Render window
 			PivotInteractor(RenderWindow* window);
+
+      /// Destructor
+      virtual ~PivotInteractor() override = default;
 
 			/// Set the pivot point.
 			///
@@ -36,13 +42,19 @@ namespace spatiumgl {
 			/// \return Pivot point
 			Vector3 pivotPoint() const;
 
-			virtual void OnMouseButtonPressed(MouseButton button, double x, double y) override;
-			virtual void OnMouseButtonReleased(MouseButton button, double x, double y) override;
-			virtual void OnMouseWheelScrolled(double scroll) override;
-			virtual void OnMouseMoved(double deltaX, double deltaY) override;
+      void OnMouseButtonPressed(MouseButton button, double x, double y) override;
+      void OnMouseButtonReleased(MouseButton button, double x, double y) override;
+      void OnMouseWheelScrolled(double scroll) override;
+      void OnMouseMoved(double deltaX, double deltaY) override;
 
-			virtual void resetCamera() override;
-			virtual void resetCameraClipping() override;
+      /// Reset camera transform and clipping distances.
+      ///
+      /// Reposition the camera and ensure the scene isn't clipped.
+      /// This places the camera above the scene (along the Z-axis) while
+      /// looking down and the positive Y-axis pointing up.
+      void resetCamera() override;
+
+      void resetCameraClipping() override;
 
 		protected:
 			bool m_pressed;

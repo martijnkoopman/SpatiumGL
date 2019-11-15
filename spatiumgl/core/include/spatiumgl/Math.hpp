@@ -15,13 +15,6 @@
 
 #include "spatiumglexport.hpp"
 
- // Precision
-#ifndef SPATIUMGL_SINGLE_PRECISION
-#define SPATIUMGL_PRECISION double
-#else
-#define SPATIUMGL_PRECISION float
-#endif
-
 namespace spatiumgl {
 
 	/// Pi constant

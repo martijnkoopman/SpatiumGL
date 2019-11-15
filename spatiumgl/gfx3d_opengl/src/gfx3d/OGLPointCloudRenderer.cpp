@@ -23,7 +23,8 @@ namespace spatiumgl {
 		OGLPointCloudRenderer::OGLPointCloudRenderer(const PointCloud* pointCloud)
 			: OGLRenderer(pointCloud)
 		{
-			std::string vertexShaderSrc, fragmentShaderSrc;
+      std::string vertexShaderSrc;
+      std::string fragmentShaderSrc;
 			if (pointCloud->hasColors())
 			{
 				vertexShaderSrc =
@@ -113,7 +114,7 @@ namespace spatiumgl {
 				glBufferSubData(GL_ARRAY_BUFFER, pointBufferSize, pointBufferSize, (void*)colorsFloat.data());
 
 				// Specify strucutre of a single vertex attribute, and enable
-				glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0); // positions
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)nullptr); // positions
 				glEnableVertexAttribArray(0);
 				glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)(pointBufferSize)); // colors
 				glEnableVertexAttribArray(1);
@@ -124,7 +125,7 @@ namespace spatiumgl {
 				glBufferData(GL_ARRAY_BUFFER, pointBufferSize, verticesFloat.data(), GL_STATIC_DRAW);
 
 				// Specify strucutre of a single vertex attribute, and enable
-				glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)nullptr);
 				glEnableVertexAttribArray(0);
 			}
 

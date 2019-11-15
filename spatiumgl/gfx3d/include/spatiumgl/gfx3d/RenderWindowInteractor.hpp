@@ -38,6 +38,9 @@ namespace spatiumgl {
 				: m_window(window)
 			{}
 
+      /// Destructor
+      virtual ~RenderWindowInteractor() = default;
+
 			// Pure virtual functions to be implemented by subclasses.
 
 			virtual void OnMouseButtonPressed(MouseButton button, double x, double y) = 0;

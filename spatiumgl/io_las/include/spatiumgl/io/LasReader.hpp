@@ -29,7 +29,7 @@ namespace spatiumgl {
 			/// Constructor
 			///
 			/// \param[in] path Path to LAS/LAZ file
-			LasReader(const std::string& path = "", const bool shiftToOrigin = false);
+      LasReader(const std::string& path = "", bool shiftToOrigin = false);
 
 			/// Destructor
 			virtual ~LasReader(); // Must be virtual for PIMPL pattern
@@ -107,7 +107,7 @@ namespace spatiumgl {
 			/// Gte the boundaries of all points combined, according to the file header.
 			///
 			/// \return Boundaries
-			BoundingBox<SPATIUMGL_PRECISION> bounds() const;
+      BoundingBox<double> bounds() const;
 
 		private:
 			class Impl;

@@ -20,7 +20,7 @@ namespace spatiumgl {
 			, m_bounds()
 		{}
 
-		BoundingBox<SPATIUMGL_PRECISION> RenderObject::bounds() const
+    BoundingBox<double> RenderObject::bounds() const
 		{
 			return m_bounds;
 		}

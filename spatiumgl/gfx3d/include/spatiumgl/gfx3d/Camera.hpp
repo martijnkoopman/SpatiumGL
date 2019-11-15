@@ -67,7 +67,7 @@ namespace spatiumgl {
 			/// boundaries.
 			///
 			/// \param[in] bounds Boundaries
-			void setNearAndFarFromBounds(const BoundingBox<SPATIUMGL_PRECISION> &bounds);
+      void setNearAndFarFromBounds(const BoundingBox<double> &bounds);
 
 			/// Get the projection matrix.
 			///

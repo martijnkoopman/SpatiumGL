@@ -74,16 +74,19 @@ namespace spatiumgl
 		///
 		/// \param[in] other Other matrix
 		/// \return True if equal, otherwise false
-		bool operator==(const Matrix<T, 3, 3> & other) const
-		{
-			if (this->m_data[0] != other.m_data[0]
-				|| this->m_data[1] != other.m_data[1]
-				|| this->m_data[2] != other.m_data[2])
-			{
-				return false;
-			}
-			return true;
-		}
+    bool operator==(const Matrix<T, 3, 3> & other) const
+    {
+      if (this->m_data[0] != other.m_data[0]
+          || this->m_data[1] != other.m_data[1]
+          || this->m_data[2] != other.m_data[2])
+      {
+        return false;
+      }
+      else
+      {
+        return true;
+      }
+    }
 
 		/// Compare operator. Is unequal.
 		///
