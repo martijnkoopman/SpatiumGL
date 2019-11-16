@@ -1,0 +1,5 @@
+<map id="spatiumgl::BoundingEllipsoid&lt; T &gt;" name="spatiumgl::BoundingEllipsoid&lt; T &gt;">
+<area shape="rect" id="node1" title="Minimum bounding ellipsoid (3D)" alt="" coords="74,95,295,121"/>
+<area shape="rect" id="node2" href="$structspatiumgl_1_1BoundsCenter.html" title=" " alt="" coords="5,5,175,47"/>
+<area shape="rect" id="node3" href="$structspatiumgl_1_1BoundsRadii.html" title=" " alt="" coords="199,5,359,47"/>
+</map>

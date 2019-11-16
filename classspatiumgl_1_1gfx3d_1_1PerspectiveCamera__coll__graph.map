@@ -1,0 +1,10 @@
+<map id="spatiumgl::gfx3d::PerspectiveCamera" name="spatiumgl::gfx3d::PerspectiveCamera">
+<area shape="rect" id="node1" title=" " alt="" coords="9,636,203,677"/>
+<area shape="rect" id="node2" href="$classspatiumgl_1_1gfx3d_1_1Camera.html" title=" " alt="" coords="20,560,192,587"/>
+<area shape="rect" id="node3" href="$classspatiumgl_1_1gfx3d_1_1SceneObject.html" title="Object in a 3D scene." alt="" coords="5,484,207,511"/>
+<area shape="rect" id="node4" href="$classspatiumgl_1_1gfx3d_1_1Transform.html" title="Tranformation in 3D space." alt="" coords="13,395,199,421"/>
+<area shape="rect" id="node5" href="$structspatiumgl_1_1Matrix.html" title=" " alt="" coords="41,291,171,332"/>
+<area shape="rect" id="node6" href="$structspatiumgl_1_1MatrixBase.html" title=" " alt="" coords="30,200,182,241"/>
+<area shape="rect" id="node7" href="$structspatiumgl_1_1Vector.html" title=" " alt="" coords="40,96,172,137"/>
+<area shape="rect" id="node8" href="$structspatiumgl_1_1VectorBase.html" title=" " alt="" coords="29,5,183,47"/>
+</map>

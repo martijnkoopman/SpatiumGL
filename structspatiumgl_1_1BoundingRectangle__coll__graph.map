@@ -1,0 +1,5 @@
+<map id="spatiumgl::BoundingRectangle&lt; T &gt;" name="spatiumgl::BoundingRectangle&lt; T &gt;">
+<area shape="rect" id="node1" title="Minimum bounding rectangle (2D)" alt="" coords="69,95,300,121"/>
+<area shape="rect" id="node2" href="$structspatiumgl_1_1BoundsCenter.html" title=" " alt="" coords="5,5,175,47"/>
+<area shape="rect" id="node3" href="$structspatiumgl_1_1BoundsRadii.html" title=" " alt="" coords="199,5,359,47"/>
+</map>

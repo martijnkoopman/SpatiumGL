@@ -1,0 +1,24 @@
+<map id="gfx3d/src/gfx3d/TransformAnimator.cpp" name="gfx3d/src/gfx3d/TransformAnimator.cpp">
+<area shape="rect" id="node1" title=" " alt="" coords="995,5,1169,47"/>
+<area shape="rect" id="node2" href="$TransformAnimator_8hpp.html" title=" " alt="" coords="919,95,1096,136"/>
+<area shape="rect" id="node22" title=" " alt="" coords="1121,102,1193,129"/>
+<area shape="rect" id="node3" href="$Animator_8hpp.html" title=" " alt="" coords="915,184,1014,211"/>
+<area shape="rect" id="node9" href="$spatiumglexport_8hpp.html" title=" " alt="" coords="830,632,969,659"/>
+<area shape="rect" id="node4" href="$RenderObject_8hpp.html" title=" " alt="" coords="812,259,939,285"/>
+<area shape="rect" id="node5" href="$SceneObject_8hpp.html" title=" " alt="" coords="790,333,913,360"/>
+<area shape="rect" id="node20" href="$Bounds_8hpp.html" title=" " alt="" coords="463,333,613,360"/>
+<area shape="rect" id="node6" href="$Transform_8hpp.html" title=" " alt="" coords="750,408,857,435"/>
+<area shape="rect" id="node7" href="$Matrix_8hpp.html" title=" " alt="" coords="509,483,652,509"/>
+<area shape="rect" id="node8" href="$Vector_8hpp.html" title=" " alt="" coords="241,557,326,584"/>
+<area shape="rect" id="node12" title=" " alt="" coords="565,632,634,659"/>
+<area shape="rect" id="node17" href="$Matrix2x2_8hpp.html" title=" " alt="" coords="529,557,633,584"/>
+<area shape="rect" id="node18" href="$Matrix3x3_8hpp.html" title=" " alt="" coords="657,557,761,584"/>
+<area shape="rect" id="node19" href="$Matrix4x4_8hpp.html" title=" " alt="" coords="350,557,454,584"/>
+<area shape="rect" id="node10" title=" " alt="" coords="353,632,419,659"/>
+<area shape="rect" id="node11" title=" " alt="" coords="443,632,540,659"/>
+<area shape="rect" id="node13" href="$Vector2_8hpp.html" title=" " alt="" coords="5,632,97,659"/>
+<area shape="rect" id="node15" href="$Vector3_8hpp.html" title=" " alt="" coords="121,632,213,659"/>
+<area shape="rect" id="node16" href="$Vector4_8hpp.html" title=" " alt="" coords="237,632,329,659"/>
+<area shape="rect" id="node14" title=" " alt="" coords="79,707,138,733"/>
+<area shape="rect" id="node21" title=" " alt="" coords="509,408,567,435"/>
+</map>

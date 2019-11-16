@@ -1,0 +1,22 @@
+<map id="gfx3d/include/spatiumgl/gfx3d/Renderer.hpp" name="gfx3d/include/spatiumgl/gfx3d/Renderer.hpp">
+<area shape="rect" id="node1" title=" " alt="" coords="761,5,920,47"/>
+<area shape="rect" id="node2" href="$Camera_8hpp.html" title=" " alt="" coords="646,95,739,121"/>
+<area shape="rect" id="node7" href="$spatiumglexport_8hpp.html" title=" " alt="" coords="893,468,1031,495"/>
+<area shape="rect" id="node20" href="$RenderObject_8hpp.html" title=" " alt="" coords="777,95,904,121"/>
+<area shape="rect" id="node3" href="$SceneObject_8hpp.html" title=" " alt="" coords="779,169,902,196"/>
+<area shape="rect" id="node18" href="$Bounds_8hpp.html" title=" " alt="" coords="604,169,755,196"/>
+<area shape="rect" id="node4" href="$Transform_8hpp.html" title=" " alt="" coords="754,244,861,271"/>
+<area shape="rect" id="node5" href="$Matrix_8hpp.html" title=" " alt="" coords="623,319,765,345"/>
+<area shape="rect" id="node6" href="$Vector_8hpp.html" title=" " alt="" coords="303,393,389,420"/>
+<area shape="rect" id="node10" title=" " alt="" coords="565,468,634,495"/>
+<area shape="rect" id="node15" href="$Matrix2x2_8hpp.html" title=" " alt="" coords="770,393,874,420"/>
+<area shape="rect" id="node16" href="$Matrix3x3_8hpp.html" title=" " alt="" coords="514,393,618,420"/>
+<area shape="rect" id="node17" href="$Matrix4x4_8hpp.html" title=" " alt="" coords="642,393,746,420"/>
+<area shape="rect" id="node8" title=" " alt="" coords="475,468,540,495"/>
+<area shape="rect" id="node9" title=" " alt="" coords="5,468,103,495"/>
+<area shape="rect" id="node11" href="$Vector2_8hpp.html" title=" " alt="" coords="127,468,219,495"/>
+<area shape="rect" id="node13" href="$Vector3_8hpp.html" title=" " alt="" coords="243,468,335,495"/>
+<area shape="rect" id="node14" href="$Vector4_8hpp.html" title=" " alt="" coords="359,468,451,495"/>
+<area shape="rect" id="node12" title=" " alt="" coords="201,543,259,569"/>
+<area shape="rect" id="node19" title=" " alt="" coords="650,244,709,271"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="spatiumgl::OrientedBoundingBox&lt; T &gt;" name="spatiumgl::OrientedBoundingBox&lt; T &gt;">
+<area shape="rect" id="node1" title="Minimum bounding oriented box (3D)" alt="" coords="247,71,436,112"/>
+<area shape="rect" id="node2" href="$structspatiumgl_1_1BoundsCenter.html" title=" " alt="" coords="17,5,187,47"/>
+<area shape="rect" id="node3" href="$structspatiumgl_1_1BoundsRadii.html" title=" " alt="" coords="22,71,182,112"/>
+<area shape="rect" id="node4" href="$structspatiumgl_1_1BoundsOrientation.html" title=" " alt="" coords="5,136,199,177"/>
+</map>

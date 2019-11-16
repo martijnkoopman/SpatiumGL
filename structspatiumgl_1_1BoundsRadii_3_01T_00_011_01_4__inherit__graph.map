@@ -1,0 +1,9 @@
+<map id="spatiumgl::BoundsRadii&lt; T, 1 &gt;" name="spatiumgl::BoundsRadii&lt; T, 1 &gt;">
+<area shape="rect" id="node1" title="Boundaries with 1 radius." alt="" coords="5,125,165,166"/>
+<area shape="rect" id="node2" href="$structspatiumgl_1_1BoundingCircle.html" title="Minimum bounding circle (2D)" alt="" coords="217,5,423,32"/>
+<area shape="rect" id="node3" href="$structspatiumgl_1_1BoundingCube.html" title="Minimum bounding cube (3D)" alt="" coords="219,56,421,83"/>
+<area shape="rect" id="node4" href="$structspatiumgl_1_1BoundingSphere.html" title="Minimum bounding sphere (3D)" alt="" coords="213,107,427,133"/>
+<area shape="rect" id="node5" href="$structspatiumgl_1_1BoundingSquare.html" title="Minimum bounding square (2D)" alt="" coords="213,157,427,184"/>
+<area shape="rect" id="node6" href="$structspatiumgl_1_1OrientedBoundingCube.html" title="Minimum bounding oriented cube (3D)" alt="" coords="225,209,415,250"/>
+<area shape="rect" id="node7" href="$structspatiumgl_1_1OrientedBoundingSquare.html" title="Minimum bounding oriented square (2D)" alt="" coords="225,274,415,315"/>
+</map>

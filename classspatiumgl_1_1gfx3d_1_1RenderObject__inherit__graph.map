@@ -1,0 +1,7 @@
+<map id="spatiumgl::gfx3d::RenderObject" name="spatiumgl::gfx3d::RenderObject">
+<area shape="rect" id="node1" title="Scene object that can be rendered." alt="" coords="175,80,343,121"/>
+<area shape="rect" id="node3" href="$classspatiumgl_1_1gfx3d_1_1Grid.html" title="Quadrangular grid lines." alt="" coords="5,169,156,196"/>
+<area shape="rect" id="node4" href="$classspatiumgl_1_1gfx3d_1_1Mesh.html" title="Triangluar mesh." alt="" coords="180,169,339,196"/>
+<area shape="rect" id="node5" href="$classspatiumgl_1_1gfx3d_1_1PointCloud.html" title="Point cloud with optional colors." alt="" coords="363,169,553,196"/>
+<area shape="rect" id="node2" href="$classspatiumgl_1_1gfx3d_1_1SceneObject.html" title="Object in a 3D scene." alt="" coords="159,5,360,32"/>
+</map>

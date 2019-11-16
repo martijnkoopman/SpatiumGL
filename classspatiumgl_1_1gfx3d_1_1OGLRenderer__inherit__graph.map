@@ -1,0 +1,8 @@
+<map id="spatiumgl::gfx3d::OGLRenderer" name="spatiumgl::gfx3d::OGLRenderer">
+<area shape="rect" id="node1" title=" " alt="" coords="232,111,439,138"/>
+<area shape="rect" id="node3" href="$classspatiumgl_1_1gfx3d_1_1OGLGridRenderer.html" title=" " alt="" coords="497,5,675,47"/>
+<area shape="rect" id="node4" href="$classspatiumgl_1_1gfx3d_1_1OGLMeshRenderer.html" title=" " alt="" coords="493,71,679,112"/>
+<area shape="rect" id="node5" href="$classspatiumgl_1_1gfx3d_1_1OGLPointCloudRenderer.html" title=" " alt="" coords="495,136,677,177"/>
+<area shape="rect" id="node6" href="$classspatiumgl_1_1gfx3d_1_1OGLTriangleRenderer.html" title=" " alt="" coords="487,201,685,243"/>
+<area shape="rect" id="node2" href="$classspatiumgl_1_1gfx3d_1_1Renderer.html" title=" " alt="" coords="5,111,184,138"/>
+</map>

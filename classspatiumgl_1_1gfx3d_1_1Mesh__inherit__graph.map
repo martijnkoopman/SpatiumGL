@@ -1,0 +1,5 @@
+<map id="spatiumgl::gfx3d::Mesh" name="spatiumgl::gfx3d::Mesh">
+<area shape="rect" id="node1" title="Triangluar mesh." alt="" coords="27,169,185,196"/>
+<area shape="rect" id="node2" href="$classspatiumgl_1_1gfx3d_1_1RenderObject.html" title="Scene object that can be rendered." alt="" coords="22,80,190,121"/>
+<area shape="rect" id="node3" href="$classspatiumgl_1_1gfx3d_1_1SceneObject.html" title="Object in a 3D scene." alt="" coords="5,5,207,32"/>
+</map>
