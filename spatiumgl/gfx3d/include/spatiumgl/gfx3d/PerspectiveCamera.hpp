@@ -27,7 +27,9 @@ public:
   /// \param[in] fov Field of view angle
   /// \param[in] near Distance to near clipping plane
   /// \param[in] far Distance to far clipping plane
-  PerspectiveCamera(double fov = 45, double near = 1, double far = 10);
+  PerspectiveCamera(double fov = 0.7853981634,
+                    double near = 1,
+                    double far = 10);
 
   /// Destructor
   virtual ~PerspectiveCamera() override = default;

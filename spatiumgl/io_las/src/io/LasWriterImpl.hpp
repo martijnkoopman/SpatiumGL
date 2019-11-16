@@ -30,6 +30,7 @@ public:
   /// \param[in] path Path to LAS/LAZ file
   LasWriterImpl(const std::string& path = "");
 
+
   ~LasWriterImpl();
 
   /// Set path to file.

@@ -52,7 +52,8 @@ TEST(Matrix, constructor)
 // TEST(Matrix, Matrix_data)
 //{
 //	spatiumgl::Matrix<double, size_t(3), size_t(3)> matrix = { { 1, 2, 3 }, { 4,
-//5, 6 }, { 7, 8, 9 } }; 	spatiumgl::Matrix3 matrix2 = { { 1, 2, 3 }, { 4, 5, 6
+// 5, 6 }, { 7, 8, 9 } }; 	spatiumgl::Matrix3 matrix2 = { { 1, 2, 3 }, { 4, 5,
+// 6
 //}, { 7, 8, 9 } }; 	double* ptr = matrix.data(); 	EXPECT_EQ(*ptr, 1);
 //	EXPECT_EQ(*(ptr + 1), 2);
 //	EXPECT_EQ(*(ptr + 2), 3);

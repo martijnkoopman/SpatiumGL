@@ -21,7 +21,10 @@
 namespace spatiumgl {
 namespace io {
 
-/// \class PointCloudReader
+// Forward declare implementation
+class LasReaderImpl;
+
+/// \class LasReader
 /// \brief Read point cloud from LAS/LAZ file.
 class SPATIUMGL_EXPORT LasReader
 {
@@ -111,7 +114,7 @@ public:
 
 private:
   class Impl;
-  std::unique_ptr<Impl> m_pimpl;
+  std::unique_ptr<LasReaderImpl> m_pimpl;
 };
 
 } // namespace io

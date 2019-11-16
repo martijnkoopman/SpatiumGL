@@ -74,15 +74,15 @@ LasWriterImpl::writePointCloud(const gfx3d::PointCloud& pointCloud)
 
   for (size_t i = 0; i < pointCloud.pointCount(); i++) {
     // Populate the point
-    Vector3 position = pointCloud.position(i);
+    Vector3 position = pointCloud.position(i) + pointCloud.shift();
     laspoint.set_X(static_cast<int>(position.x() * 100));
     laspoint.set_Y(static_cast<int>(position.y() * 100));
     laspoint.set_Z(static_cast<int>(position.z() * 100));
     if (hasColors) {
       Vector3 color = pointCloud.color(i);
-      laspoint.set_R(static_cast<unsigned short>(color.x() * 0xFFFF));
-      laspoint.set_G(static_cast<unsigned short>(color.y() * 0xFFFF));
-      laspoint.set_B(static_cast<unsigned short>(color.z() * 0xFFFF));
+      laspoint.set_R(static_cast<unsigned short>(color.x() * 255));
+      laspoint.set_G(static_cast<unsigned short>(color.y() * 255));
+      laspoint.set_B(static_cast<unsigned short>(color.z() * 255));
     }
 
     // Write the point

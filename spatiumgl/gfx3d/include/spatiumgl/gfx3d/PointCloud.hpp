@@ -149,10 +149,23 @@ public:
   /// \return All point normals
   const std::vector<Vector3>& normals() const;
 
+  // Shift
+
+  /// Get origin shift (if any)
+  ///
+  /// \return Shift
+  Vector3 shift() const;
+
+  /// Set origin shift
+  ///
+  /// \param[in] shift Origin shift
+  void setShift(const Vector3 &shift);
+
 protected:
   std::vector<Vector3> m_positions;
   std::vector<Vector3> m_colors;
   std::vector<Vector3> m_normals;
+  Vector3 m_shift;
 };
 
 /*

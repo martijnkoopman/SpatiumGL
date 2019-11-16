@@ -118,10 +118,20 @@ PivotInteractor::resetCamera()
 
   auto perspectiveCamera = dynamic_cast<PerspectiveCamera*>(m_window->camera());
   if (perspectiveCamera != nullptr) {
-    // Compute distance to dataset to fit in view
-    const double z =
-      m_window->bounds().max()[2] +
-      (m_window->bounds().radii()[1] / tan(perspectiveCamera->fov()));
+
+    // Fit in view vertically
+    const double z1 =
+      m_window->bounds().radii()[1] / tan(perspectiveCamera->fov() / 2);
+
+    // Fit in view horizontally
+    const double fovX = perspectiveCamera->fov() *
+                        m_window->framebufferSize()[0] /
+                        m_window->framebufferSize()[1];
+    const double z2 = m_window->bounds().radii()[0] / tan(fovX / 2);
+
+    // Choose maximum distance and add 10%
+    double z = std::max(z1, z2);
+    z = z * 1.1 + m_window->bounds().max()[2];
 
     // Position camera above, looking down with Y+ up vector.
     m_window->camera()->lookAt(

@@ -29,6 +29,7 @@ PointCloud::PointCloud(const std::vector<Vector3>& positions,
   , m_positions(positions)
   , m_colors(colors)
   , m_normals(normals)
+  , m_shift()
 {
   /// \todo std::move semantics for vectors
 
@@ -169,6 +170,18 @@ const std::vector<Vector3>&
 PointCloud::normals() const
 {
   return m_normals;
+}
+
+Vector3
+PointCloud::shift() const
+{
+  return m_shift;
+}
+
+void
+PointCloud::setShift(const Vector3& shift)
+{
+  m_shift = shift;
 }
 
 } // namespace gfx3d
