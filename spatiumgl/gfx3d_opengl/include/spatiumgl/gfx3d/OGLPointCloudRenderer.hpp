@@ -28,6 +28,12 @@ public:
   /// \param[in] pointCloud Point cloud
   OGLPointCloudRenderer(const PointCloudObject* pointCloudObject);
 
+  /// Copy constructor. (deleted)
+  OGLPointCloudRenderer(const OGLPointCloudRenderer& other) = delete;
+
+  /// Copy assignment operator. (deleted)
+  OGLPointCloudRenderer& operator=(const OGLPointCloudRenderer& other) = delete;
+
   /// Destructor
   virtual ~OGLPointCloudRenderer() override;
 

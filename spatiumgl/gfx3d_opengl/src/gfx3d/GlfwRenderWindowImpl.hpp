@@ -29,6 +29,12 @@ public:
   /// \param[in] debug Log debug information
   GlfwRenderWindowImpl(GlfwRenderWindow* parent, bool debug = false);
 
+  /// Copy constructor (deleted)
+  GlfwRenderWindowImpl(const GlfwRenderWindowImpl& other) = delete;
+
+  /// Copy assignment operator.
+  GlfwRenderWindowImpl& operator=(const GlfwRenderWindowImpl& other) = delete;
+
   // Destructor
   ~GlfwRenderWindowImpl() = default;
 

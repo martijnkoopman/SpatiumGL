@@ -46,7 +46,7 @@ main(int argc, char* argv[])
   }
 
   // Create window with OpenGL context
-  if (!renderWindow.createWindow(640, 480)) {
+  if (!renderWindow.createWindow(1280, 720)) {
     std::cerr << "Failed to create window or OpenGL context." << std::endl;
 
     // Release resources of GLFW

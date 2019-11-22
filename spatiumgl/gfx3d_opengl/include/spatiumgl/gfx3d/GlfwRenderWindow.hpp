@@ -35,6 +35,12 @@ public:
   /// Constructor
   GlfwRenderWindow(bool debug = false);
 
+  /// Copy constructor (deleted)
+  GlfwRenderWindow(const GlfwRenderWindow& other) = delete;
+
+  /// Copy assignment operator.
+  GlfwRenderWindow& operator=(const GlfwRenderWindow& other) = delete;
+
   /// Destructor
   virtual ~GlfwRenderWindow() override;
 

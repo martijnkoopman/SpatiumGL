@@ -25,6 +25,12 @@ public:
   /// Constructor
   OGLTriangleRenderer();
 
+  /// Copy constructor. (deleted)
+  OGLTriangleRenderer(const OGLTriangleRenderer& other) = delete;
+
+  /// Copy assignment operator. (deleted)
+  OGLTriangleRenderer& operator=(const OGLTriangleRenderer& other) = delete;
+
   /// Destructor
   virtual ~OGLTriangleRenderer() override;
 

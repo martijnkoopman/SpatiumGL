@@ -29,6 +29,12 @@ public:
   /// \param[in] mesh Mesh
   OGLMeshRenderer(const Mesh* mesh, const Material& material);
 
+  /// Copy constructor. (deleted)
+  OGLMeshRenderer(const OGLMeshRenderer& other) = delete;
+
+  /// Copy assignment operator. (deleted)
+  OGLMeshRenderer& operator=(const OGLMeshRenderer& other) = delete;
+
   /// Destructor
   virtual ~OGLMeshRenderer() override;
 

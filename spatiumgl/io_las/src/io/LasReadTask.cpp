@@ -69,11 +69,11 @@ LasReadTask::run()
   if (m_pimpl->readPoint()) {
     // Add to position vector
     const Vector3 pos = m_pimpl->lastReadPointPosition();
-    pointPositions[pointIndex] = pos;
+    pointPositions.emplace_back(pos);
 
     // Add to color vector
     if (hasColors) {
-      pointColors[pointIndex] = m_pimpl->lastReadPointColor();
+      pointColors.emplace_back(m_pimpl->lastReadPointColor());
     }
 
     // Set initial extent
@@ -87,11 +87,11 @@ LasReadTask::run()
   while (m_pimpl->readPoint()) {
     // Add to position vector
     const Vector3 pos = m_pimpl->lastReadPointPosition();
-    pointPositions[pointIndex] = pos;
+    pointPositions.emplace_back(pos);
 
     // Add to color vector
     if (hasColors) {
-      pointColors[pointIndex] = m_pimpl->lastReadPointColor();
+      pointColors.emplace_back(m_pimpl->lastReadPointColor());
     }
 
     // Second or later point

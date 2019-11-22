@@ -29,6 +29,12 @@ public:
   /// \param[in] grid Grid
   OGLGridRenderer(const Grid* grid);
 
+  /// Copy constructor. (deleted)
+  OGLGridRenderer(const OGLGridRenderer& other) = delete;
+
+  /// Copy assignment operator. (deleted)
+  OGLGridRenderer& operator=(const OGLGridRenderer& other) = delete;
+
   /// Destructor
   virtual ~OGLGridRenderer() override;
 
