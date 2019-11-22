@@ -14,7 +14,7 @@
 #define SPATIUMGL_GFX3D_OGLPOINTCLOUDRENDERER_H
 
 #include "OGLRenderer.hpp"
-#include "spatiumgl/gfx3d/PointCloud.hpp"
+#include "spatiumgl/gfx3d/PointCloudObject.hpp"
 #include "spatiumglexport.hpp"
 
 namespace spatiumgl {
@@ -26,15 +26,15 @@ public:
   /// Constructor
   ///
   /// \param[in] pointCloud Point cloud
-  OGLPointCloudRenderer(const PointCloud* pointCloud);
+  OGLPointCloudRenderer(const PointCloudObject* pointCloudObject);
 
   /// Destructor
   virtual ~OGLPointCloudRenderer() override;
 
-  /// Get the point cloud.
+  /// Get point cloud render object.
   ///
-  /// \return Point cloud
-  const PointCloud* pointCloud() const;
+  /// \return Point cloud render object
+  const PointCloudObject* pointCloudObject() const;
 
   void render(Camera* camera, double aspect) override;
 };

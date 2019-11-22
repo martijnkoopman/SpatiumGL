@@ -20,12 +20,12 @@
 namespace spatiumgl {
 namespace gfx3d {
 
-OGLPointCloudRenderer::OGLPointCloudRenderer(const PointCloud* pointCloud)
-  : OGLRenderer(pointCloud)
+OGLPointCloudRenderer::OGLPointCloudRenderer(const PointCloudObject* pcObj)
+  : OGLRenderer(pcObj)
 {
   std::string vertexShaderSrc;
   std::string fragmentShaderSrc;
-  if (pointCloud->hasColors()) {
+  if (pcObj->pointCloud().header().hasColors()) {
     vertexShaderSrc =
       "#version 330 core\n"
       "layout (location = 0) in vec3 pos;\n"
@@ -88,19 +88,19 @@ OGLPointCloudRenderer::OGLPointCloudRenderer(const PointCloud* pointCloud)
   glGenBuffers(1, &m_vbo);
   glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
 
-  const size_t pointCount = pointCloud->positions().size();
+  const size_t pointCount = pcObj->pointCloud().data().positions().size();
   std::vector<Vector3f> verticesFloat(pointCount);
   for (size_t i = 0; i < pointCount; i++)
-    verticesFloat[i] = pointCloud->positions()[i].staticCast<float>();
+    verticesFloat[i] = (pcObj->pointCloud().data().positions()[i]).staticCast<float>();
 
   // Allocate vertex attributes buffer
   const size_t pointBufferSize = pointCount * sizeof(float) * 3;
-  if (pointCloud->colors().size() == pointCount) {
+  if (pcObj->pointCloud().data().colors().size() == pointCount) {
     // THESE DOUBLES ARE NOT WORKING.
 
     std::vector<Vector3f> colorsFloat(pointCount);
     for (size_t i = 0; i < pointCount; i++)
-      colorsFloat[i] = pointCloud->colors()[i].staticCast<float>();
+      colorsFloat[i] = pcObj->pointCloud().data().colors()[i].staticCast<float>();
 
     // Allocate vertex attributes buffer for points + colors
     glBufferData(GL_ARRAY_BUFFER, 2 * pointBufferSize, nullptr, GL_STATIC_DRAW);
@@ -148,10 +148,9 @@ OGLPointCloudRenderer::~OGLPointCloudRenderer()
   glDeleteBuffers(1, &m_vbo);
 }
 
-const PointCloud*
-OGLPointCloudRenderer::pointCloud() const
+const PointCloudObject* OGLPointCloudRenderer::pointCloudObject() const
 {
-  return static_cast<const PointCloud*>(m_renderObject);
+  return static_cast<const PointCloudObject*>(m_renderObject);
 }
 
 void
@@ -194,7 +193,7 @@ OGLPointCloudRenderer::render(spatiumgl::gfx3d::Camera* camera, double aspect)
   glBindVertexArray(m_vao);
 
   // Draw
-  glDrawArrays(GL_POINTS, 0, pointCloud()->pointCount());
+  glDrawArrays(GL_POINTS, 0, pointCloudObject()->pointCloud().data().positions().size());
 
   // Unbind vertex array object
   glBindVertexArray(0);

@@ -270,14 +270,16 @@ struct BoundingBox
     , BoundsRadii<T, 3>(radii)
   {}
 
-  /// Build from points
+  /// Construct from points.
+  ///
+  /// The bounding box will encapsulate all points.
   ///
   /// \param[in] points Points in N-dimensional space.
   /// \return Bounding box
-  static BoundingBox fromPoints(const std::vector<Vector<T, 3>>& points)
+  static BoundingBox<T> fromPoints(const std::vector<Vector<T, 3>>& points)
   {
     if (points.size() == 0) {
-      return BoundingBox();
+      return {};
     }
 
     // Set initial bounds
@@ -301,6 +303,11 @@ struct BoundingBox
     return BoundingBox::fromMinMax(minVal, maxVal);
   }
 
+  /// Construct from minimum and maximum coordinates.
+  ///
+  /// \param[in] min Minimum coordinates
+  /// \param[in] max Maximum coordinates
+  /// \return Bounding box
   static BoundingBox fromMinMax(const Vector<T, 3>& min,
                                 const Vector<T, 3>& max)
   {
@@ -314,23 +321,60 @@ struct BoundingBox
                        max[1] / static_cast<T>(2) - min[1] / static_cast<T>(2),
                        max[2] / static_cast<T>(2) - min[2] / static_cast<T>(2));
 
-    return BoundingBox(center, radii);
+    return {center, radii};
   }
 
+  // Compare operators
+
+  /// Compare operator. Is equal.
+  ///
+  /// \param[in] other Other bounding box
+  /// \return True if equal, otherwise false
+  bool operator==(const BoundingBox<T> &other) const
+  {
+    if (this->m_center != other.m_center ||
+        this->m_radii != other.m_radii) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  /// Compare operator. Is unequal.
+  ///
+  /// \param[in] other Other bounding box
+  /// \return True if unequal, otherwise false
+  bool operator!=(const BoundingBox<T> & other) const
+  {
+    return !(operator==(other));
+  }
+
+  /// Get minimum coordinates.
+  ///
+  /// \return Minimum coordinates.
   Vector<T, 3> min() const
   {
-    return Vector<T, 3>(this->m_center[0] - this->m_radii[0],
-                        this->m_center[1] - this->m_radii[1],
-                        this->m_center[2] - this->m_radii[2]);
+    return { this->m_center[0] - this->m_radii[0],
+             this->m_center[1] - this->m_radii[1],
+             this->m_center[2] - this->m_radii[2] };
   }
 
+  /// Get maxmimum coordinates.
+  ///
+  /// \return Maximum coordinates.
   Vector<T, 3> max() const
   {
-    return Vector<T, 3>(this->m_center[0] + this->m_radii[0],
-                        this->m_center[1] + this->m_radii[1],
-                        this->m_center[2] + this->m_radii[2]);
+    return { this->m_center[0] + this->m_radii[0],
+             this->m_center[1] + this->m_radii[1],
+             this->m_center[2] + this->m_radii[2] };
   }
 
+  /// Check wheter a point is within the bounding box.
+  ///
+  /// A point exactly on the boundary is not considered inside.
+  ///
+  /// \param[in] point Point
+  /// \return True if inside, false outside.
   bool isInside(const Vector<T, 3>& point) const
   {
     for (size_t i = 0; i < 3; i++) {
@@ -344,6 +388,9 @@ struct BoundingBox
     return true;
   }
 
+  /// Extend bounding box to include point.
+  ///
+  /// \param[in] point Point
   void include(const Vector<T, 3>& point)
   {
     // Get min and max values
@@ -367,6 +414,9 @@ struct BoundingBox
     this->m_radii = box.radii();
   }
 
+  /// Extend bounding box to include other bounding box.
+  ///
+  /// \param[in] bounds Bounding box
   void include(const BoundingBox& bounds)
   {
     // Get min and max values

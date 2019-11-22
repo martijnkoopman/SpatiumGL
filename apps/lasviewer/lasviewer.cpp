@@ -4,7 +4,8 @@
 #include <spatiumgl/gfx3d/PerspectiveCamera.hpp>
 #include <spatiumgl/gfx3d/PivotInteractor.hpp>
 #include <spatiumgl/gfx3d/PointCloud.hpp>
-#include <spatiumgl/io/LasReader.hpp>
+#include <spatiumgl/gfx3d/PointCloudObject.hpp>
+#include <spatiumgl/io/LasReadTask.hpp>
 
 #include <iostream>
 
@@ -16,26 +17,28 @@ main(int argc, char* argv[])
   // Get path from command line arguments
   std::string path;
   if (argc != 2) {
-    std::cerr << "usage: pcviewer <file.las/laz>" << std::endl;
+    std::cerr << "usage: lasviewer <file.las/laz>" << std::endl;
     return 1;
   } else {
     path = argv[1];
   }
 
   // Construct point cloud reader
-  spgl::io::LasReader reader(path, true);
-  if (!reader.isReady()) {
+  spgl::io::LasReadTask readTask(path, true);
+  if (!readTask.isReady()) {
     std::cerr << "Invalid input file: " << path << std::endl;
     return 1;
   }
 
-  if (!reader.open()) {
+  if (!readTask.open()) {
     std::cerr << "Unable to open file: " << path << std::endl;
     return 1;
   }
 
   // Read all points from file
-  spgl::gfx3d::PointCloud pointCloud = reader.readAllPoints();
+  readTask.start();
+  readTask.join();
+  std::shared_ptr<spgl::gfx3d::PointCloud> pointCloud = readTask.result();
 
   // Create and initialize render window
   spgl::gfx3d::GlfwRenderWindow renderWindow(true);
@@ -61,8 +64,11 @@ main(int argc, char* argv[])
   spgl::gfx3d::PivotInteractor interactor(&renderWindow);
   renderWindow.setInteractor(&interactor);
 
+  // Create point cloud render object
+  spgl::gfx3d::PointCloudObject pointCloudObject(std::move(*pointCloud));
+
   // Create point cloud renderer
-  spgl::gfx3d::OGLPointCloudRenderer renderer(&pointCloud);
+  spgl::gfx3d::OGLPointCloudRenderer renderer(&pointCloudObject);
   if (!renderer.isValid()) {
     // Exit
     renderWindow.terminate();

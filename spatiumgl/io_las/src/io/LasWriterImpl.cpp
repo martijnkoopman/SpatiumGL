@@ -45,7 +45,7 @@ LasWriterImpl::isActive() const
 bool
 LasWriterImpl::writePointCloud(const gfx3d::PointCloud& pointCloud)
 {
-  const bool hasColors = pointCloud.hasColors();
+  const bool hasColors = pointCloud.header().hasColors();
   // const bool hasNormals = pointCloud.hasNormals();
 
   // Init header
@@ -72,14 +72,14 @@ LasWriterImpl::writePointCloud(const gfx3d::PointCloud& pointCloud)
     return false;
   }
 
-  for (size_t i = 0; i < pointCloud.pointCount(); i++) {
+  for (size_t i = 0; i < pointCloud.header().pointCount(); i++) {
     // Populate the point
-    Vector3 position = pointCloud.position(i) + pointCloud.shift();
+    Vector3 position = pointCloud.data().positions()[i] + pointCloud.header().originShift();
     laspoint.set_X(static_cast<int>(position.x() * 100));
     laspoint.set_Y(static_cast<int>(position.y() * 100));
     laspoint.set_Z(static_cast<int>(position.z() * 100));
     if (hasColors) {
-      Vector3 color = pointCloud.color(i);
+      Vector3 color = pointCloud.data().colors()[i];
       laspoint.set_R(static_cast<unsigned short>(color.x() * 255));
       laspoint.set_G(static_cast<unsigned short>(color.y() * 255));
       laspoint.set_B(static_cast<unsigned short>(color.z() * 255));

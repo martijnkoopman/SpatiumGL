@@ -1,5 +1,5 @@
-# Point cloud viewer app
-option(SPATIUMGL_APP_PCVIEWER "Build app pcviewer." OFF)
-if(SPATIUMGL_APP_PCVIEWER)
-    add_subdirectory(pcviewer)
-endif(SPATIUMGL_APP_PCVIEWER)
+# LAS/LAZ point cloud viewer app
+option(SPATIUMGL_APP_LASVIEWER "Build app lasviewer." OFF)
+if(SPATIUMGL_APP_LASVIEWER)
+    add_subdirectory(lasviewer)
+endif(SPATIUMGL_APP_LASVIEWER)

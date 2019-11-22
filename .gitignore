@@ -30,3 +30,6 @@
 *.exe
 *.out
 *.app
+
+# Qt creator CMake project cache
+*.txt.user
