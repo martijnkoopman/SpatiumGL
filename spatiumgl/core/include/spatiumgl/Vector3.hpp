@@ -17,7 +17,7 @@
 
 #include <cmath> // sqrt()
 
-namespace spatiumgl {
+namespace spgl {
 /// \class Vector<T,3>
 /// \brief Fixed size vector with length 3
 template<typename T>

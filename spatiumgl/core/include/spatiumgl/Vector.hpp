@@ -19,7 +19,7 @@
 #include <initializer_list> // std::initializer_list
 #include <ostream>          // std::ostream
 
-namespace spatiumgl {
+namespace spgl {
 /// \class VectorBase
 /// \brief Vector base class
 ///
@@ -158,7 +158,7 @@ struct SPATIUMGL_EXPORT Vector : public VectorBase<T, N>
 #include "Vector3.hpp"
 #include "Vector4.hpp"
 
-namespace spatiumgl {
+namespace spgl {
 /// Vector of 2 integer coordinates (x,y)
 using Vector2i = Vector<int, 2>;
 

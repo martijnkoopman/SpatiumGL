@@ -12,7 +12,7 @@
 
 #include "spatiumgl/gfx3d/RenderObject.hpp"
 
-namespace spatiumgl {
+namespace spgl {
 namespace gfx3d {
 
 RenderObject::RenderObject()
@@ -27,4 +27,4 @@ RenderObject::bounds() const
 }
 
 } // namespace gfx3d
-} // namespace spatiumgl
+} // namespace spgl

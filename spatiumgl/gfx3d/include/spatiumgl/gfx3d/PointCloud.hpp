@@ -20,7 +20,7 @@
 
 #include <vector>
 
-namespace spatiumgl {
+namespace spgl {
 namespace gfx3d {
 
 /// \class PointCloudData
@@ -247,6 +247,6 @@ protected:
 };
 
 } // namespace gfx3d
-} // namespace spatiumgl
+} // namespace spgl
 
 #endif // SPATIUMGL_GFX3D_POINTCLOUD_H

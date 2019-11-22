@@ -15,7 +15,7 @@
 
 #include "spatiumglexport.hpp"
 
-namespace spatiumgl {
+namespace spgl {
 
 /// \class Pixmap
 class SPATIUMGL_EXPORT Pixmap

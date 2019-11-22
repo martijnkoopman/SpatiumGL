@@ -16,7 +16,7 @@
 #include "spatiumgl/Vector4.hpp"
 #include "spatiumglexport.hpp"
 
-namespace spatiumgl {
+namespace spgl {
 namespace gfx3d {
 
 /// \class Material
@@ -37,6 +37,6 @@ protected:
 };
 
 } // namespace gfx3d
-} // namespace spatiumgl
+} // namespace spgl
 
 #endif // SPATIUMGL_GFX3D_MATERIAL_H

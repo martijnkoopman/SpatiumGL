@@ -18,7 +18,7 @@
 #include "spatiumgl/gfx3d/Material.hpp"
 #include "spatiumglexport.hpp"
 
-namespace spatiumgl {
+namespace spgl {
 namespace gfx3d {
 
 class SPATIUMGL_EXPORT OGLGridRenderer : public OGLRenderer
@@ -44,6 +44,6 @@ protected:
 };
 
 } // namespace gfx3d
-} // namespace spatiumgl
+} // namespace spgl
 
 #endif // SPATIUMGL_GFX3D_OGLGRIDRENDERER_H

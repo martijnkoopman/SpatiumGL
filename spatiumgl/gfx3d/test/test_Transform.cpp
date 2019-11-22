@@ -5,16 +5,14 @@
 #include <spatiumgl/gfx3d/PointCloud.hpp>
 #include <spatiumgl/gfx3d/Transform.hpp>
 
-namespace spgl = spatiumgl;
-
 TEST(Transform, defaultConstructor)
 {
-  const spatiumgl::gfx3d::Transform transform;
+  const spgl::gfx3d::Transform transform;
 
-  EXPECT_EQ(transform.right(), spatiumgl::Vector3(1, 0, 0));
-  EXPECT_EQ(transform.up(), spatiumgl::Vector3(0, 1, 0));
-  EXPECT_EQ(transform.back(), spatiumgl::Vector3(0, 0, 1));
-  EXPECT_EQ(transform.translation(), spatiumgl::Vector3(0, 0, 0));
+  EXPECT_EQ(transform.right(), spgl::Vector3(1, 0, 0));
+  EXPECT_EQ(transform.up(), spgl::Vector3(0, 1, 0));
+  EXPECT_EQ(transform.back(), spgl::Vector3(0, 0, 1));
+  EXPECT_EQ(transform.translation(), spgl::Vector3(0, 0, 0));
 }
 
 TEST(Transform, translationMatrix)
@@ -53,9 +51,9 @@ TEST(Transform, translation)
   const double x = 1;
   const double y = 2;
   const double z = 3;
-  const spatiumgl::Vector3 position(x, y, z);
+  const spgl::Vector3 position(x, y, z);
 
-  spatiumgl::gfx3d::Transform transform;
+  spgl::gfx3d::Transform transform;
   transform.setTranslation(position);
   EXPECT_EQ(transform.translation(), position);
 

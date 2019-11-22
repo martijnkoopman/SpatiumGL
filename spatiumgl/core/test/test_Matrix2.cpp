@@ -22,8 +22,6 @@
 // inverse
 // output
 
-namespace spgl = spatiumgl;
-
 TEST(Matrix2, constructor) {}
 
 TEST(Matrix2, multiplyMatrix)
@@ -37,7 +35,7 @@ TEST(Matrix2, multiplyMatrix)
   spgl::Matrix2 m2 = { { 5, 7 }, { 6, 8 } };
 
   // Multiply
-  const spatiumgl::Matrix2 result = m1 * m2;
+  const spgl::Matrix2 result = m1 * m2;
 
   // Compare
 

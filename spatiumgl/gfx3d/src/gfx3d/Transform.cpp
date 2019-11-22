@@ -12,7 +12,7 @@
 
 #include "spatiumgl/gfx3d/Transform.hpp"
 
-namespace spatiumgl {
+namespace spgl {
 namespace gfx3d {
 
 Transform::Transform()
@@ -220,4 +220,4 @@ Transform::worldPointToObjectPoint(const Vector3& point) const
 }
 
 } // namespace gfx3d
-} // namespace spatiumgl
+} // namespace spgl

@@ -13,7 +13,7 @@
 #include "spatiumgl/gfx3d/GlfwRenderWindow.hpp"
 #include "GlfwRenderWindowImpl.hpp"
 
-namespace spatiumgl {
+namespace spgl {
 namespace gfx3d {
 GlfwRenderWindow::GlfwRenderWindow(bool debug)
   : RenderWindow(debug)
@@ -56,4 +56,4 @@ GlfwRenderWindow::show()
   m_pimpl->show();
 }
 } // namespace gfx3d
-} // namespace spatiumgl
+} // namespace spgl

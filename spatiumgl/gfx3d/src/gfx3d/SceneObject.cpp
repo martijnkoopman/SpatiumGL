@@ -12,7 +12,7 @@
 
 #include "spatiumgl/gfx3d/SceneObject.hpp"
 
-namespace spatiumgl {
+namespace spgl {
 namespace gfx3d {
 
 SceneObject::SceneObject()
@@ -32,4 +32,4 @@ SceneObject::transform() const
 }
 
 } // namespace gfx3d
-} // namespace spatiumgl
+} // namespace spgl

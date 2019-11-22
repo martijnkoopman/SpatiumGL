@@ -15,7 +15,7 @@
 
 #include "spatiumglexport.hpp"
 
-namespace spatiumgl {
+namespace spgl {
 namespace gfx3d {
 
 // Forward declare
@@ -69,6 +69,6 @@ protected:
 };
 
 } // namespace gfx3d
-} // namespace spatiumgl
+} // namespace spgl
 
 #endif // SPATIUMGL_GFX3D_RENDERWINDOWINTERACTOR_H

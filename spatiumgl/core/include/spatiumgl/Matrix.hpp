@@ -18,7 +18,7 @@
 
 #include <ostream>
 
-namespace spatiumgl {
+namespace spgl {
 template<typename T, size_t W, size_t H>
 struct SPATIUMGL_EXPORT MatrixBase
 {
@@ -169,7 +169,7 @@ struct SPATIUMGL_EXPORT Matrix : public MatrixBase<T, W, H>
 #include "Matrix3x3.hpp"
 #include "Matrix4x4.hpp"
 
-namespace spatiumgl {
+namespace spgl {
 using Matrix2 = Matrix<double, 2, 2>;
 using Matrix3 = Matrix<double, 3, 3>;
 using Matrix4 = Matrix<double, 4, 4>;

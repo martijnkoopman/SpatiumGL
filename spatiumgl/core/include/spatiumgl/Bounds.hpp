@@ -17,7 +17,7 @@
 
 #include <vector> // std::vector
 
-namespace spatiumgl {
+namespace spgl {
 
 /// \class BoundsCenter
 /// \brief Boundaries with a center (all of them).
@@ -479,6 +479,6 @@ struct OrientedBoundingBox
   , public BoundsOrientation<T, 3>
 {};
 
-} // namespace spatiumgl
+} // namespace spgl
 
 #endif // SPATIUMGL_GFX3D_BOUNDS_H

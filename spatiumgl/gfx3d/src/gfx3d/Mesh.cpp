@@ -12,7 +12,7 @@
 
 #include "spatiumgl/gfx3d/Mesh.hpp"
 
-namespace spatiumgl {
+namespace spgl {
 namespace gfx3d {
 
 /// Constructor
@@ -41,4 +41,4 @@ Mesh::triangles() const
 }
 
 } // namespace gfx3d
-} // namespace spatiumgl
+} // namespace spgl

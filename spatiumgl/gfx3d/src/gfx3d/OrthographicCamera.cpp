@@ -12,7 +12,7 @@
 
 #include "spatiumgl/gfx3d/OrthographicCamera.hpp"
 
-namespace spatiumgl {
+namespace spgl {
 namespace gfx3d {
 
 OrthographicCamera::OrthographicCamera(double size, double near, double far)
@@ -39,4 +39,4 @@ OrthographicCamera::projectionMatrix(double aspect) const
 }
 
 } // namespace gfx3d
-} // namespace spatiumgl
+} // namespace spgl

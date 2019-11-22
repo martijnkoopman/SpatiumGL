@@ -18,7 +18,7 @@
 #include "spatiumgl/gfx3d/Mesh.hpp"
 #include "spatiumglexport.hpp"
 
-namespace spatiumgl {
+namespace spgl {
 namespace gfx3d {
 
 class SPATIUMGL_EXPORT OGLMeshRenderer : public OGLRenderer
@@ -45,6 +45,6 @@ protected:
 };
 
 } // namespace gfx3d
-} // namespace spatiumgl
+} // namespace spgl
 
 #endif // SPATIUMGL_GFX3D_OGLMESHRENDERER_H

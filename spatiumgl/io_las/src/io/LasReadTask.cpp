@@ -13,7 +13,7 @@
 #include "spatiumgl/io/LasReadTask.hpp"
 #include "LasReadTaskImpl.hpp"
 
-namespace spatiumgl {
+namespace spgl {
 namespace io {
 
 LasReadTask::LasReadTask(const std::string& path, const bool shiftToOrigin)
@@ -159,4 +159,4 @@ LasReadTask::extent() const
   return m_pimpl->extent();
 }
 } // namespace io
-} // namespace spatiumgl
+} // namespace spgl

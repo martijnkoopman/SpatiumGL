@@ -12,7 +12,7 @@
 
 #include "spatiumgl/gfx3d/Grid.hpp"
 
-namespace spatiumgl {
+namespace spgl {
 namespace gfx3d {
 
 Grid::Grid(const size_t radiusX,
@@ -30,4 +30,4 @@ Grid::Grid(const size_t radiusX,
 }
 
 } // namespace gfx3d
-} // namespace spatiumgl
+} // namespace spgl

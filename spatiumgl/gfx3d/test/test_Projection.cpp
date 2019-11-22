@@ -5,8 +5,6 @@
 #include <spatiumgl/gfx3d/PerspectiveCamera.hpp>
 #include <spatiumgl/gfx3d/Transform.hpp>
 
-namespace spgl = spatiumgl;
-
 /*
 Projection works, but not these tests.
 

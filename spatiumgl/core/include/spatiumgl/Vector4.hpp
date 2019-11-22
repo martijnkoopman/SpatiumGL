@@ -15,7 +15,7 @@
 
 #include "Vector.hpp"
 
-namespace spatiumgl {
+namespace spgl {
 /// \class Vector<T,4>
 /// \brief Fixed size vector with length 4
 template<typename T>

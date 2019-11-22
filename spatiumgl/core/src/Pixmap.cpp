@@ -12,4 +12,4 @@
 
 #include "spatiumgl/Pixmap.hpp"
 
-namespace spatiumgl {}
+namespace spgl {}

@@ -19,7 +19,7 @@
 #include <ostream>
 #include <vector>
 
-namespace spatiumgl {
+namespace spgl {
 namespace gfx3d {
 
 /// \class Mesh
@@ -131,6 +131,6 @@ protected:
 };
 
 } // namespace gfx3d
-} // namespace spatiumgl
+} // namespace spgl
 
 #endif // SPATIUMGL_GFX3D_MESH_H

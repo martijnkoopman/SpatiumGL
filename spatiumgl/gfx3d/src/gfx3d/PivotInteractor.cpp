@@ -18,7 +18,7 @@
 
 #include <algorithm> // std::max
 
-namespace spatiumgl {
+namespace spgl {
 namespace gfx3d {
 
 PivotInteractor::PivotInteractor(RenderWindow* window)
@@ -149,4 +149,4 @@ PivotInteractor::resetCameraClipping()
 }
 
 } // namespace gfx3d
-} // namespace spatiumgl
+} // namespace spgl

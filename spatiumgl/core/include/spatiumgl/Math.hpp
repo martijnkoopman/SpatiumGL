@@ -15,7 +15,7 @@
 
 #include "spatiumglexport.hpp"
 
-namespace spatiumgl {
+namespace spgl {
 
 /// Pi constant
 template<typename T>
@@ -41,6 +41,6 @@ Deg2Rad()
   return 1.745329251994329576923690768488612713e-02;
 }
 
-} // namespace spatiumgl
+} // namespace spgl
 
 #endif // SPATIUMGL_MATH_H

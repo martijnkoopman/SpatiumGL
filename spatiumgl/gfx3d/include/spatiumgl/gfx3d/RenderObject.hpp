@@ -17,7 +17,7 @@
 #include "spatiumgl/Bounds.hpp"
 #include "spatiumglexport.hpp"
 
-namespace spatiumgl {
+namespace spgl {
 namespace gfx3d {
 
 /// \class RenderObject
@@ -41,6 +41,6 @@ protected:
 };
 
 } // namespace gfx3d
-} // namespace spatiumgl
+} // namespace spgl
 
 #endif // SPATIUMGL_GFX3D_RENDEROBJECT_H

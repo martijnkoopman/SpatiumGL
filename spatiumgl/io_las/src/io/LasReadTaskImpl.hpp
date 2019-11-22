@@ -19,7 +19,7 @@
 
 #include <memory> // std::unique_ptr
 
-namespace spatiumgl {
+namespace spgl {
 namespace io {
 
 /// \class LasReadTaskImpl
@@ -120,6 +120,6 @@ private:
 };
 
 } // namespace io
-} // namespace spatiumgl
+} // namespace spgl
 
 #endif // SPATIUMGL_IO_LAS_LASREADTASKIMPL_H

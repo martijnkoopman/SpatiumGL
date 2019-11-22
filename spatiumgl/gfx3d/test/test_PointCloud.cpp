@@ -3,8 +3,6 @@
 #include <spatiumgl/Bounds.hpp>
 #include <spatiumgl/gfx3d/PointCloud.hpp>
 
-namespace spgl = spatiumgl;
-
 TEST(PointCloud, constructor)
 {
   const spgl::Vector3 point1(1, 2, 3);

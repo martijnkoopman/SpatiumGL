@@ -12,7 +12,7 @@
 
 #include "spatiumgl/gfx3d/PerspectiveCamera.hpp"
 
-namespace spatiumgl {
+namespace spgl {
 namespace gfx3d {
 
 PerspectiveCamera::PerspectiveCamera(double fov, double near, double far)
@@ -39,4 +39,4 @@ PerspectiveCamera::projectionMatrix(double aspect) const
 }
 
 } // namespace gfx3d
-} // namespace spatiumgl
+} // namespace spgl

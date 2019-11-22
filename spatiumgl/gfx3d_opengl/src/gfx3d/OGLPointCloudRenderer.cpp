@@ -17,7 +17,7 @@
 #include <iostream>
 #include <string>
 
-namespace spatiumgl {
+namespace spgl {
 namespace gfx3d {
 
 OGLPointCloudRenderer::OGLPointCloudRenderer(const PointCloudObject* pcObj)
@@ -154,36 +154,36 @@ const PointCloudObject* OGLPointCloudRenderer::pointCloudObject() const
 }
 
 void
-OGLPointCloudRenderer::render(spatiumgl::gfx3d::Camera* camera, double aspect)
+OGLPointCloudRenderer::render(spgl::gfx3d::Camera* camera, double aspect)
 {
   m_shaderProgram.use();
 
   {
     // Set model matrix
-    const spatiumgl::Matrix4 modelMatrix = m_renderObject->transform().matrix();
+    const spgl::Matrix4 modelMatrix = m_renderObject->transform().matrix();
     int modelMatrixLoc =
       glGetUniformLocation(m_shaderProgram.shaderProgamId(), "model");
-    const spatiumgl::Matrix4f modelMatrixF = modelMatrix.staticCast<float>();
+    const spgl::Matrix4f modelMatrixF = modelMatrix.staticCast<float>();
     glUniformMatrix4fv(modelMatrixLoc, 1, GL_FALSE, modelMatrixF.data());
   }
 
   {
     // Set view matrix
-    const spatiumgl::Matrix4 viewMatrix =
+    const spgl::Matrix4 viewMatrix =
       camera->transform().matrix().inverse(); // MAY THROW EXCEPTION!
     int viewMatrixLoc =
       glGetUniformLocation(m_shaderProgram.shaderProgamId(), "view");
-    const spatiumgl::Matrix4f viewMatrixF = viewMatrix.staticCast<float>();
+    const spgl::Matrix4f viewMatrixF = viewMatrix.staticCast<float>();
     glUniformMatrix4fv(viewMatrixLoc, 1, GL_FALSE, viewMatrixF.data());
   }
 
   {
     // Set projection matrix
-    const spatiumgl::Matrix4 projectionMatrix =
+    const spgl::Matrix4 projectionMatrix =
       camera->projectionMatrix(aspect);
     int projectionMatrixLoc =
       glGetUniformLocation(m_shaderProgram.shaderProgamId(), "projection");
-    const spatiumgl::Matrix4f projectionMatrixF =
+    const spgl::Matrix4f projectionMatrixF =
       projectionMatrix.staticCast<float>();
     glUniformMatrix4fv(
       projectionMatrixLoc, 1, GL_FALSE, projectionMatrixF.data());
@@ -200,4 +200,4 @@ OGLPointCloudRenderer::render(spatiumgl::gfx3d::Camera* camera, double aspect)
 }
 
 } // namespace gfx3d
-} // namespace spatiumgl
+} // namespace spgl

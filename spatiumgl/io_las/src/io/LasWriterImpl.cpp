@@ -14,7 +14,7 @@
 
 #include <memory> // std::unique_ptr
 
-namespace spatiumgl {
+namespace spgl {
 namespace io {
 LasWriterImpl::LasWriterImpl(const std::string& path)
   : m_laswriteopener()
@@ -101,4 +101,4 @@ LasWriterImpl::writePointCloud(const gfx3d::PointCloud& pointCloud)
   return true;
 }
 } // namespace io
-} // namespace spatiumgl
+} // namespace spgl

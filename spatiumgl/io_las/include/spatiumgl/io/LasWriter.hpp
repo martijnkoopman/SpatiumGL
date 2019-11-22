@@ -18,7 +18,7 @@
 
 #include <memory> // std::unique_ptr
 
-namespace spatiumgl {
+namespace spgl {
 namespace io {
 
 // Forward declare implementation
@@ -62,6 +62,6 @@ private:
 };
 
 } // namespace io
-} // namespace spatiumgl
+} // namespace spgl
 
 #endif // SPATIUMGL_IO_LAS_LASWRITER_H

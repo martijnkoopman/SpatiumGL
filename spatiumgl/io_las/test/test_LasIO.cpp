@@ -3,8 +3,6 @@
 #include <spatiumgl/io/LasReadTask.hpp>
 #include <spatiumgl/io/LasWriter.hpp>
 
-namespace spgl = spatiumgl;
-
 TEST(LasIO, writeReadPositions)
 {
   // Construct points vector

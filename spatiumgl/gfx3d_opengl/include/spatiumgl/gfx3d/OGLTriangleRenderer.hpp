@@ -16,7 +16,7 @@
 #include "OGLRenderer.hpp"
 #include "spatiumglexport.hpp"
 
-namespace spatiumgl {
+namespace spgl {
 namespace gfx3d {
 
 class SPATIUMGL_EXPORT OGLTriangleRenderer : public OGLRenderer
@@ -32,6 +32,6 @@ public:
 };
 
 } // namespace gfx3d
-} // namespace spatiumgl
+} // namespace spgl
 
 #endif // SPATIUMGL_GFX3D_OGLTRIANGLERENDERER_H

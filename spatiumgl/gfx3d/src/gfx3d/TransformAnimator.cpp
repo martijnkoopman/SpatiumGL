@@ -14,7 +14,7 @@
 
 #include <iostream>
 
-namespace spatiumgl {
+namespace spgl {
 namespace gfx3d {
 
 TransformAnimator::TransformAnimator(RenderObject* renderObject,
@@ -36,4 +36,4 @@ TransformAnimator::animate(double deltaTime)
 }
 
 } // namespace gfx3d
-} // namespace spatiumgl
+} // namespace spgl

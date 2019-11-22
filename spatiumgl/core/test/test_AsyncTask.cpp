@@ -2,8 +2,6 @@
 
 #include <spatiumgl/AsyncTask.hpp>
 
-namespace spgl = spatiumgl;
-
 class CountTask : public spgl::AsyncTask<int>
 {
 public:

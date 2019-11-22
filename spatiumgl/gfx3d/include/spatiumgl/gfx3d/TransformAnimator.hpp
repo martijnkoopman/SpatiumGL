@@ -16,7 +16,7 @@
 #include "Animator.hpp"
 #include "spatiumglexport.hpp"
 
-namespace spatiumgl {
+namespace spgl {
 namespace gfx3d {
 
 class SPATIUMGL_EXPORT TransformAnimator : public Animator
@@ -45,6 +45,6 @@ protected:
 };
 
 } // namespace gfx3d
-} // namespace spatiumgl
+} // namespace spgl
 
 #endif // SPATIUMGL_GFX3D_TRANSFORMANIMATOR_H

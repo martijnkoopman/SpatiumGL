@@ -18,7 +18,7 @@
 
 #include <memory> // std::unique_ptr
 
-namespace spatiumgl {
+namespace spgl {
 namespace gfx3d {
 // Forward declaration of private implementation
 class GlfwRenderWindowImpl;
@@ -74,6 +74,6 @@ private:
   std::unique_ptr<GlfwRenderWindowImpl> m_pimpl;
 };
 } // namespace gfx3d
-} // namespace spatiumgl
+} // namespace spgl
 
 #endif // SPATIUMGL_GFX3D_GLFWRENDERWINDOW_H

@@ -13,7 +13,7 @@
 #include "spatiumgl/gfx3d/RenderWindow.hpp"
 #include "spatiumgl/gfx3d/PivotInteractor.hpp"
 
-namespace spatiumgl {
+namespace spgl {
 namespace gfx3d {
 RenderWindow::RenderWindow(bool debug)
   : m_interactor(nullptr)
@@ -78,4 +78,4 @@ RenderWindow::framebufferSize() const
   return m_framebufferSize;
 }
 } // namespace gfx3d
-} // namespace spatiumgl
+} // namespace spgl

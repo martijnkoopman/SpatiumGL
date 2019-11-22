@@ -17,7 +17,7 @@
 #include "spatiumgl/Vector3.hpp"
 #include "spatiumglexport.hpp"
 
-namespace spatiumgl {
+namespace spgl {
 namespace gfx3d {
 class SPATIUMGL_EXPORT PivotInteractor : public RenderWindowInteractor
 {
@@ -62,6 +62,6 @@ protected:
 };
 
 } // namespace gfx3d
-} // namespace spatiumgl
+} // namespace spgl
 
 #endif // SPATIUMGL_GFX3D_PIVOTINTERACTOR_H

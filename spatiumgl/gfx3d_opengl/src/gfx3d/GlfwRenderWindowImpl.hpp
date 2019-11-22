@@ -18,7 +18,7 @@
 #include <GL/glew.h>    // Include GLEW *always* just before GLFW.
 #include <GLFW/glfw3.h> // GLFWwindow
 
-namespace spatiumgl {
+namespace spgl {
 namespace gfx3d {
 
 class GlfwRenderWindowImpl
@@ -67,6 +67,6 @@ protected:
 };
 
 } // namespace gfx3d
-} // namespace spatiumgl
+} // namespace spgl
 
 #endif // SPATIUMGL_GFX3D_GLFWRENDERWINDOWIMPL_H

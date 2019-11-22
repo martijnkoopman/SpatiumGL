@@ -15,7 +15,7 @@
 
 #include "spatiumglexport.hpp"
 
-namespace spatiumgl {
+namespace spgl {
 namespace gfx3d {
 
 /// \class Mesh
@@ -140,6 +140,6 @@ public:
 };
 
 } // namespace gfx3d
-} // namespace spatiumgl
+} // namespace spgl
 
 #endif // SPATIUMGL_GFX3D_TEXTURE_H

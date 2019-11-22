@@ -13,7 +13,7 @@
 #include "spatiumgl/io/LasWriter.hpp"
 #include "LasWriterImpl.hpp"
 
-namespace spatiumgl {
+namespace spgl {
 namespace io {
 LasWriter::LasWriter(const std::string& path)
   : m_pimpl{ std::unique_ptr<LasWriterImpl>(new LasWriterImpl(path)) }
@@ -45,4 +45,4 @@ LasWriter::writePointCloud(const gfx3d::PointCloud& pointCloud) const
   return m_pimpl->writePointCloud(pointCloud);
 }
 } // namespace io
-} // namespace spatiumgl
+} // namespace spgl

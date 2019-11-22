@@ -2,8 +2,6 @@
 
 #include <spatiumgl/Matrix.hpp>
 
-namespace spgl = spatiumgl;
-
 // constructor
 // constructorEmpty
 // constructorDiagonal
@@ -51,8 +49,8 @@ TEST(Matrix, constructor)
 
 // TEST(Matrix, Matrix_data)
 //{
-//	spatiumgl::Matrix<double, size_t(3), size_t(3)> matrix = { { 1, 2, 3 }, { 4,
-// 5, 6 }, { 7, 8, 9 } }; 	spatiumgl::Matrix3 matrix2 = { { 1, 2, 3 }, { 4, 5,
+//	spgl::Matrix<double, size_t(3), size_t(3)> matrix = { { 1, 2, 3 }, { 4,
+// 5, 6 }, { 7, 8, 9 } }; 	spgl::Matrix3 matrix2 = { { 1, 2, 3 }, { 4, 5,
 // 6
 //}, { 7, 8, 9 } }; 	double* ptr = matrix.data(); 	EXPECT_EQ(*ptr, 1);
 //	EXPECT_EQ(*(ptr + 1), 2);
@@ -67,20 +65,20 @@ TEST(Matrix, constructor)
 //
 // TEST(Matrix, transpose)
 //{
-//	spatiumgl::Matrix<double, 2, 3> m1;
+//	spgl::Matrix<double, 2, 3> m1;
 //	m1[0][0] = 1;
 //	m1[1][2] = 6;
 //
-//	spatiumgl::Matrix<double, 3, 2> m2 = m1.transposed();
+//	spgl::Matrix<double, 3, 2> m2 = m1.transposed();
 //	EXPECT_EQ(m2[0][0], 1);
 //	EXPECT_EQ(m2[2][1], 6);
 //}
 //
 // TEST(Matrix, multiplyMatrix)
 //{
-//	spatiumgl::Matrix<double, 3, 2> m1 = { { 1,4 }, {2,5}, {3,6} };
-//	spatiumgl::Matrix<double, 2, 3> m2 = m1.transposed();
-//	//spatiumgl::MatrixT<double, 3, 3> m3 = m1 * m2;
+//	spgl::Matrix<double, 3, 2> m1 = { { 1,4 }, {2,5}, {3,6} };
+//	spgl::Matrix<double, 2, 3> m2 = m1.transposed();
+//	//spgl::MatrixT<double, 3, 3> m3 = m1 * m2;
 //
 //	//QCOMPARE(m3(0, 0), 14);
 //	//QCOMPARE(m3(0, 1), 32);

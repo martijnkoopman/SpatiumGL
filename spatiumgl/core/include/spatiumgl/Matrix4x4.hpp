@@ -19,7 +19,7 @@
 #undef minor
 #endif
 
-namespace spatiumgl {
+namespace spgl {
 template<typename T>
 struct SPATIUMGL_EXPORT Matrix<T, 4, 4> : public MatrixBase<T, 4, 4>
 {

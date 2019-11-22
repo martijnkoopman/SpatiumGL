@@ -15,7 +15,7 @@
 
 #include "spatiumgl/Bounds.hpp"
 
-namespace spatiumgl {
+namespace spgl {
 namespace gfx3d {
 
 ///\class Geometry
@@ -32,6 +32,6 @@ protected:
   BoundsT<T, D> m_bounds;
 };
 } // namespace gfx3d
-} // namespace spatiumgl
+} // namespace spgl
 
 #endif // SPATIUMGL_GFX3D_GEOMETRY_H

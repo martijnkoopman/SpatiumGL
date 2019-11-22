@@ -17,7 +17,7 @@
 
 #include <cmath> // sqrt(), acos()
 
-namespace spatiumgl {
+namespace spgl {
 /// \class Vector<T,2>
 /// \brief Fixed size vector with length 2
 template<typename T>

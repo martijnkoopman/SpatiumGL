@@ -16,7 +16,7 @@
 #include "RenderObject.hpp"
 #include "PointCloud.hpp"
 
-namespace spatiumgl {
+namespace spgl {
 namespace gfx3d {
 
 /// \class PointCloudObject
@@ -45,6 +45,6 @@ protected:
 };
 
 } // namespace gfx3d
-} // namespace spatiumgl
+} // namespace spgl
 
 #endif // SPATIUMGL_GFX3D_POINTCLOUDOBJECT_H

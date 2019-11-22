@@ -4,21 +4,21 @@
 
 TEST(Matrix3, constructorDefault)
 {
-  const spatiumgl::Matrix3 result;
-  const spatiumgl::Matrix3 correct = { { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 } };
+  const spgl::Matrix3 result;
+  const spgl::Matrix3 correct = { { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 } };
   EXPECT_EQ(correct, result);
 }
 
 TEST(Matrix3, constructorDiagonal)
 {
-  const spatiumgl::Matrix3 result(3);
-  const spatiumgl::Matrix3 correct = { { 3, 0, 0 }, { 0, 3, 0 }, { 0, 0, 3 } };
+  const spgl::Matrix3 result(3);
+  const spgl::Matrix3 correct = { { 3, 0, 0 }, { 0, 3, 0 }, { 0, 0, 3 } };
   EXPECT_EQ(correct, result);
 }
 
 TEST(Matrix3, constructorInitializerList)
 {
-  const spatiumgl::Matrix3 result = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
+  const spgl::Matrix3 result = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
   EXPECT_EQ(result[0][0], 1);
   EXPECT_EQ(result[0][1], 2);
   EXPECT_EQ(result[0][2], 3);
@@ -32,26 +32,26 @@ TEST(Matrix3, constructorInitializerList)
 
 TEST(Matrix3, compareEqual)
 {
-  const spatiumgl::Matrix3 matrix1 = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
-  const spatiumgl::Matrix3 matrix2 = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
+  const spgl::Matrix3 matrix1 = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
+  const spgl::Matrix3 matrix2 = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
   EXPECT_TRUE(matrix1 == matrix2);
 }
 
 TEST(Matrix3, compareUnequal)
 {
-  const spatiumgl::Matrix3 matrix1 = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
-  const spatiumgl::Matrix3 matrix2 = { { 1, 2, 3 }, { 9, 9, 9 }, { 7, 8, 9 } };
+  const spgl::Matrix3 matrix1 = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
+  const spgl::Matrix3 matrix2 = { { 1, 2, 3 }, { 9, 9, 9 }, { 7, 8, 9 } };
   EXPECT_TRUE(matrix1 != matrix2);
 }
 
 TEST(Matrix3, addMatrix)
 {
-  const spatiumgl::Matrix3 matrix1 = { { 4, 8, 12 },
+  const spgl::Matrix3 matrix1 = { { 4, 8, 12 },
                                        { 16, 20, 24 },
                                        { 28, 32, 36 } };
-  const spatiumgl::Matrix3 matrix2 = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
-  const spatiumgl::Matrix3 result = matrix1 + matrix2;
-  const spatiumgl::Matrix3 correct = { { 5, 10, 15 },
+  const spgl::Matrix3 matrix2 = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
+  const spgl::Matrix3 result = matrix1 + matrix2;
+  const spgl::Matrix3 correct = { { 5, 10, 15 },
                                        { 20, 25, 30 },
                                        { 35, 40, 45 } };
   EXPECT_EQ(correct, result);
@@ -59,12 +59,12 @@ TEST(Matrix3, addMatrix)
 
 TEST(Matrix3, subtractMatrix)
 {
-  const spatiumgl::Matrix3 matrix1 = { { 4, 8, 12 },
+  const spgl::Matrix3 matrix1 = { { 4, 8, 12 },
                                        { 16, 20, 24 },
                                        { 28, 32, 36 } };
-  const spatiumgl::Matrix3 matrix2 = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
-  const spatiumgl::Matrix3 result = matrix1 - matrix2;
-  const spatiumgl::Matrix3 correct = { { 3, 6, 9 },
+  const spgl::Matrix3 matrix2 = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
+  const spgl::Matrix3 result = matrix1 - matrix2;
+  const spgl::Matrix3 correct = { { 3, 6, 9 },
                                        { 12, 15, 18 },
                                        { 21, 24, 27 } };
   EXPECT_EQ(correct, result);
@@ -72,9 +72,9 @@ TEST(Matrix3, subtractMatrix)
 
 TEST(Matrix3, multiplyScalar)
 {
-  const spatiumgl::Matrix3 matrix = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
-  const spatiumgl::Matrix3 result = matrix * 2;
-  const spatiumgl::Matrix3 correct = { { 2, 4, 6 },
+  const spgl::Matrix3 matrix = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
+  const spgl::Matrix3 result = matrix * 2;
+  const spgl::Matrix3 correct = { { 2, 4, 6 },
                                        { 8, 10, 12 },
                                        { 14, 16, 18 } };
   EXPECT_EQ(correct, result);
@@ -84,26 +84,26 @@ TEST(Matrix3, multiplyScalar)
 
 TEST(Matrix3, multiplyVector)
 {
-  spatiumgl::Vector3 vector;
+  spgl::Vector3 vector;
   vector[0] = 1;
   vector[1] = 2;
   vector[2] = 3;
 
-  spatiumgl::Matrix3 matrix;
+  spgl::Matrix3 matrix;
   matrix[0][0] = 1;
   matrix[1][1] = 2;
   matrix[2][2] = 3;
 
-  spatiumgl::Vector3 res = matrix * vector;
+  spgl::Vector3 res = matrix * vector;
 }
 
 TEST(Matrix3, divideScalar)
 {
-  const spatiumgl::Matrix3 matrix = { { 2, 4, 6 },
+  const spgl::Matrix3 matrix = { { 2, 4, 6 },
                                       { 8, 10, 12 },
                                       { 14, 16, 18 } };
-  const spatiumgl::Matrix3 result = matrix / 2;
-  const spatiumgl::Matrix3 correct = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
+  const spgl::Matrix3 result = matrix / 2;
+  const spgl::Matrix3 correct = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
   EXPECT_EQ(correct, result);
 };
 
@@ -111,9 +111,9 @@ TEST(Matrix3, divideScalar)
 
 TEST(Matrix3, transposed)
 {
-  const spatiumgl::Matrix3 matrix = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
-  const spatiumgl::Matrix3 result = matrix.transposed();
-  const spatiumgl::Matrix3 correct = { { 1, 4, 7 }, { 2, 5, 8 }, { 3, 6, 9 } };
+  const spgl::Matrix3 matrix = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
+  const spgl::Matrix3 result = matrix.transposed();
+  const spgl::Matrix3 correct = { { 1, 4, 7 }, { 2, 5, 8 }, { 3, 6, 9 } };
   EXPECT_EQ(correct, result);
 };
 
@@ -122,7 +122,7 @@ TEST(Matrix3, transposed)
 TEST(Matrix3, determinant)
 {
   // Example: https://www.mathsisfun.com/algebra/matrix-determinant.html
-  const spatiumgl::Matrix3 matrix = { { 6, 4, 2 }, { 1, -2, 8 }, { 1, 5, 7 } };
+  const spgl::Matrix3 matrix = { { 6, 4, 2 }, { 1, -2, 8 }, { 1, 5, 7 } };
   const double det = matrix.determinant();
   EXPECT_EQ(det, -306);
 };
@@ -133,9 +133,9 @@ TEST(Matrix3, inverse)
 {
   // Example:
   // https://www.mathsisfun.com/algebra/matrix-inverse-minors-cofactors-adjugate.html
-  const spatiumgl::Matrix3 m = { { 3, 2, 0 }, { 0, 0, 1 }, { 2, -2, 1 } };
-  const spatiumgl::Matrix3 result = m.inverse();
-  const spatiumgl::Matrix3 correct = { { 0.2, -0.2, 0.2 },
+  const spgl::Matrix3 m = { { 3, 2, 0 }, { 0, 0, 1 }, { 2, -2, 1 } };
+  const spgl::Matrix3 result = m.inverse();
+  const spgl::Matrix3 correct = { { 0.2, -0.2, 0.2 },
                                        { 0.2, 0.3, -0.3 },
                                        { 0, 1, 0 } };
   EXPECT_EQ(correct, result);

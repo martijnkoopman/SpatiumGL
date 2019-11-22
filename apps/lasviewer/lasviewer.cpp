@@ -9,8 +9,6 @@
 
 #include <iostream>
 
-namespace spgl = spatiumgl;
-
 int
 main(int argc, char* argv[])
 {

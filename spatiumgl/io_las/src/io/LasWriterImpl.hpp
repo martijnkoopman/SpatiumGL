@@ -17,7 +17,7 @@
 
 #include "laswriter.hpp" // LASlib
 
-namespace spatiumgl {
+namespace spgl {
 namespace io {
 
 /// \class LasWriterImpl
@@ -51,6 +51,6 @@ private:
   LASwriteOpener m_laswriteopener;
 };
 } // namespace io
-} // namespace spatiumgl
+} // namespace spgl
 
 #endif // SPATIUMGL_IO_LAS_LASWRITERIMPL_H

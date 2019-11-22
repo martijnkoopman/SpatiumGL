@@ -14,7 +14,7 @@
 
 #include <GL/glew.h>
 
-namespace spatiumgl {
+namespace spgl {
 namespace gfx3d {
 
 OGLShaderProgram::OGLShaderProgram()
@@ -124,4 +124,4 @@ OGLShaderProgram::createShaderProgram(const std::string& vertexShaderSource,
 }
 
 } // namespace gfx3d
-} // namespace spatiumgl
+} // namespace spgl

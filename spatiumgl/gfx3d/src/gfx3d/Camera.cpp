@@ -14,7 +14,7 @@
 
 #include <algorithm> // std::max
 
-namespace spatiumgl {
+namespace spgl {
 namespace gfx3d {
 Camera::Camera(double near, double far)
   : SceneObject()
@@ -128,4 +128,4 @@ Camera::setNearAndFarFromBounds(const BoundingBox<double>& bounds)
 }
 
 } // namespace gfx3d
-} // namespace spatiumgl
+} // namespace spgl

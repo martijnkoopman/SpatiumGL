@@ -20,7 +20,7 @@
 #include <mutex>  // std::mutex
 #include <string> // std::string
 
-namespace spatiumgl {
+namespace spgl {
 
 /// \class RunningGaurd
 /// \brief Gaurd for running flag.
@@ -225,6 +225,6 @@ private:
   std::mutex m_progressMessageMutex;
 };
 
-} // namespace spatiumgl
+} // namespace spgl
 
 #endif // SPATIUMGL_ASYNCTASK_H

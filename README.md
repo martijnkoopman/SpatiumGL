@@ -15,7 +15,7 @@ C++ graphics library for (geo)spatial visualization.
 * lasviewer - LAS/LAZ Point cloud viewer
 
 ### Namespaces
-* spatiumgl
+* spgl - SpatiumGL
   * gfx3d - 3D graphics
   * io - File input/output
   

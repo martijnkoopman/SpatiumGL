@@ -16,7 +16,7 @@
 
 #include <iostream>
 
-namespace spatiumgl {
+namespace spgl {
 namespace gfx3d {
 
 OGLTriangleRenderer::OGLTriangleRenderer()
@@ -81,23 +81,23 @@ OGLTriangleRenderer::~OGLTriangleRenderer()
 }
 
 void
-OGLTriangleRenderer::render(spatiumgl::gfx3d::Camera* camera, double aspect)
+OGLTriangleRenderer::render(spgl::gfx3d::Camera* camera, double aspect)
 {
   m_shaderProgram.use();
 
   // Set view matrix
-  const spatiumgl::Matrix4 viewMatrix =
+  const spgl::Matrix4 viewMatrix =
     camera->transform().matrix().inverse(); // MAY THROW EXCEPTION!
   int viewMatrixLoc =
     glGetUniformLocation(m_shaderProgram.shaderProgamId(), "view");
-  const spatiumgl::Matrix4f viewMatrixF = viewMatrix.staticCast<float>();
+  const spgl::Matrix4f viewMatrixF = viewMatrix.staticCast<float>();
   glUniformMatrix4fv(viewMatrixLoc, 1, GL_FALSE, viewMatrixF.data());
 
   // Set projection matrix
-  const spatiumgl::Matrix4 projectionMatrix = camera->projectionMatrix(aspect);
+  const spgl::Matrix4 projectionMatrix = camera->projectionMatrix(aspect);
   int projectionMatrixLoc =
     glGetUniformLocation(m_shaderProgram.shaderProgamId(), "projection");
-  const spatiumgl::Matrix4f projectionMatrixF =
+  const spgl::Matrix4f projectionMatrixF =
     projectionMatrix.staticCast<float>();
   glUniformMatrix4fv(
     projectionMatrixLoc, 1, GL_FALSE, projectionMatrixF.data());
@@ -110,4 +110,4 @@ OGLTriangleRenderer::render(spatiumgl::gfx3d::Camera* camera, double aspect)
 }
 
 } // namespace gfx3d
-} // namespace spatiumgl
+} // namespace spgl

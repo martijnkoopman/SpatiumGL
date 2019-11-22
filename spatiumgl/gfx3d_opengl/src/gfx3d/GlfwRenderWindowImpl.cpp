@@ -18,7 +18,7 @@
 #include <iostream>
 #include <string>
 
-namespace spatiumgl {
+namespace spgl {
 namespace gfx3d {
 
 static void
@@ -343,4 +343,4 @@ GlfwRenderWindowImpl::glfw_error_callback(int error, const char* description)
   std::cerr << "Error: " << std::string(description) << std::endl;
 }
 } // namespace gfx3d
-} // namespace spatiumgl
+} // namespace spgl
