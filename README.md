@@ -62,7 +62,7 @@ $ cmake .. -G "Visual Studio 16 2019" -A x64 -DBUILD_SHARED_LIBS=ON -DBUILD_TEST
 ## Using the library
 **CMakeLists.txt**
 ```
-cmake_minimum_required(VERSION 3.1.0)
+cmake_minimum_required(VERSION 3.2.0)
 
 project(yourapp)
 
