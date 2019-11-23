@@ -1,4 +1,4 @@
-# SpatiumGL [![Build Status](https://travis-ci.org/martijnkoopman/SpatiumGL.svg?branch=master)](https://travis-ci.org/martijnkoopman/SpatiumGL)
+# SpatiumGL [![Build Status](https://travis-ci.org/martijnkoopman/SpatiumGL.svg?branch=master)](https://travis-ci.org/martijnkoopman/SpatiumGL) [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 C++ graphics library for (geo)spatial visualization.
 
 ## Content
@@ -43,7 +43,7 @@ $ cmake .. -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=ON -DSPATIUMGL_MODULE_GFX3D=ON
 ```
 Windows
 ```
-$ cmake .. -G "Visual Studio 16 2019 Win64" -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=ON -DSPATIUMGL_MODULE_GFX3D=ON -DSPATIUMGL_MODULE_GFX3D_OPENGL=ON -DSPATIUMGL_MODULE_IO_LAS=ON -DSPATIUMGL_APP_LASVIEWER=ON
+$ cmake .. -G "Visual Studio 16 2019" -A x64 -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=ON -DSPATIUMGL_MODULE_GFX3D=ON -DSPATIUMGL_MODULE_GFX3D_OPENGL=ON -DSPATIUMGL_MODULE_IO_LAS=ON -DSPATIUMGL_APP_LASVIEWER=ON
 ```
 
 *CMake options*
@@ -56,9 +56,27 @@ $ cmake .. -G "Visual Studio 16 2019 Win64" -DBUILD_SHARED_LIBS=ON -DBUILD_TESTI
 | SPATIUMGL_MODULE_GFX3D_OPENGL | Include module gfx3d_opengl | 
 | SPATIUMGL_MODULE_IO_LAS | Include module io_las | 
 | SPATIUMGL_APP_LASVIEWER | Include app lasviewer |
+| CMAKE_BUILD_TYPE | Build type for library and thirdparty dependencies |
+| CMAKE_INSTALL_PREFIX | Install directory |
 
 ## Using the library
-...
+**CMakeLists.txt**
+```
+cmake_minimum_required(VERSION 3.1.0)
 
+project(yourapp)
+
+# Create executable
+add_executable(yourapp yourapp.cpp)
+
+# TODO: find_package(SpatiumGL REQUIRED)
+
+# Link dependencies
+target_link_libraries(lasviewer PRIVATE spatiumgl)
+```
+**yourapp.cpp**
+```
+TODO
+```
 ## License
-GPL
+This library is licensed under the GNU General Public License 3.0 - see the [LICENSE.md](LICENSE.md) file for details.
