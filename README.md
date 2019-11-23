@@ -1,4 +1,6 @@
-# SpatiumGL [![Build Status](https://travis-ci.org/martijnkoopman/SpatiumGL.svg?branch=master)](https://travis-ci.org/martijnkoopman/SpatiumGL) [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+# SpatiumGL 
+[![Build Status](https://travis-ci.org/martijnkoopman/SpatiumGL.svg?branch=master)](https://travis-ci.org/martijnkoopman/SpatiumGL) [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
 C++ graphics library for (geo)spatial visualization.
 
 ## Content
