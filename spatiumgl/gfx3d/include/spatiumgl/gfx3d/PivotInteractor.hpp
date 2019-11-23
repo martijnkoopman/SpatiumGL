@@ -57,7 +57,8 @@ public:
   void resetCameraClipping() override;
 
 protected:
-  bool m_pressed;
+  bool m_pressedLeft;
+  bool m_pressedRight;
   Vector3 m_pivotPoint;
 };
 

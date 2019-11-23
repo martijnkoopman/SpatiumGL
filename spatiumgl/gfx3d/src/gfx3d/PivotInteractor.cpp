@@ -23,7 +23,8 @@ namespace gfx3d {
 
 PivotInteractor::PivotInteractor(RenderWindow* window)
   : RenderWindowInteractor(window)
-  , m_pressed(false)
+  , m_pressedLeft(false)
+  , m_pressedRight(false)
   , m_pivotPoint()
 {}
 
@@ -42,16 +43,26 @@ PivotInteractor::pivotPoint() const
 void
 PivotInteractor::OnMouseButtonPressed(MouseButton button, double x, double y)
 {
-  if (button == MouseButton::MOUSE_BUTTON_LEFT) {
-    m_pressed = true;
+  switch (button) {
+    case MouseButton::MOUSE_BUTTON_LEFT:
+      m_pressedLeft = true;
+      break;
+    case MouseButton::MOUSE_BUTTON_RIGHT:
+      m_pressedRight = true;
+      break;
   }
 }
 
 void
 PivotInteractor::OnMouseButtonReleased(MouseButton button, double x, double y)
 {
-  if (button == MouseButton::MOUSE_BUTTON_LEFT) {
-    m_pressed = false;
+  switch (button) {
+    case MouseButton::MOUSE_BUTTON_LEFT:
+      m_pressedLeft = false;
+      break;
+    case MouseButton::MOUSE_BUTTON_RIGHT:
+      m_pressedRight = false;
+      break;
   }
 }
 
@@ -87,25 +98,64 @@ PivotInteractor::OnMouseWheelScrolled(double scroll)
 void
 PivotInteractor::OnMouseMoved(double deltaX, double deltaY)
 {
-  if (m_pressed) {
-    Vector2i framebufferSize = m_window->framebufferSize();
+  if (m_pressedLeft || m_pressedRight) {
+    const Vector2i framebufferSize = m_window->framebufferSize();
     Camera* camera = m_window->camera();
+
     if (framebufferSize[0] > 0 && framebufferSize[1] > 0 && camera != nullptr) {
-      // Get rotation angles
-      double angleX = deltaX * PI<double>() / framebufferSize[0];
-      double angleY = deltaY * PI<double>() / framebufferSize[1];
 
-      // Translate pivot point to origin
-      camera->transform().translate(m_pivotPoint * -1);
+      // Rotate view
+      if (m_pressedLeft) {
+        // Get rotation angles
+        const double angleX = deltaX * PI<double>() / framebufferSize[0];
+        const double angleY = deltaY * PI<double>() / framebufferSize[1];
 
-      // Rotate around horizontal and vertical axes
-      camera->transform().rotateAround(camera->transform().up(), -angleX);
-      camera->transform().rotateAround(camera->transform().right(), -angleY);
+        // Translate pivot point to origin
+        camera->transform().translate(m_pivotPoint * -1);
 
-      // Translate back to pivot point
-      camera->transform().translate(m_pivotPoint);
+        // Rotate around horizontal and vertical axes
+        camera->transform().rotateAround(camera->transform().up(), -angleX);
+        camera->transform().rotateAround(camera->transform().right(), -angleY);
 
-      // camera->orthogonalizeViewUp();
+        // Translate back to pivot point
+        camera->transform().translate(m_pivotPoint);
+
+        // camera->orthogonalizeViewUp();
+      }
+
+      // Pan view
+      if (m_pressedRight) {
+        auto perspectiveCamera =
+          dynamic_cast<PerspectiveCamera*>(m_window->camera());
+        if (perspectiveCamera != nullptr) {
+          // Perspective camera
+
+          // Compute translation vector
+          const double distance =
+            (camera->transform().translation() - m_pivotPoint).length();
+
+          const double angleY =
+            perspectiveCamera->fov() * deltaY / framebufferSize[1];
+          const double translateY = tan(angleY) * distance;
+
+          const double aspectRatio = framebufferSize[0] / framebufferSize[1];
+          const double angleX = perspectiveCamera->fov() * aspectRatio *
+                                deltaX / framebufferSize[0];
+          const double translateX = tan(angleX) * distance;
+          Vector3 translation = (camera->transform().up() * translateY) -
+                                (camera->transform().right() * translateX);
+
+          // Apply translation to camera and pivot point
+          camera->transform().translate(translation);
+          m_pivotPoint = m_pivotPoint + translation;
+
+        } else {
+          // Orthographic camera
+
+          /// \todo implement pan for orthographic camera (using orthographic
+          /// size)
+        }
+      }
     }
   }
 }
