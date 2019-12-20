@@ -34,7 +34,11 @@ public:
   /// Destructor
   virtual ~OGLTriangleRenderer() override;
 
-  void render(Camera* camera, double aspect) override;
+  /// Render the triangle.
+  ///
+  /// \param[in] camera Camera
+  /// \param[in] size Render image size
+  void render(Camera* camera, const Vector2i& size) override;
 };
 
 } // namespace gfx3d

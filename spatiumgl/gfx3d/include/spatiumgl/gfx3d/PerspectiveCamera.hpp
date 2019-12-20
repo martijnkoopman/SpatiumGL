@@ -50,6 +50,32 @@ public:
   /// \return Perspective projection matrix
   Matrix4 projectionMatrix(double aspect) const override;
 
+  /// Transform point from world space into viewport space.
+  ///
+  /// Viewport space is normalized and relative to the camera. The bottom-left 
+  /// of the camera is (0,0)(-1,-1)?; the top-right is (1,1). The z position 
+  /// is in world units from the camera.
+  ///
+  /// \param[in] point World point
+  /// \param[in] aspect Aspect ratio (w/h)
+  /// \return Viewport point
+  Vector3 worldToViewportPoint(const Vector3& point, double aspect) const;
+
+  /// Transform point from world space into screen space.
+  ///
+  /// Screenspace is defined in pixels. The bottom-left of the screen is (0,0);
+  /// the right-top is (pixelWidth,pixelHeight). The z position is in world 
+  /// units from the camera.
+  ///
+  /// \param[in] point World point
+  /// \param[in] size Screen size in pixels
+  /// \return Screen point
+  Vector3 worldToScreenPoint(const Vector3& point, const Vector2i &size) const;
+
+  //Vector3 screenToWorldPoint(const Vector3& point) const;
+
+  //Vector3 screenToWorldPoint(const Vector3& point) const;
+
 protected:
   double m_fov;
 };

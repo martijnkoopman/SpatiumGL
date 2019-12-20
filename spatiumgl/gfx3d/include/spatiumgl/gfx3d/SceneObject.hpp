@@ -22,22 +22,24 @@ namespace gfx3d {
 /// \class SceneObject
 /// \brief Object in a 3D scene
 ///
-/// A SceneObject is transformable in world space.
+/// A SceneObject is a transformable object in world space.
 class SPATIUMGL_EXPORT SceneObject
 {
 public:
-  /// Default constructor
-  SceneObject();
+  /// Default constructor.
+  SceneObject()
+    : m_transform()
+  {}
 
-  /// Get the transformation (by reference)
+  /// Get the transformation.
   ///
   /// \return transformation
-  Transform& transform();
+  Transform& transform() { return m_transform; }
 
-  /// Get the transformation (by const reference)
+  /// Get the transformation.
   ///
   /// \return transformation
-  const Transform& transform() const;
+  const Transform& transform() const { return m_transform; }
 
 protected:
   Transform m_transform;

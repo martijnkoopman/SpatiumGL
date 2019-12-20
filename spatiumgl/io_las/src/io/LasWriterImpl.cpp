@@ -50,9 +50,9 @@ LasWriterImpl::writePointCloud(const gfx3d::PointCloud& pointCloud)
 
   // Init header
   LASheader lasheader;
-  lasheader.x_scale_factor = 0.01;
-  lasheader.y_scale_factor = 0.01;
-  lasheader.z_scale_factor = 0.01;
+  lasheader.x_scale_factor = 0.001;
+  lasheader.y_scale_factor = 0.001;
+  lasheader.z_scale_factor = 0.001;
   lasheader.x_offset = 0;
   lasheader.y_offset = 0;
   lasheader.z_offset = 0;
@@ -74,12 +74,13 @@ LasWriterImpl::writePointCloud(const gfx3d::PointCloud& pointCloud)
 
   for (size_t i = 0; i < pointCloud.header().pointCount(); i++) {
     // Populate the point
-    Vector3 position = pointCloud.data().positions()[i] + pointCloud.header().originShift();
-    laspoint.set_X(static_cast<int>(position.x() * 100));
-    laspoint.set_Y(static_cast<int>(position.y() * 100));
-    laspoint.set_Z(static_cast<int>(position.z() * 100));
+    Vector3 position = pointCloud.data().positions()[i].staticCast<double>() +
+                       pointCloud.header().originShift();
+    laspoint.set_X(static_cast<int>(position.x() * 1000));
+    laspoint.set_Y(static_cast<int>(position.y() * 1000));
+    laspoint.set_Z(static_cast<int>(position.z() * 1000));
     if (hasColors) {
-      Vector3 color = pointCloud.data().colors()[i];
+      Vector3 color = pointCloud.data().colors()[i].staticCast<double>();
       laspoint.set_R(static_cast<unsigned short>(color.x() * 255));
       laspoint.set_G(static_cast<unsigned short>(color.y() * 255));
       laspoint.set_B(static_cast<unsigned short>(color.z() * 255));

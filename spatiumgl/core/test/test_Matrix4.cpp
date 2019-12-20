@@ -96,4 +96,18 @@ TEST(Matrix4, inverse)
   EXPECT_EQ(correct, result);
 }
 
+TEST(Matrix4, viewport)
+{
+  const spgl::Vector2i size(640, 480);
+  const spgl::Matrix4 viewport = spgl::Matrix4::viewport(size);
+
+  const spgl::Vector4 bottomLeftNDC(-1, -1, 0, 1);
+  const spgl::Vector4 bottomLeftScreen = viewport * bottomLeftNDC;
+  EXPECT_EQ(bottomLeftScreen, spgl::Vector4(0, 0, 0, 1));
+
+  const spgl::Vector4 topRightNDC(1, 1, 0, 1);
+  const spgl::Vector4 topRightScreen = viewport * topRightNDC;
+  EXPECT_EQ(topRightScreen, spgl::Vector4(640, 480, 0, 1));
+}
+
 // output

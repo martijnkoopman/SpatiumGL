@@ -29,85 +29,41 @@ namespace gfx3d {
 class SPATIUMGL_EXPORT Mesh : public RenderObject
 {
 public:
-  /// Constructor
+  /// Constructor.
   ///
-  /// \param[in] vertices Vertex positions
-  /// \param[in] triangles Triangles. (Triplets of vertex indices)
-  Mesh(const std::vector<Vector3>& vertices,
-       const std::vector<Vector<size_t, 3>>& triangles);
+  /// Vertices and triangles are moved.
+  ///
+  /// \param[in] vetices. Vertices, coordinates.
+  /// \param[in] triangles Triangles, triplets of vertex indices.
+  Mesh(const std::vector<Vector3>&& vertices,
+       const std::vector<Vector<size_t, 3>>&& triangles);
 
-  /// Destructor
-  virtual ~Mesh() = default;
-
-  /// Get all vertex positions (by reference)
+  /// Get all vertex positions.
   ///
   /// \return All vertex positions
-  const std::vector<Vector3>& vertices() const;
+  const std::vector<Vector3>& vertices() const { return m_vertices; }
 
-  /// Get all triangles (triplets of vertex indices) (by reference)
+  /// Get all triangles (triplets of vertex indices)
   ///
   /// \return All triangle vertex indices
-  const std::vector<Vector<size_t, 3>>& triangles() const;
+  const std::vector<Vector<size_t, 3>>& triangles() const
+  {
+    return m_triangles;
+  }
 
-  /// Construct quad mesh
+  /// Construct quad mesh.
+  ///
+  /// Has two triangles.
   ///
   /// \param[in] radius Quad radius (default = 1)
   /// \return Quad mesh
-  static Mesh quad(double radius = 1)
-  {
-    const std::vector<Vector3> vertices = {
-      { -radius, -radius, 0 },
-      { radius, -radius, 0 },
-      { radius, radius, 0 },
-      { -radius, radius, 0 },
-    };
-
-    const std::vector<Vector<size_t, 3>> triangles = { { 0, 1, 2 },
-                                                       { 2, 3, 0 } };
-
-    return Mesh(vertices, triangles);
-  }
+  static Mesh quad(double radius = 1);
 
   /// Construct cube mesh
   ///
   /// \param[in] radius Cube radius (default = 1)
   /// \return Cube mesh
-  static Mesh cube(double radius = 1)
-  {
-    const std::vector<Vector3> vertices = { // front
-                                            { -radius, -radius, radius },
-                                            { radius, -radius, radius },
-                                            { radius, radius, radius },
-                                            { -radius, radius, radius },
-                                            // back
-                                            { -radius, -radius, -radius },
-                                            { radius, -radius, -radius },
-                                            { radius, radius, -radius },
-                                            { -radius, radius, -radius }
-    };
-
-    const std::vector<Vector<size_t, 3>> triangles = { // front
-                                                       { 0, 1, 2 },
-                                                       { 2, 3, 0 },
-                                                       // right
-                                                       { 1, 5, 6 },
-                                                       { 6, 2, 1 },
-                                                       // back
-                                                       { 7, 6, 5 },
-                                                       { 5, 4, 7 },
-                                                       // left
-                                                       { 4, 0, 3 },
-                                                       { 3, 7, 4 },
-                                                       // bottom
-                                                       { 4, 5, 1 },
-                                                       { 1, 0, 4 },
-                                                       // top
-                                                       { 3, 2, 6 },
-                                                       { 6, 7, 3 }
-    };
-
-    return Mesh(vertices, triangles);
-  }
+  static Mesh cube(double radius = 1);
 
   /// Output to ostream
   friend std::ostream& operator<<(std::ostream& os, const Mesh& mesh)

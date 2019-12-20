@@ -152,7 +152,7 @@ OGLGridRenderer::grid() const
 }
 
 void
-OGLGridRenderer::render(spgl::gfx3d::Camera* camera, double aspect)
+OGLGridRenderer::render(spgl::gfx3d::Camera* camera, const Vector2i& size)
 {
   m_shaderProgram.use();
 
@@ -178,7 +178,7 @@ OGLGridRenderer::render(spgl::gfx3d::Camera* camera, double aspect)
   {
     // Set projection matrix
     const spgl::Matrix4 projectionMatrix =
-      camera->projectionMatrix(aspect);
+      camera->projectionMatrix(static_cast<double>(size.x()) / size.y());
     int projectionMatrixLoc =
       glGetUniformLocation(m_shaderProgram.shaderProgamId(), "projection");
     const spgl::Matrix4f projectionMatrixF =

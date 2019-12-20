@@ -37,9 +37,9 @@ public:
   /// \param[in] positions Point positions
   /// \param[in] colors Point colors (RGB)
   /// \param[in] normals Point normals
-  PointCloudData(std::vector<Vector3>&& positions,
-                 std::vector<Vector3>&& colors = std::vector<Vector3>(),
-                 std::vector<Vector3>&& normals = std::vector<Vector3>())
+  PointCloudData(std::vector<Vector3f>&& positions,
+                 std::vector<Vector3f>&& colors = std::vector<Vector3f>(),
+                 std::vector<Vector3f>&& normals = std::vector<Vector3f>())
     : m_positions(std::move(positions))
     , m_colors(std::move(colors))
     , m_normals(std::move(normals))
@@ -50,34 +50,39 @@ public:
   /// Clears: points, colors and normals.
   void clear()
   {
-    /// \todo container<T>().swap( c );
-    m_positions.clear();
-    m_positions.shrink_to_fit(); // Only a request to shrink
-    m_colors.clear();
-    m_colors.shrink_to_fit(); // Only a request to shrink
-    m_normals.clear();
-    m_normals.shrink_to_fit(); // Only a request to shrink
+    std::vector<Vector3f>().swap(m_positions);
+    std::vector<Vector3f>().swap(m_colors);
+    std::vector<Vector3f>().swap(m_normals);
+    // m_positions.clear();
+    // m_positions.shrink_to_fit(); // Only a request to shrink
   }
 
   /// Get point positions (by const reference)
   ///
   /// \return Point positions
-  const std::vector<Vector3>& positions() const { return m_positions; }
+  const std::vector<Vector3f>& positions() const { return m_positions; }
 
   /// Get point colors (by const reference)
   ///
   /// \return Point colors
-  const std::vector<Vector3>& colors() const { return m_colors; }
+  const std::vector<Vector3f>& colors() const { return m_colors; }
 
   /// Get point normals (by const reference)
   ///
   /// \return Point normals
-  const std::vector<Vector3>& normals() const { return m_normals; }
+  const std::vector<Vector3f>& normals() const { return m_normals; }
+
+  const size_t computeSize() const
+  {
+    return m_positions.capacity() * sizeof(Vector3f) +
+           m_normals.capacity() * sizeof(Vector3f) +
+           m_colors.capacity() * sizeof(Vector3f);
+  }
 
 protected:
-  std::vector<Vector3> m_positions;
-  std::vector<Vector3> m_colors;
-  std::vector<Vector3> m_normals;
+  std::vector<Vector3f> m_positions;
+  std::vector<Vector3f> m_colors;
+  std::vector<Vector3f> m_normals;
 };
 
 /// \class PointCloudHeader
@@ -122,16 +127,16 @@ public:
 
     // Compute extent
     auto computeExtent =
-      [&](const std::vector<Vector3>& positions) -> BoundingBox<double> {
+      [&](const std::vector<Vector3f>& positions) -> BoundingBox<double> {
       if (positions.size() < 1) {
         return {};
       } else {
         // Set initial extent
-        BoundingBox<double> extent(positions[0], {});
+        BoundingBox<double> extent(positions[0].staticCast<double>(), {});
 
         // Iterate points and update extent
         for (size_t i = 1; i < positions.size(); i++) {
-          extent.include(positions[i]);
+          extent.include(positions[i].staticCast<double>());
         }
         return extent;
       }
@@ -234,6 +239,12 @@ public:
   /// \return Header
   /// \sa PointCloudHeader
   const PointCloudHeader& header() const { return m_header; }
+
+  /// Get point cloud data (by reference).
+  ///
+  /// \return Data
+  /// \sa PointCloudData
+  PointCloudData& data() { return m_data; }
 
   /// Get point cloud data (by const reference).
   ///

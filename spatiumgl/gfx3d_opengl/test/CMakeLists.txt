@@ -1,6 +1,6 @@
 project(gfx3d_opengl_test LANGUAGES CXX)
 
-add_executable(gfx3d_opengl_test test_PointCloudRenderer.cpp)
+add_executable(gfx3d_opengl_test test_Renderers.cpp)
 set_target_properties(gfx3d_opengl_test PROPERTIES
     LINKER_LANGUAGE CXX
     CXX_STANDARD 11

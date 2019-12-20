@@ -30,6 +30,12 @@ public:
     , m_vbo(0)
   {}
 
+  /// Copy constructor. (deleted)
+  OGLRenderer(const OGLRenderer& other) = delete;
+
+  /// Copy assignment operator. (deleted)
+  OGLRenderer& operator=(const OGLRenderer& other) = delete;
+
 protected:
   OGLShaderProgram m_shaderProgram;
   unsigned int m_vao; // Vertex Array Object (GLuint)

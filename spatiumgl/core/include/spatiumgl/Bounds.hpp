@@ -249,7 +249,19 @@ template<typename T>
 struct BoundingCube
   : public BoundsCenter<T, 3>
   , public BoundsRadii<T, 1>
-{};
+{
+  /// Default constructor.
+  BoundingCube() = default;
+
+  /// Constructor.
+  ///
+  /// \param[in] center Center position
+  /// \param[in] radius Radius for all three axes
+  BoundingCube(const Vector<T, 3>& center, const T radius)
+    : BoundsCenter<T, 3>(center)
+    , BoundsRadii<T, 1>(radius)
+  {}
+};
 
 /// \class BoundingBox
 /// \brief Minimum bounding box (3D)
@@ -258,10 +270,10 @@ struct BoundingBox
   : public BoundsCenter<T, 3>
   , public BoundsRadii<T, 3>
 {
-  /// Default onstructor
+  /// Default constructor.
   BoundingBox() = default;
 
-  /// Constructor
+  /// Constructor.
   ///
   /// \param[in] center Center position
   /// \param[in] radii Radii for each axis

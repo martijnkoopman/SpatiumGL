@@ -50,11 +50,11 @@ LasReadTask::run()
   BoundingBox<double> extent;
 
   // Allocate memory for points positions
-  std::vector<Vector3> pointPositions;
+  std::vector<Vector3f> pointPositions;
   pointPositions.reserve(pointCount);
 
   // Allocate memory for points colors
-  std::vector<Vector3> pointColors;
+  std::vector<Vector3f> pointColors;
   if (hasColors)
   {
     pointColors.reserve(pointCount);
@@ -69,11 +69,12 @@ LasReadTask::run()
   if (m_pimpl->readPoint()) {
     // Add to position vector
     const Vector3 pos = m_pimpl->lastReadPointPosition();
-    pointPositions.emplace_back(pos);
+    pointPositions.emplace_back(pos.staticCast<float>());
 
     // Add to color vector
     if (hasColors) {
-      pointColors.emplace_back(m_pimpl->lastReadPointColor());
+      pointColors.emplace_back(
+        m_pimpl->lastReadPointColor().staticCast<float>());
     }
 
     // Set initial extent
@@ -87,11 +88,12 @@ LasReadTask::run()
   while (m_pimpl->readPoint()) {
     // Add to position vector
     const Vector3 pos = m_pimpl->lastReadPointPosition();
-    pointPositions.emplace_back(pos);
+    pointPositions.emplace_back(pos.staticCast<float>());
 
     // Add to color vector
     if (hasColors) {
-      pointColors.emplace_back(m_pimpl->lastReadPointColor());
+      pointColors.emplace_back(
+        m_pimpl->lastReadPointColor().staticCast<float>());
     }
 
     // Second or later point
@@ -100,7 +102,7 @@ LasReadTask::run()
     pointIndex++;
 
     // Update progress percentage
-    if (onePercent > 0 && pointIndex > progressPercentage * onePercent) {
+    if (onePercent > 0 && pointIndex > (progressPercentage+1) * onePercent) {
       progressPercentage = pointIndex / onePercent;
       setProgressPercentage(progressPercentage);
     }

@@ -1,6 +1,6 @@
 project(core_test LANGUAGES CXX)
 
-add_executable(core_test test_Vector2.cpp test_Vector3.cpp test_Vector4.cpp test_Vector.cpp test_Matrix2.cpp test_Matrix3.cpp test_Matrix4.cpp test_Matrix.cpp test_Bounds.cpp test_AsyncTask.cpp)
+add_executable(core_test test_AsyncTask.cpp test_Bounds.cpp test_Matrix.cpp test_Matrix2.cpp test_Matrix3.cpp test_Matrix4.cpp test_System.cpp test_Vector.cpp test_Vector2.cpp test_Vector3.cpp test_Vector4.cpp)
 set_target_properties(core_test PROPERTIES
     LINKER_LANGUAGE CXX
     CXX_STANDARD 11

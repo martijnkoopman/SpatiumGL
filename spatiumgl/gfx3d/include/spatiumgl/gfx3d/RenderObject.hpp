@@ -28,13 +28,18 @@ namespace gfx3d {
 class SPATIUMGL_EXPORT RenderObject : public SceneObject
 {
 public:
-  /// Default constrcutor
-  RenderObject();
+  /// Constructor.
+  ///
+  /// \param[in] bounds Boundaries (optional)
+  RenderObject(const BoundingBox<double>& bounds = BoundingBox<double>())
+    : SceneObject()
+    , m_bounds(bounds)
+  {}
 
   /// Get boundaries of the object (axis aligned bounding box).
   ///
   /// \return Boundaries
-  BoundingBox<double> bounds() const;
+  BoundingBox<double> bounds() const { return m_bounds; }
 
 protected:
   BoundingBox<double> m_bounds;

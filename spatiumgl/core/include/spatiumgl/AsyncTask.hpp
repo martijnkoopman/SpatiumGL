@@ -102,6 +102,8 @@ public:
       m_thread = std::unique_ptr<std::thread>(
         new std::thread(&AsyncTask::run, this));
 
+	  m_running = true;
+
       return true;
     } else {
       return false;

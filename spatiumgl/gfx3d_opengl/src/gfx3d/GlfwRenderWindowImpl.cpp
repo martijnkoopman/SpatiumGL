@@ -243,9 +243,7 @@ GlfwRenderWindowImpl::draw()
 
   // Trigger all renderers
   for (Renderer* renderer : m_parent->m_renderers) {
-    renderer->render(m_parent->m_camera,
-                     static_cast<double>(m_parent->m_framebufferSize[0]) /
-                       static_cast<double>(m_parent->m_framebufferSize[1]));
+    renderer->render(m_parent->m_camera, m_parent->m_framebufferSize);
   }
 
   // Swap front and back buffer (front = displayed, back = rendered)

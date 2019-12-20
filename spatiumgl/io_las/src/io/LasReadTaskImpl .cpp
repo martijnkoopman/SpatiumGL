@@ -94,9 +94,10 @@ Vector3 LasReadTaskImpl::lastReadPointColor()
     return {};
   }
 
-  double r = static_cast<double>(m_reader->point.get_R()) / 255;
-  double g = static_cast<double>(m_reader->point.get_G()) / 255;
-  double b = static_cast<double>(m_reader->point.get_B()) / 255;
+  /// \todo divider by file header
+  double r = static_cast<double>(m_reader->point.get_R()) / 255.0 / 255;
+  double g = static_cast<double>(m_reader->point.get_G()) / 255.0 / 255;
+  double b = static_cast<double>(m_reader->point.get_B()) / 255.0 / 255;
 
   return { r, g, b };
 }

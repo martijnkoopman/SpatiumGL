@@ -1,6 +1,6 @@
 project(gfx3d_test LANGUAGES CXX)
 
-add_executable(gfx3d_test test_Transform.cpp test_PointCloud.cpp test_Camera.cpp test_Projection.cpp)
+add_executable(gfx3d_test test_Camera.cpp test_PointCloud.cpp test_Projection.cpp test_Transform.cpp)
 set_target_properties(gfx3d_test PROPERTIES
     LINKER_LANGUAGE CXX
     CXX_STANDARD 11

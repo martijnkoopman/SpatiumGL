@@ -15,30 +15,66 @@
 namespace spgl {
 namespace gfx3d {
 
-/// Constructor
-///
-/// \param[in] vetices. Vertices, coordinates.
-/// \param[in] triangles Triangles, triplets of vertex indices.
-Mesh::Mesh(const std::vector<Vector3>& vertices,
-           const std::vector<Vector<size_t, 3>>& triangles)
+Mesh::Mesh(const std::vector<Vector3>&& vertices,
+           const std::vector<Vector<size_t, 3>>&& triangles)
   : RenderObject()
-  , m_vertices(vertices)
-  , m_triangles(triangles)
+  , m_vertices(std::move(vertices))
+  , m_triangles(std::move(triangles))
 {
-  /// \todo std::move semantics for vectors
 }
 
-const std::vector<Vector3>&
-Mesh::vertices() const
+Mesh Mesh::quad(const double radius)
 {
-  return m_vertices;
+  const std::vector<Vector3> vertices = {
+    { -radius, -radius, 0 },
+    { radius, -radius, 0 },
+    { radius, radius, 0 },
+    { -radius, radius, 0 },
+  };
+
+  const std::vector<Vector<size_t, 3>> triangles = { { 0, 1, 2 }, { 2, 3, 0 } };
+
+  return { std::move(vertices), std::move(triangles) };
 }
 
-const std::vector<Vector<size_t, 3>>&
-Mesh::triangles() const
+Mesh
+Mesh::cube(const double radius)
 {
-  return m_triangles;
+  const std::vector<Vector3> vertices = { // front
+                                          { -radius, -radius, radius },
+                                          { radius, -radius, radius },
+                                          { radius, radius, radius },
+                                          { -radius, radius, radius },
+                                          // back
+                                          { -radius, -radius, -radius },
+                                          { radius, -radius, -radius },
+                                          { radius, radius, -radius },
+                                          { -radius, radius, -radius }
+  };
+
+  const std::vector<Vector<size_t, 3>> triangles = { // front
+                                                     { 0, 1, 2 },
+                                                     { 2, 3, 0 },
+                                                     // right
+                                                     { 1, 5, 6 },
+                                                     { 6, 2, 1 },
+                                                     // back
+                                                     { 7, 6, 5 },
+                                                     { 5, 4, 7 },
+                                                     // left
+                                                     { 4, 0, 3 },
+                                                     { 3, 7, 4 },
+                                                     // bottom
+                                                     { 4, 5, 1 },
+                                                     { 1, 0, 4 },
+                                                     // top
+                                                     { 3, 2, 6 },
+                                                     { 6, 7, 3 }
+  };
+
+  return { std::move(vertices), std::move(triangles) };
 }
+
 
 } // namespace gfx3d
 } // namespace spgl

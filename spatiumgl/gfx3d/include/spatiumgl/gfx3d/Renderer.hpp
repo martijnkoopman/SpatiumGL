@@ -48,8 +48,9 @@ public:
   /// This function should be called by the RenderWindow.
   ///
   /// \param[in] camera Camera
-  /// \param[in] aspect Aspect ratio (w/h)
-  virtual void render(Camera* camera, double aspect) = 0;
+  /// \param[in] width Image width
+  /// \param[in] height Image height
+  virtual void render(Camera* camera, const Vector2i &size) = 0;
 
 protected:
   const RenderObject* m_renderObject;

@@ -35,10 +35,15 @@ public:
     m_bounds = m_pointCloud.header().extent();
   }
 
-  /// Get point cloud (by const reference)
+  /// Get point cloud.
   ///
   /// \return Point cloud
   const PointCloud& pointCloud() const { return m_pointCloud; }
+
+  /// Get point cloud.
+  ///
+  /// \return Point cloud
+  PointCloud& pointCloud() { return m_pointCloud; }
 
 protected:
   PointCloud m_pointCloud;

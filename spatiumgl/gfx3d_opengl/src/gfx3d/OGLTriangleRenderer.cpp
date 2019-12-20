@@ -81,7 +81,7 @@ OGLTriangleRenderer::~OGLTriangleRenderer()
 }
 
 void
-OGLTriangleRenderer::render(spgl::gfx3d::Camera* camera, double aspect)
+OGLTriangleRenderer::render(spgl::gfx3d::Camera* camera, const Vector2i& size)
 {
   m_shaderProgram.use();
 
@@ -94,11 +94,11 @@ OGLTriangleRenderer::render(spgl::gfx3d::Camera* camera, double aspect)
   glUniformMatrix4fv(viewMatrixLoc, 1, GL_FALSE, viewMatrixF.data());
 
   // Set projection matrix
-  const spgl::Matrix4 projectionMatrix = camera->projectionMatrix(aspect);
+  const spgl::Matrix4 projectionMatrix =
+    camera->projectionMatrix(static_cast<double>(size.x()) / size.y());
   int projectionMatrixLoc =
     glGetUniformLocation(m_shaderProgram.shaderProgamId(), "projection");
-  const spgl::Matrix4f projectionMatrixF =
-    projectionMatrix.staticCast<float>();
+  const spgl::Matrix4f projectionMatrixF = projectionMatrix.staticCast<float>();
   glUniformMatrix4fv(
     projectionMatrixLoc, 1, GL_FALSE, projectionMatrixF.data());
 

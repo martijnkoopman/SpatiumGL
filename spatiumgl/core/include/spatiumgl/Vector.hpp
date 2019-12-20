@@ -165,6 +165,9 @@ using Vector2i = Vector<int, 2>;
 /// Vector of 2 double precision coordinates (x,y)
 using Vector2 = Vector<double, 2>;
 
+/// Vector of 2 single precision coordinates (x,y)
+using Vector2f = Vector<float, 2>;
+
 /// Vector of 3 double precision coordinates (x,y,z)
 using Vector3 = Vector<double, 3>;
 

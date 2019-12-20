@@ -40,10 +40,14 @@ public:
 
   /// Get the mesh.
   ///
-  /// \returnMesh
+  /// \return Mesh
   const Mesh* mesh() const;
 
-  void render(Camera* camera, double aspect) override;
+  /// Render the mesh.
+  ///
+  /// \param[in] camera Camera
+  /// \param[in] size Render image size
+  void render(Camera* camera, const Vector2i& size) override;
 
 protected:
   unsigned int m_ebo; // Element Buffer Object (GLuint)

@@ -20,13 +20,16 @@ namespace gfx3d {
 OGLShaderProgram::OGLShaderProgram()
   : m_vertexShaderId(0)
   , m_fragmentShaderId(0)
+  , m_geometryShaderId(0)
   , m_shaderProgramId(0)
 {}
 
 OGLShaderProgram::OGLShaderProgram(const std::string& vertexShaderSource,
-                                   const std::string& fragmentShaderSource)
+                                   const std::string& fragmentShaderSource,
+                                   const std::string& geometryShaderSource)
 {
-  createShaderProgram(vertexShaderSource, fragmentShaderSource);
+  createShaderProgram(
+    vertexShaderSource, fragmentShaderSource, geometryShaderSource);
 }
 
 OGLShaderProgram::~OGLShaderProgram()
@@ -36,11 +39,13 @@ OGLShaderProgram::~OGLShaderProgram()
 
 void
 OGLShaderProgram::setShaderSources(const std::string& vertexShaderSource,
-                                   const std::string& fragmentShaderSource)
+                                   const std::string& fragmentShaderSource,
+                                   const std::string& geometryShaderSource)
 {
   free();
 
-  createShaderProgram(vertexShaderSource, fragmentShaderSource);
+  createShaderProgram(
+    vertexShaderSource, fragmentShaderSource, geometryShaderSource);
 }
 
 bool
@@ -56,6 +61,16 @@ OGLShaderProgram::validate(std::string& errorMessage)
     glGetShaderInfoLog(m_vertexShaderId, 512, nullptr, infoLog);
     errorMessage = infoLog;
     return false;
+  }
+
+  // Validate geometry shader
+  if (m_geometryShaderId != 0) {
+    glGetShaderiv(m_geometryShaderId, GL_COMPILE_STATUS, &success);
+    if (success == 0) {
+      glGetShaderInfoLog(m_geometryShaderId, 512, nullptr, infoLog);
+      errorMessage = infoLog;
+      return false;
+    }
   }
 
   // Validate fragment shader
@@ -91,6 +106,7 @@ OGLShaderProgram::free()
     m_shaderProgramId = 0;
     m_vertexShaderId = 0;
     m_fragmentShaderId = 0;
+    m_geometryShaderId = 0;
   }
 }
 
@@ -98,7 +114,8 @@ OGLShaderProgram::free()
 
 void
 OGLShaderProgram::createShaderProgram(const std::string& vertexShaderSource,
-                                      const std::string& fragmentShaderSource)
+                                      const std::string& fragmentShaderSource,
+                                      const std::string& geometryShaderSource)
 {
   // Create vertex shader
   m_vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
@@ -112,14 +129,26 @@ OGLShaderProgram::createShaderProgram(const std::string& vertexShaderSource,
   glShaderSource(m_fragmentShaderId, 1, &fragmentShaderSourceStr, nullptr);
   glCompileShader(m_fragmentShaderId);
 
+  // Create geometry shader
+  if (!geometryShaderSource.empty()) {
+    m_geometryShaderId = glCreateShader(GL_GEOMETRY_SHADER);
+    const char* geometryShaderSourceStr = geometryShaderSource.c_str();
+    glShaderSource(m_geometryShaderId, 1, &geometryShaderSourceStr, nullptr);
+    glCompileShader(m_geometryShaderId);
+  }
+
   // Create shader program
   m_shaderProgramId = glCreateProgram();
   glAttachShader(m_shaderProgramId, m_vertexShaderId);
+  if (m_geometryShaderId != 0) {
+    glAttachShader(m_shaderProgramId, m_geometryShaderId);
+  }
   glAttachShader(m_shaderProgramId, m_fragmentShaderId);
   glLinkProgram(m_shaderProgramId);
 
   // Delete unattached shaders
   glDeleteShader(m_vertexShaderId);
+  glDeleteShader(m_geometryShaderId);
   glDeleteShader(m_fragmentShaderId);
 }
 

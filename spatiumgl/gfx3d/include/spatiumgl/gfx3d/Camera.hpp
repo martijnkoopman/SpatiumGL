@@ -75,6 +75,11 @@ public:
   /// \return Projection matrix
   virtual Matrix4 projectionMatrix(double aspect) const = 0;
 
+  //virtual Vector3 worldToViewportPoint(const Vector3& point,
+  //                                    double aspect) const = 0;
+  //virtual Vector3 worldToScreenPoint(const Vector3& point,
+  //                                   const Vector2i& size) const = 0;
+
 protected:
   double m_near;
   double m_far;

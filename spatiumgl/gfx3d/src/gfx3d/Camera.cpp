@@ -106,7 +106,7 @@ Camera::setNearAndFarFromBounds(const BoundingBox<double>& bounds)
 {
   // Compute radius from bounds
   const Vector3 radii = bounds.radii();
-  const double radius = std::max({ radii[0], radii[1], radii[2] });
+  const double radius = std::max({ radii[0], radii[1], radii[2] }) * sqrt(3);
 
   // Check camera in bounds?
   const Vector3 cameraTranslation = m_transform.translation();

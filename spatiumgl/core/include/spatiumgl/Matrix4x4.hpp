@@ -407,6 +407,36 @@ struct SPATIUMGL_EXPORT Matrix<T, 4, 4> : public MatrixBase<T, 4, 4>
     return result;
   }
 
+  /// Create viewport transform matrix.
+  ///
+  /// Transform from normalized device coordinates (NDC) to screen coordinates.
+  /// NDC are in range [-1, 1]. Bottom left corner is (-1, -1) and top right 
+  /// corner is (1,1). 
+  /// Screen coordinates are in range [0, width] and [0, height]. Bottom left 
+  /// corner is (0,0) and top right corner is (idth, heigth)
+  ///
+  /// Note: this is a 2D transformation. Z=0.
+  ///
+  /// \param[in] size Screen size
+  /// \return Vieport transform matrix
+  template<typename T2>
+  static Matrix<T, 4, 4> viewport(const Vector<T2, 2>& size)
+  {
+    Matrix<T, 4, 4> result;
+
+    const T w = static_cast<T>(size[0]);
+    const T h = static_cast<T>(size[1]);
+
+    result[0][0] = w / 2;
+    result[1][1] = h / 2;
+    result[2][2] = 1;
+    result[3][0] = w / 2; // (w-1)
+    result[3][1] = h / 2; // (h-1)
+    result[3][3] = 1;
+
+    return result;
+  }
+
   // Construct affine transformation Matrix4x4
 
   /// Construct translation matrix.

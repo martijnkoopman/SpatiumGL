@@ -6,7 +6,7 @@
 TEST(LasIO, writeReadPositions)
 {
   // Construct points vector
-  std::vector<spgl::Vector3> positions;
+  std::vector<spgl::Vector3f> positions;
   positions.emplace_back(0, 0, 0);
   positions.emplace_back(100, 0, 0);
   positions.emplace_back(100, 100, 0);
@@ -63,13 +63,13 @@ TEST(LasIO, writeReadPositions)
 TEST(LasIO, writeReadColorsCompressed)
 {
   // Construct point cloud
-  std::vector<spgl::Vector3> positions;
+  std::vector<spgl::Vector3f> positions;
   positions.emplace_back(0, 0, 0);
   positions.emplace_back(100, 0, 0);
   positions.emplace_back(100, 100, 0);
   positions.emplace_back(0, 100, 0);
 
-  std::vector<spgl::Vector3> colors;
+  std::vector<spgl::Vector3f> colors;
   colors.emplace_back(1, 0, 0);
   colors.emplace_back(0, 1, 0);
   colors.emplace_back(0, 0, 1);

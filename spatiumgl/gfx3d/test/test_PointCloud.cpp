@@ -5,11 +5,11 @@
 
 TEST(PointCloud, constructor)
 {
-  const spgl::Vector3 point1(1, 2, 3);
-  const spgl::Vector3 point2(4, 5, 6);
-  const spgl::Vector3 point3(7, 8, 9);
+  const spgl::Vector3f point1(1, 2, 3);
+  const spgl::Vector3f point2(4, 5, 6);
+  const spgl::Vector3f point3(7, 8, 9);
 
-  std::vector<spgl::Vector3> positions;
+  std::vector<spgl::Vector3f> positions;
   positions.push_back(point1);
   positions.push_back(point2);
   positions.push_back(point3);
@@ -51,7 +51,7 @@ TEST(PointCloud, constructor)
 TEST(PointCloud, copy)
 {
   // Construct point cloud
-  std::vector<spgl::Vector3> positions;
+  std::vector<spgl::Vector3f> positions;
   positions.emplace_back(1, 2, 3);
   positions.emplace_back(4, 5, 6);
   positions.emplace_back(7, 8, 9);
@@ -74,7 +74,7 @@ TEST(PointCloud, copy)
 TEST(PointCloud, moveConstructor)
 {
   // Construct point cloud
-  std::vector<spgl::Vector3> positions;
+  std::vector<spgl::Vector3f> positions;
   positions.emplace_back(1, 2, 3);
   positions.emplace_back(4, 5, 6);
   positions.emplace_back(7, 8, 9);
@@ -97,7 +97,7 @@ TEST(PointCloud, moveConstructor)
 TEST(PointCloud, moveAssignment)
 {
   // Construct point cloud
-  std::vector<spgl::Vector3> positions;
+  std::vector<spgl::Vector3f> positions;
   positions.emplace_back(1, 2, 3);
   positions.emplace_back(4, 5, 6);
   positions.emplace_back(7, 8, 9);
