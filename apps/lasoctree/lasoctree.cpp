@@ -8,13 +8,13 @@
 #include <algorithm> // std::max
 #include <array>     // std::array
 #include <queue>     // std::queue
-#include <tuple>	 // std::tuple
+#include <tuple>	   // std::tuple
 
 int
 main(int argc, char* argv[])
 {
   // Parse command-line arguments
-  CLI::App app;
+  CLI::App app{"Create spatial index for viewing a massive point cloud in 3D."};
 
   std::string fileIn;
   app.add_option("-i,--input", fileIn, "Input LAS/lAZ file")
@@ -31,7 +31,7 @@ main(int argc, char* argv[])
     .add_option("-n,--num", targetPointCount, "Target number of points per node")
     ->required();
 
-  CLI11_PARSE(app, argc, argv);
+  CLI11_PARSE(app, argc, argv)
 
   // Open input file
   LASreadOpener lasReadOpener;
@@ -72,15 +72,14 @@ main(int argc, char* argv[])
   if (!octant.isOpen()) {
     return 1;
   }
-  std::array<long long, 8> childPointCounts =
-    octant.process(targetPointCount, extent, spacing);
+  std::array<long long, 8> childPointCounts = octant.process(extent, spacing);
 
   // Push first children on queue
   std::queue<std::tuple<std::string,Extent,double>> queue;
-  for (int i = 0; i < 8; i++) {
+  for (size_t i = 0; i < 8; i++) {
     if (childPointCounts[i] > targetPointCount) {
-      queue.push({ LasOctant::computeFilePath(octant.fileOut(), i),
-                   LasOctant::computeChildExtent(extent, i), 
+      queue.push({ LasOctant::computeFilePath(octant.fileOut(), static_cast<unsigned char>(i)),
+                   LasOctant::computeChildExtent(extent, static_cast<unsigned char>(i)),
 				   spacing / 2});
 	}
   }
@@ -102,14 +101,13 @@ main(int argc, char* argv[])
       std::cerr << "Error opening file " << fileName << std::endl;
       continue;
     }
-    std::array<long long, 8> childPointCounts =
-      octant.process(targetPointCount, extent, spacing);
+    std::array<long long, 8> childPointCounts = octant.process(extent, spacing);
 
 	// Push children on queue
-    for (int i = 0; i < 8; i++) {
+    for (size_t i = 0; i < 8; i++) {
       if (childPointCounts[i] > targetPointCount) {
-        queue.push({ LasOctant::computeFilePath(octant.fileOut(), i),
-                     LasOctant::computeChildExtent(extent, i),
+        queue.push({ LasOctant::computeFilePath(octant.fileOut(), static_cast<unsigned char>(i)),
+                     LasOctant::computeChildExtent(extent, static_cast<unsigned char>(i)),
 					 spacing / 2});
       }
     }

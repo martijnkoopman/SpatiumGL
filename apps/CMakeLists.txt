@@ -4,6 +4,12 @@ if(SPATIUMGL_APP_LASINFO)
     add_subdirectory(lasinfo)
 endif(SPATIUMGL_APP_LASINFO)
 
+# LAS/LAZ point cloud grid filter
+option(SPATIUMGL_APP_LASGRID "Build app lasgrid." OFF)
+if(SPATIUMGL_APP_LASGRID)
+    add_subdirectory(lasgrid)
+endif(SPATIUMGL_APP_LASGRID)
+
 # LAS/LAZ point cloud viewer app
 option(SPATIUMGL_APP_LASVIEWER "Build app lasviewer." OFF)
 if(SPATIUMGL_APP_LASVIEWER)

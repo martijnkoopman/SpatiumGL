@@ -18,6 +18,7 @@
 
 #include <fstream> // std::ofstream, std::ifstream
 #include <queue>   // std::queue
+#include <cstring> // std::memcmp
 
 namespace spgl {
 namespace idx {
@@ -107,7 +108,7 @@ public:
     // Read signature
     char signature[17];
     ifile.read(signature, 17);
-    if (memcmp(signature, "SPATIUMGL_OCTREE\n", 17) != 0) {
+    if (std::memcmp(signature, "SPATIUMGL_OCTREE\n", 17) != 0) {
       return false;
     }
 

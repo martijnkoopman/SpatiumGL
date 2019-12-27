@@ -14,11 +14,15 @@
 #define SPATIUMGL_IOLAS_LASOCTANT_H
 
 #include "lasreader.hpp" // LASlib
-#include "laswriter.hpp"
+#include "laswriter.hpp" // LASlib
 
 #include <array>         // std::array
+#include <cmath>         // std::pow
+#include <iostream>      // std::cout
+#include <memory>        // std::unique_ptr
 #include <string>        // std::string
 #include <unordered_map> // std::unordered_map
+#include <cstring>       // std::memset, std::memcpy
 
 using Point = std::array<double, 3>;
 using Extent = std::array<Point, 2>;
@@ -51,10 +55,15 @@ public:
     }
   }
 
+  /// Destructor
   ~LasOctant() { close(); }
 
-  std::array<long long, 8> process(long long maxPointCount,
-                                   const Extent& extent,
+  /// Process octant.
+  ///
+  /// \param[in] extent Octant extent
+  /// \param[in] spacing Octant grid cell size (spacing)
+  /// \return Written point counts for each child (8)
+  std::array<long long, 8> process(const Extent& extent,
                                    const double spacing)
   {
     if (!isOpen()) {
@@ -67,7 +76,6 @@ public:
               << "," << extent[1][2] << ")" << std::endl;
     std::cout << " - Spacing = " << spacing << std::endl;
 
-    //const double spacing = (extent[1][0] - extent[0][0]) / cbrt(maxPointCount);
     std::unordered_map<std::string, LASpoint> grid;
 
     // Read points
@@ -110,7 +118,7 @@ public:
 
         // Compute distance to grid cell center
         double distanceGridPoint =
-          sqrt(pow(gridPointPosition[0] - cellCenter[0], 2) +
+          sqrt(std::pow(gridPointPosition[0] - cellCenter[0], 2) +
                pow(gridPointPosition[1] - cellCenter[1], 2) +
                pow(gridPointPosition[2] - cellCenter[2], 2));
 
@@ -126,28 +134,34 @@ public:
           // Replace point in grid cell
           grid[gridIndexKey] = m_lasReader->point; // copy assignment
         } else {
-		  // Write new point to file
+          // Write new point to file
           writePointToFile(LasOctant::computeChildIndex(position, extent),
-                       m_lasReader->point);
-		}
+                           m_lasReader->point);
+        }
       }
     }
 
-	// Write grid points to file
+    // Write grid points to file
     LASwriteOpener lasWriteOpener;
     lasWriteOpener.set_file_name(m_fileOut.c_str());
-    std::unique_ptr<LASwriter> lasWriter(lasWriteOpener.open(&m_lasReader->header));
+    std::memset(m_lasReader->header.system_identifier, '\0', 32);
+    std::memcpy(m_lasReader->header.system_identifier, "Desktop", 8);
+    std::memset(m_lasReader->header.generating_software, '\0', 32);
+    std::memcpy(m_lasReader->header.generating_software, "SpatiumGL", 10);
+    std::unique_ptr<LASwriter> lasWriter(
+      lasWriteOpener.open(&m_lasReader->header));
     for (const auto& gridCell : grid) {
       lasWriter->write_point(&gridCell.second);
       lasWriter->update_inventory(&gridCell.second);
     }
     lasWriter->update_header(&m_lasReader->header, TRUE);
-	lasWriter->close();
-    std::cout << " - Point count = " << std::to_string(grid.size()) << std::endl;
+    lasWriter->close();
+    std::cout << " - Point count = " << std::to_string(grid.size())
+              << std::endl;
 
     // Close writers
     std::array<long long, 8> writtenPointCounts;
-    for (int i = 0; i < 8; i++) {
+    for (size_t i = 0; i < 8; i++) {
       std::unique_ptr<LASwriter>& lasWriter = m_lasWriters[i];
       if (lasWriter == nullptr) {
         writtenPointCounts[i] = 0;
@@ -241,8 +255,6 @@ public:
         }
       }
     }
-
-    return 0;
   }
 
   static Extent computeChildExtent(const Extent& extent,
@@ -289,14 +301,11 @@ public:
     }
   }
 
-  /// Determine cell index (i,j,k) in grid by point position.
+  /// Compute file path.
   ///
-  /// \param[in] position Point position
-  /// \return Cell index
-  static std::array<long long, 3> computeCellIndex(
-    const std::array<double, 3>& position)
-  {}
-
+  /// \param[in] file File path of octant
+  /// \param[in] childIndex Child octant index (0-7)
+  /// \return File path
   static std::string computeFilePath(std::string file, unsigned char childIndex)
   {
     file.pop_back(); // -S
@@ -308,7 +317,6 @@ public:
   }
 
 protected:
-  // spgl::idx::NTreeNode<void, 8>* m_node;
   std::string m_fileIn;
   std::string m_fileOut;
   std::unique_ptr<LASreader> m_lasReader;

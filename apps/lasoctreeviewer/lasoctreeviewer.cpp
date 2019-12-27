@@ -6,11 +6,21 @@
 #include <spatiumgl/gfx3d/PivotInteractor.hpp>
 #include <spatiumgl/io/LasReadTask.hpp>
 
+#include "CLI11.hpp"
+
 #include <iostream>
 
 int
 main(int argc, char* argv[])
 {
+  // Parse command-line arguments
+  CLI::App app{ "View massive LAS/LAZ point cloud in 3D utilizing a spatial index." };
+  std::string dirIn;
+  app.add_option("-i,--input", dirIn, "Input directory with spatial index (*.idx) and point cloud (LAS/LAZ) files.")
+    ->required()
+    ->check(CLI::ExistingDirectory);
+  CLI11_PARSE(app, argc, argv)
+
   // Create and initialize render window
   spgl::gfx3d::GlfwRenderWindow renderWindow(true);
   if (!renderWindow.init()) {

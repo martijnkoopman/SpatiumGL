@@ -7,29 +7,30 @@
 #include <spatiumgl/gfx3d/PointCloudObject.hpp>
 #include <spatiumgl/io/LasReadTask.hpp>
 
+#include "CLI11.hpp"
+
 #include <iostream>
 
 int
 main(int argc, char* argv[])
 {
-  // Get path from command line arguments
-  std::string path;
-  if (argc != 2) {
-    std::cerr << "usage: lasviewer <file.las/laz>" << std::endl;
-    return 1;
-  } else {
-    path = argv[1];
-  }
+  // Parse command-line arguments
+  CLI::App app{ "View LAS/LAZ point cloud in 3D." };
+  std::string fileIn;
+  app.add_option("-i,--input", fileIn, "Input LAS/lAZ file")
+    ->required()
+    ->check(CLI::ExistingFile);
+  CLI11_PARSE(app, argc, argv)
 
   // Construct point cloud reader
-  spgl::io::LasReadTask readTask(path, true);
+  spgl::io::LasReadTask readTask(fileIn, true);
   if (!readTask.isReady()) {
-    std::cerr << "Invalid input file: " << path << std::endl;
+    std::cerr << "Invalid input file: " << fileIn << std::endl;
     return 1;
   }
 
   if (!readTask.open()) {
-    std::cerr << "Unable to open file: " << path << std::endl;
+    std::cerr << "Unable to open file: " << fileIn << std::endl;
     return 1;
   }
 
@@ -99,7 +100,7 @@ main(int argc, char* argv[])
   spgl::gfx3d::PointCloudObject pointCloudObject(std::move(*pointCloud)); // move!
 
   spgl::gfx3d::PointCloudRenderOptions renderOptions;
-  renderOptions.pointSize = 0.20;
+  renderOptions.pointSize = 0.20f;
   renderOptions.pointScaleWorld = true;
 
   // Create point cloud renderer

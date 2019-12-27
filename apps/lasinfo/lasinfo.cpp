@@ -4,98 +4,319 @@
 
 #include <unordered_map> // std::unordered_map
 
-std::string
-classificationToString(unsigned char classification,
-                       unsigned char point_data_format)
+struct LasPoint
 {
-  if (point_data_format < 6) {
-    switch (classification) {
-      case 0:
-        return "Never classified";
-      case 1:
-        return "Unclassified";
-      case 2:
-        return "Ground";
-      case 3:
-        return "Low Vegetation";
-      case 4:
-        return "Medium Vegetation";
-      case 5:
-        return "High Vegetation";
-      case 6:
-        return "Building";
-      case 7:
-        return "Low Point (noise)";
-      case 8:
-        return "Model Key-point (mass point)";
-      case 9:
-        return "Water";
-      case 12:
-        return "Overlap Points";
-      case 10:
-      case 11:
-      default:
-        return "Reserved";
-    }
-  } else {
-    switch (classification) {
-      case 0:
-        return "Never classified";
-      case 1:
-        return "Unclassified";
-      case 2:
-        return "Ground";
-      case 3:
-        return "Low Vegetation";
-      case 4:
-        return "Medium Vegetation";
-      case 5:
-        return "High Vegetation";
-      case 6:
-        return "Building";
-      case 7:
-        return "Low Point (noise)";
-      case 8:
-        return "Model Key-point (mass point)";
-      case 9:
-        return "Water";
-      case 10:
-        return "Rail";
-      case 11:
-        return "Road Surface";
-      case 12:
-        return "Reserved";
-      case 13:
-        return "Wire - Guard (Shield)";
-      case 14:
-        return "Wire - Conductor (Phase)";
-      case 15:
-        return "Transmission Tower";
-      case 16:
-        return "Wire-structure Connector";
-      case 17:
-        return "Bridge Deck";
-      case 18:
-        return "High Noise";
-    }
-    if (classification > 17 && classification < 64) {
-      return "Reserved";
+  double x;
+  double y;
+  double z;
+  unsigned short intensity;
+  // unsigned char return_number;
+  unsigned char number_of_returns;
+  float scan_angle;
+  unsigned char user_data;
+  unsigned short point_source_id;
+  // unsigned char classification;
+  double gps_time;
+  unsigned short red;
+  unsigned short green;
+  unsigned short blue;
+  unsigned short nir;
+};
+
+class LasPointStatistics
+{
+public:
+  LasPointStatistics(const LASheader& lasHeader)
+    : m_firstPoint(true)
+    , m_pointDataFormat(lasHeader.point_data_format)
+    , m_classifications()
+    , m_return_numbers()
+  {}
+
+  void update(const LASpoint& point)
+  {
+    if (m_firstPoint) {
+      m_firstPoint = false;
+      // First point
+
+      m_min.x = m_max.x = point.get_x();
+      m_min.y = m_max.y = point.get_y();
+      m_min.z = m_max.z = point.get_z();
+      m_min.intensity = m_max.intensity = point.get_intensity();
+      m_min.number_of_returns = m_max.number_of_returns =
+        point.get_number_of_returns();
+      m_min.scan_angle = m_max.scan_angle = point.get_scan_angle();
+      m_min.user_data = m_max.user_data = point.get_user_data();
+      m_min.point_source_id = m_max.point_source_id =
+        point.get_point_source_ID();
+
+      // Update tables
+      unsigned char return_number = point.get_return_number();
+      if (m_return_numbers.find(return_number) == m_return_numbers.end()) {
+        m_return_numbers[return_number] = 1;
+      } else {
+        m_return_numbers[return_number] = m_return_numbers[return_number] + 1;
+      }
+
+      unsigned char classification = point.get_classification();
+      if (m_classifications.find(classification) == m_classifications.end()) {
+        m_classifications[classification] = 1;
+      } else {
+        m_classifications[classification] =
+          m_classifications[classification] + 1;
+      }
+
+      if (point.have_gps_time) {
+        // Point data format = 1,3,4,6,7,8,9
+        m_min.gps_time = m_max.gps_time = point.get_gps_time();
+      }
+      if (point.have_rgb) {
+        // Point data format = 2,3,5,7,8,10
+        m_min.red = m_max.red = point.get_R();
+        m_min.green = m_max.green = point.get_G();
+        m_min.blue = m_max.blue = point.get_B();
+      }
+      if (point.have_nir) {
+        // Point data format = 8
+        m_min.nir = m_max.nir = point.get_NIR();
+      }
     } else {
-      return "User defined";
-	}
+      // 2nd or Nth point
+      // Update min and max
+      m_min.x = std::min(m_min.x, point.get_x());
+      m_max.x = std::max(m_max.x, point.get_x());
+      m_min.y = std::min(m_min.y, point.get_y());
+      m_max.y = std::max(m_max.y, point.get_y());
+      m_min.z = std::min(m_min.z, point.get_z());
+      m_max.z = std::max(m_max.z, point.get_z());
+      m_min.intensity = std::min(m_min.intensity, point.get_intensity());
+      m_max.intensity = std::max(m_max.intensity, point.get_intensity());
+      m_min.number_of_returns =
+        std::min(m_min.number_of_returns, point.get_number_of_returns());
+      m_max.number_of_returns =
+        std::max(m_max.number_of_returns, point.get_number_of_returns());
+      m_min.scan_angle = std::min(m_min.scan_angle, point.get_scan_angle());
+      m_max.scan_angle = std::max(m_max.scan_angle, point.get_scan_angle());
+      m_min.user_data = std::min(m_min.user_data, point.get_user_data());
+      m_max.user_data = std::max(m_max.user_data, point.get_user_data());
+      m_min.point_source_id =
+        std::min(m_min.point_source_id, point.get_point_source_ID());
+      m_max.point_source_id =
+        std::max(m_max.point_source_id, point.get_point_source_ID());
+
+      if (point.have_gps_time) {
+        // Point data format = 1,3,4,6,7,8,9
+        m_min.gps_time = std::min(m_min.gps_time, point.get_gps_time());
+        m_max.gps_time = std::max(m_max.gps_time, point.get_gps_time());
+      }
+      if (point.have_rgb) {
+        // Point data format = 2,3,5,7,8,10
+        m_min.red = std::min(m_min.red, point.get_R());
+        m_max.red = std::max(m_max.red, point.get_R());
+        m_min.green = std::min(m_min.green, point.get_G());
+        m_max.green = std::max(m_max.green, point.get_G());
+        m_min.blue = std::min(m_min.blue, point.get_B());
+        m_max.blue = std::max(m_max.blue, point.get_B());
+      }
+      if (point.have_nir) {
+        // Point data format = 8
+        m_min.nir = std::min(m_min.nir, point.get_NIR());
+        m_max.nir = std::max(m_max.nir, point.get_NIR());
+      }
+
+      // Update tables
+      unsigned char return_number = point.get_return_number();
+      if (m_return_numbers.find(return_number) == m_return_numbers.end()) {
+        m_return_numbers[return_number] = 1;
+      } else {
+        m_return_numbers[return_number] = m_return_numbers[return_number] + 1;
+      }
+
+      unsigned char classification = point.get_classification();
+      if (m_classifications.find(classification) == m_classifications.end()) {
+        m_classifications[classification] = 1;
+      } else {
+        m_classifications[classification] =
+          m_classifications[classification] + 1;
+      }
+    }
   }
-}
+
+  void print()
+  {
+    std::cout << "# Point Statistics: " << std::endl;
+    std::cout << "X: " << std::to_string(m_min.x) << " - "
+              << std::to_string(m_max.x) << std::endl;
+    std::cout << "Y: " << std::to_string(m_min.y) << " - "
+              << std::to_string(m_max.y) << std::endl;
+    std::cout << "Z: " << std::to_string(m_min.z) << " - "
+              << std::to_string(m_max.z) << std::endl;
+
+    if (m_min.intensity != m_max.intensity) {
+      std::cout << "Intensity: " << std::to_string(m_min.intensity) << " - "
+                << std::to_string(m_max.intensity) << std::endl;
+    }
+
+    if (m_min.number_of_returns != m_max.number_of_returns) {
+      std::cout << "Number of Returns: "
+                << std::to_string(m_min.number_of_returns) << " - "
+                << std::to_string(m_max.number_of_returns) << std::endl;
+    }
+
+    if (m_return_numbers.size() > 1) {
+      std::cout << "Return Numbers: " << std::endl;
+      for (const auto& pair : m_return_numbers) {
+        std::cout << "> " << std::to_string(pair.first) << ": "
+                  << std::to_string(pair.second) << std::endl;
+      }
+    }
+
+    if (m_min.scan_angle != m_max.scan_angle) {
+      std::cout << "Scan Angle: " << std::to_string(m_min.scan_angle) << " - "
+                << std::to_string(m_max.scan_angle) << std::endl;
+    }
+
+    if (m_min.user_data != m_max.user_data) {
+      std::cout << "User Data: " << std::to_string(m_min.user_data) << " - "
+                << std::to_string(m_max.user_data) << std::endl;
+    }
+
+    /// \todo Hash map
+    if (m_min.point_source_id != m_max.point_source_id) {
+      std::cout << "Point Source ID: " << std::to_string(m_min.point_source_id)
+                << " - " << std::to_string(m_max.point_source_id) << std::endl;
+    }
+
+    if (m_classifications.size() > 0) {
+      std::cout << "Classifications: " << std::endl;
+      for (const auto& pair : m_classifications) {
+        std::cout << "> " << std::to_string(pair.first) << " ("
+                  << classificationToString(pair.first, m_pointDataFormat)
+                  << "): " << std::to_string(pair.second) << std::endl;
+      }
+    }
+
+    if (m_min.gps_time != m_max.gps_time) {
+      std::cout << "GPS Time: " << std::to_string(m_min.gps_time) << " - "
+                << std::to_string(m_max.gps_time) << std::endl;
+    }
+
+    if (m_min.red != m_max.red) {
+      std::cout << "Red: " << std::to_string(m_min.red) << " - "
+                << std::to_string(m_max.red) << std::endl;
+      std::cout << "Green: " << std::to_string(m_min.green) << " - "
+                << std::to_string(m_max.green) << std::endl;
+      std::cout << "Blue: " << std::to_string(m_min.blue) << " - "
+                << std::to_string(m_max.blue) << std::endl;
+    }
+
+    if (m_min.nir != m_max.nir) {
+      std::cout << "NIR: " << std::to_string(m_min.nir) << " - "
+                << std::to_string(m_max.nir) << std::endl;
+    }
+  }
+
+  static std::string
+  classificationToString(unsigned char classification,
+                         unsigned char point_data_format)
+  {
+    if (point_data_format < 6) {
+      switch (classification) {
+        case 0:
+          return "Never classified";
+        case 1:
+          return "Unclassified";
+        case 2:
+          return "Ground";
+        case 3:
+          return "Low Vegetation";
+        case 4:
+          return "Medium Vegetation";
+        case 5:
+          return "High Vegetation";
+        case 6:
+          return "Building";
+        case 7:
+          return "Low Point (noise)";
+        case 8:
+          return "Model Key-point (mass point)";
+        case 9:
+          return "Water";
+        case 12:
+          return "Overlap Points";
+        case 10:
+        case 11:
+        default:
+          return "Reserved";
+      }
+    } else {
+      switch (classification) {
+        case 0:
+          return "Never classified";
+        case 1:
+          return "Unclassified";
+        case 2:
+          return "Ground";
+        case 3:
+          return "Low Vegetation";
+        case 4:
+          return "Medium Vegetation";
+        case 5:
+          return "High Vegetation";
+        case 6:
+          return "Building";
+        case 7:
+          return "Low Point (noise)";
+        case 8:
+          return "Model Key-point (mass point)";
+        case 9:
+          return "Water";
+        case 10:
+          return "Rail";
+        case 11:
+          return "Road Surface";
+        case 12:
+          return "Reserved";
+        case 13:
+          return "Wire - Guard (Shield)";
+        case 14:
+          return "Wire - Conductor (Phase)";
+        case 15:
+          return "Transmission Tower";
+        case 16:
+          return "Wire-structure Connector";
+        case 17:
+          return "Bridge Deck";
+        case 18:
+          return "High Noise";
+      }
+      if (classification > 17 && classification < 64) {
+        return "Reserved";
+      } else {
+        return "User defined";
+      }
+    }
+  }
+
+private:
+  bool m_firstPoint;
+  unsigned char m_pointDataFormat;
+  LasPoint m_min;
+  LasPoint m_max;
+  std::unordered_map<unsigned char, long> m_classifications;
+  std::unordered_map<unsigned char, long> m_return_numbers;
+};
 
 int
 main(int argc, char* argv[])
 {
   // Parse command-line arguments
-  CLI::App app;
+  CLI::App app{ "View LAS/LAZ file info." };
   std::string fileIn;
   app.add_option("-i,--input", fileIn, "Input LAS/lAZ file")
     ->required()
     ->check(CLI::ExistingFile);
-  CLI11_PARSE(app, argc, argv);
+  CLI11_PARSE(app, argc, argv)
 
   // Open input file
   LASreadOpener lasReadOpener;
@@ -186,218 +407,41 @@ main(int argc, char* argv[])
   }
 
   std::cout << std::endl
-            << "Computing point statistics. This may take a while..."
-            << std::endl
+            << "Computing point statistics. This may take a while."
             << std::endl;
 
-  struct LasPoint
-  {
-    double x;
-    double y;
-    double z;
-    unsigned short intensity;
-    // unsigned char return_number;
-    unsigned char number_of_returns;
-    float scan_angle;
-    unsigned char user_data;
-    unsigned short point_source_id;
-    // unsigned char classification;
-    double gps_time;
-    unsigned short red;
-    unsigned short green;
-    unsigned short blue;
-    unsigned short nir;
-  };
-  LasPoint min, max;
-  bool have_gps_time = false;
-  bool have_rgb = false;
-  bool have_nir = false;
-  std::unordered_map<unsigned char, long> classifications;
-  std::unordered_map<unsigned char, long> return_numbers;
-
-  // Read first point
-  if (lasReader->read_point()) {
-
-    // Update min and max
-    min.x = max.x = lasReader->point.get_x();
-    min.y = max.y = lasReader->point.get_y();
-    min.z = max.z = lasReader->point.get_z();
-    min.intensity = max.intensity = lasReader->point.get_intensity();
-    min.number_of_returns = max.number_of_returns =
-      lasReader->point.get_number_of_returns();
-    min.scan_angle = max.scan_angle = lasReader->point.get_scan_angle();
-    min.user_data = max.user_data = lasReader->point.get_user_data();
-    min.point_source_id = max.point_source_id =
-      lasReader->point.get_point_source_ID();
-
-    // Update tables
-    unsigned char return_number = lasReader->point.get_return_number();
-    if (return_numbers.find(return_number) == return_numbers.end()) {
-      return_numbers[return_number] = 1;
-    } else {
-      return_numbers[return_number] = return_numbers[return_number] + 1;
-    }
-
-    unsigned char classification = lasReader->point.get_classification();
-    if (classifications.find(classification) == classifications.end()) {
-      classifications[classification] = 1;
-    } else {
-      classifications[classification] = classifications[classification] + 1;
-    }
-
-    if (lasReader->point.have_gps_time) {
-      // Point data format = 1,3,4,6,7,8,9
-      have_gps_time = true;
-      min.gps_time = max.gps_time = lasReader->point.get_gps_time();
-    }
-    if (lasReader->point.have_rgb) {
-      // Point data format = 2,3,5,7,8,10
-      have_rgb = true;
-      min.red = max.red = lasReader->point.get_R();
-      min.green = max.green = lasReader->point.get_G();
-      min.blue = max.blue = lasReader->point.get_B();
-    }
-    if (lasReader->point.have_nir) {
-      // Point data format = 8
-      have_nir = true;
-      min.nir = max.nir = lasReader->point.get_NIR();
-    }
-  }
+  LasPointStatistics pointStatistics(lasReader->header);
 
   // Read all other points
+  int progressPercentage = 0;
+  long long onePercent = lasReader->header.number_of_point_records / 100;
+  long long pointsProcessed = 0;
+
+  // Read point
   while (lasReader->read_point()) {
 
-    // Update min and max
-    min.x = std::min(min.x, lasReader->point.get_x());
-    max.x = std::max(max.x, lasReader->point.get_x());
-    min.y = std::min(min.y, lasReader->point.get_y());
-    max.y = std::max(max.y, lasReader->point.get_y());
-    min.z = std::min(min.z, lasReader->point.get_z());
-    max.z = std::max(max.z, lasReader->point.get_z());
-    min.intensity = std::min(min.intensity, lasReader->point.get_intensity());
-    max.intensity = std::max(max.intensity, lasReader->point.get_intensity());
-    min.number_of_returns =
-      std::min(min.number_of_returns, lasReader->point.get_number_of_returns());
-    max.number_of_returns =
-      std::max(max.number_of_returns, lasReader->point.get_number_of_returns());
-    min.scan_angle =
-      std::min(min.scan_angle, lasReader->point.get_scan_angle());
-    max.scan_angle =
-      std::max(max.scan_angle, lasReader->point.get_scan_angle());
-    min.user_data = std::min(min.user_data, lasReader->point.get_user_data());
-    max.user_data = std::max(max.user_data, lasReader->point.get_user_data());
-    min.point_source_id =
-      std::min(min.point_source_id, lasReader->point.get_point_source_ID());
-    max.point_source_id =
-      std::max(max.point_source_id, lasReader->point.get_point_source_ID());
+    // Update statistics
+    pointStatistics.update(lasReader->point);
 
-    if (lasReader->point.have_gps_time) {
-      // Point data format = 1,3,4,6,7,8,9
-      min.gps_time = std::min(min.gps_time, lasReader->point.get_gps_time());
-      max.gps_time = std::max(max.gps_time, lasReader->point.get_gps_time());
-    }
-    if (lasReader->point.have_rgb) {
-      // Point data format = 2,3,5,7,8,10
-      min.red = std::min(min.red, lasReader->point.get_R());
-      max.red = std::max(max.red, lasReader->point.get_R());
-      min.green = std::min(min.green, lasReader->point.get_G());
-      max.green = std::max(max.green, lasReader->point.get_G());
-      min.blue = std::min(min.blue, lasReader->point.get_B());
-      max.blue = std::max(max.blue, lasReader->point.get_B());
-    }
-    if (lasReader->point.have_nir) {
-      // Point data format = 8
-      min.nir = std::min(min.nir, lasReader->point.get_NIR());
-      max.nir = std::max(max.nir, lasReader->point.get_NIR());
-    }
+    // Update & print progress
+    pointsProcessed++;
+    if (onePercent > 0) {
+      int curProgress = static_cast<int>(pointsProcessed / onePercent);
 
-    // Update tables
-    unsigned char return_number = lasReader->point.get_return_number();
-    if (return_numbers.find(return_number) == return_numbers.end()) {
-      return_numbers[return_number] = 1;
-    } else {
-      return_numbers[return_number] = return_numbers[return_number] + 1;
-    }
+      if (curProgress > progressPercentage) {
+        int diff = curProgress - progressPercentage;
+        for (int i = 0; i < diff; i++) {
+          std::cout << "." << std::flush;
+        }
 
-    unsigned char classification = lasReader->point.get_classification();
-    if (classifications.find(classification) == classifications.end()) {
-      classifications[classification] = 1;
-    } else {
-      classifications[classification] = classifications[classification] + 1;
+        progressPercentage = curProgress;
+      }
     }
   }
 
-  // Print statistics
-  std::cout << "# Point Statistics: " << std::endl;
-  std::cout << "X: " << std::to_string(min.x) << " - " << std::to_string(max.x)
-            << std::endl;
-  std::cout << "Y: " << std::to_string(min.y) << " - " << std::to_string(max.y)
-            << std::endl;
-  std::cout << "Z: " << std::to_string(min.z) << " - " << std::to_string(max.z)
-            << std::endl;
+  std::cout << std::endl;
 
-  if (min.intensity != max.intensity) {
-    std::cout << "Intensity: " << std::to_string(min.intensity) << " - "
-              << std::to_string(max.intensity) << std::endl;
-  }
-
-  if (min.number_of_returns != max.number_of_returns) {
-    std::cout << "Number of Returns: " << std::to_string(min.number_of_returns)
-              << " - " << std::to_string(max.number_of_returns) << std::endl;
-  }
-
-  if (return_numbers.size() > 1) {
-    std::cout << "Return Numbers: " << std::endl;
-    for (const auto& pair : return_numbers) {
-      std::cout << "> " << std::to_string(pair.first) << ": "
-                << std::to_string(pair.second) << std::endl;
-    }
-  }
-
-  if (min.scan_angle != max.scan_angle) {
-    std::cout << "Scan Angle: " << std::to_string(min.scan_angle) << " - "
-              << std::to_string(max.scan_angle) << std::endl;
-  }
-
-  if (min.user_data != max.user_data) {
-    std::cout << "User Data: " << std::to_string(min.user_data) << " - "
-              << std::to_string(max.user_data) << std::endl;
-  }
-
-  /// \TODO Hash map
-  if (min.point_source_id != max.point_source_id) {
-    std::cout << "Point Source ID: " << std::to_string(min.point_source_id)
-              << " - " << std::to_string(max.point_source_id) << std::endl;
-  }
-
-  if (classifications.size() > 0) {
-    std::cout << "Classifications: " << std::endl;
-    for (const auto& pair : classifications) {
-      std::cout << "> " << std::to_string(pair.first) << " ("
-                << classificationToString(pair.first,
-                                          lasReader->header.point_data_format)
-                << "): " << std::to_string(pair.second) << std::endl;
-    }
-  }
-
-  if (have_gps_time && min.gps_time != max.gps_time) {
-    std::cout << "GPS Time: " << std::to_string(min.gps_time) << " - "
-              << std::to_string(max.gps_time) << std::endl;
-  }
-
-  if (have_rgb && min.red != max.red) {
-    std::cout << "Red: " << std::to_string(min.red) << " - "
-              << std::to_string(max.red) << std::endl;
-    std::cout << "Green: " << std::to_string(min.green) << " - "
-              << std::to_string(max.green) << std::endl;
-    std::cout << "Blue: " << std::to_string(min.blue) << " - "
-              << std::to_string(max.blue) << std::endl;
-  }
-
-  if (have_nir && min.nir != max.nir) {
-    std::cout << "NIR: " << std::to_string(min.nir) << " - "
-              << std::to_string(max.nir) << std::endl;
-  }
+  pointStatistics.print();
 
   lasReader->close();
 
