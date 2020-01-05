@@ -123,13 +123,13 @@ bool LasReadTaskImpl::hasColors() const
           format == 8 || format == 10);
 }
 
-BoundingBox<double> LasReadTaskImpl::extent() const
+BoundingBox LasReadTaskImpl::extent() const
 {
   if (m_reader == nullptr) {
     return {};
   }
 
-  return BoundingBox<double>::fromMinMax(
+  return BoundingBox::fromMinMax(
     { m_reader->get_min_x(), m_reader->get_min_y(), m_reader->get_min_z() },
     { m_reader->get_max_x(), m_reader->get_max_y(), m_reader->get_max_z() });
 }

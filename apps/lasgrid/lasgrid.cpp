@@ -1,13 +1,11 @@
 #include "CLI11.hpp"
 
-#include "lasreader.hpp" // LASlib
-#include "laswriter.hpp" // LASlib
+#include <spatiumgl/Bounds.hpp>
+#include <spatiumgl/Vector.hpp>
+#include <spatiumgl/io/LasReader.hpp>
+#include <spatiumgl/io/LasWriter.hpp>
 
 #include <unordered_map> // std::unordered_map
-#include <cstring> // std::memcpy, std::memset
-
-using Point = std::array<double, 3>;
-using Extent = std::array<Point, 2>;
 
 int
 main(int argc, char* argv[])
@@ -27,85 +25,54 @@ main(int argc, char* argv[])
     ->required();
   CLI11_PARSE(app, argc, argv)
 
-  // Open input file
-  LASreadOpener lasReadOpener;
-  lasReadOpener.set_file_name(fileIn.c_str());
-  if (!lasReadOpener.active()) {
-    std::cerr << "Unable to open file." << std::endl;
-    return 1;
-  }
-  std::unique_ptr<LASreader> lasReader(lasReadOpener.open());
-  if (lasReader == nullptr) {
-    std::cerr << "Failed to open file." << std::endl;
+  spgl::io::LasReader reader(fileIn);
+  if (!reader.isReady()) {
+    std::cerr << "Unable to open input file." << std::endl;
     return 1;
   }
 
-  // Read extent of input file
-  Extent extent{ Point{ lasReader->header.min_x,
-                        lasReader->header.min_y,
-                        lasReader->header.min_z },
-                 Point{ lasReader->header.max_x,
-                        lasReader->header.max_y,
-                        lasReader->header.max_z } };
+  if (!reader.open()) {
+    std::cerr << "Failed to open input file." << std::endl;
+    return 1;
+  }
+
+  spgl::BoundingBox extent = reader.lasHeader().extent;
 
   // Create grid for points
-  std::unordered_map<std::string, LASpoint> grid;
+  std::unordered_map<std::string, spgl::io::LasPoint> grid;
 
   // Iterate points in input file
   int progressPercentage = 0;
-  long long onePercent = lasReader->header.number_of_point_records / 100;
+  long long onePercent = reader.lasHeader().number_of_point_records / 100;
   long long pointsProcessed = 0;
 
-  Point position;
-  while (lasReader->read_point()) {
-    position[0] = lasReader->point.get_x();
-    position[1] = lasReader->point.get_y();
-    position[2] = lasReader->point.get_z();
+  while (reader.readLasPoint()) {
+    const spgl::io::LasPoint& lasPoint = reader.lasPoint();
 
     // Compute cell index in grid
-    std::array<int, 3> gridIndex{
-      static_cast<int>((position[0] - extent[0][0]) / spacing),
-      static_cast<int>((position[1] - extent[0][1]) / spacing),
-      static_cast<int>((position[2] - extent[0][2]) / spacing)
-    };
-    std::string gridIndexKey = std::to_string(gridIndex[0]) + "|" +
-                               std::to_string(gridIndex[1]) + "|" +
-                               std::to_string(gridIndex[0]);
+    const spgl::Vector3i gridIndex = (lasPoint.xyz / spacing).staticCast<int>();
+    const std::string gridIndexKey = std::to_string(gridIndex[0]) + "|" +
+                                     std::to_string(gridIndex[1]) + "|" +
+                                     std::to_string(gridIndex[0]);
 
     // Get grid cell point (if existing)
-    LASpoint& gridPoint = grid[gridIndexKey];
-    if (gridPoint.point == nullptr) {
+    if (grid.find(gridIndexKey) == grid.end()) {
       // No point in grid cell -> insert first point
-      gridPoint.init(&lasReader->header,
-                     lasReader->header.point_data_format,
-                     lasReader->header.point_data_record_length,
-                     &lasReader->header);
-      gridPoint = lasReader->point; // copy assignment
+      grid[gridIndexKey] = lasPoint; // copy assignment
     } else {
-      // Get center point of grid cell
-      Point cellCenter = {
-        gridIndex[0] * spacing + 0.5 * spacing + extent[0][0],
-        gridIndex[1] * spacing + 0.5 * spacing + extent[0][1],
-        gridIndex[2] * spacing + 0.5 * spacing + extent[0][2]
-      };
-
-      Point gridPointPosition{ gridPoint.get_x(),
-                               gridPoint.get_y(),
-                               gridPoint.get_z() };
+      // Point already in grid cell -> replace if closer to cell center
+      const spgl::io::LasPoint cellPoint = grid[gridIndexKey];
 
       // Compute distance to grid cell center
-      double distanceGridPoint =
-        sqrt(std::pow(gridPointPosition[0] - cellCenter[0], 2) +
-             pow(gridPointPosition[1] - cellCenter[1], 2) +
-             pow(gridPointPosition[2] - cellCenter[2], 2));
-
-      double distanceNewPoint = sqrt(pow(position[0] - cellCenter[0], 2) +
-                                     pow(position[1] - cellCenter[1], 2) +
-                                     pow(position[2] - cellCenter[2], 2));
+      const spgl::Vector3 cellCenter =
+        (gridIndex.staticCast<double>() * spacing) +
+        spgl::Vector3(0.5 * spacing);
+      const double distanceGridPoint = cellCenter.distance(cellPoint.xyz);
+      const double distanceNewPoint = cellCenter.distance(lasPoint.xyz);
 
       if (distanceNewPoint < distanceGridPoint) {
         // Replace point in grid cell
-        grid[gridIndexKey] = lasReader->point; // copy assignment
+        grid[gridIndexKey] = lasPoint; // copy assignment
       }
     }
 
@@ -127,21 +94,23 @@ main(int argc, char* argv[])
   std::cout << std::endl;
 
   // Write grid points to file
-  LASwriteOpener lasWriteOpener;
-  lasWriteOpener.set_file_name(fileOut.c_str());
-  std::memset(lasReader->header.system_identifier, '\0', 32);
-  std::memcpy(lasReader->header.system_identifier, "Desktop", 8);
-  std::memset(lasReader->header.generating_software, '\0', 32);
-  std::memcpy(lasReader->header.generating_software, "SpatiumGL", 10);
-  std::unique_ptr<LASwriter> lasWriter(lasWriteOpener.open(&lasReader->header));
-  for (const auto& gridCell : grid) {
-    lasWriter->write_point(&gridCell.second);
-    lasWriter->update_inventory(&gridCell.second);
+  spgl::io::LasWriter writer(fileOut);
+  if (!writer.isReady()) {
+    std::cerr << "Unable to open output file." << std::endl;
+    return 1;
   }
-  lasWriter->update_header(&lasReader->header, TRUE);
-  lasWriter->close();
+  if (!writer.open(reader.lasHeader())) {
+    std::cerr << "Failed to open output file." << std::endl;
+    return 1;
+  }
 
-  lasReader->close();
+  // Write grid points to file
+  for (const auto& gridCell : grid) {
+    writer.writeLasPoint(gridCell.second);
+  }
+  writer.close();
+
+  reader.close();
 
   return 0;
 }

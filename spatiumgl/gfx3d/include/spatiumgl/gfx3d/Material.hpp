@@ -13,8 +13,8 @@
 #ifndef SPATIUMGL_GFX3D_MATERIAL_H
 #define SPATIUMGL_GFX3D_MATERIAL_H
 
-#include "spatiumgl/Vector4.hpp"
 #include "spatiumglexport.hpp"
+#include "spatiumgl/Vector.hpp"
 
 namespace spgl {
 namespace gfx3d {

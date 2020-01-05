@@ -101,7 +101,7 @@ public:
   /// Get spatial extent of all points, according to the file header.
   ///
   /// \return Extent
-  BoundingBox<double> extent() const;
+  BoundingBox extent() const;
 
   /// Get indicator if shift to origin should be applied on all points.
   ///

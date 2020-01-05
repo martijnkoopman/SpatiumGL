@@ -14,6 +14,7 @@
 #define SPATIUMGL_ASYNCTASK_H
 
 #include "spatiumglexport.hpp"
+#include "AsyncTaskProgress.hpp"
 
 #include <thread> // std::thread
 #include <atomic> // std::atomic
@@ -28,7 +29,7 @@ namespace spgl {
 /// RunningGaurd ensures a boolean lvalue, passed as reference in the
 /// constructor, is set to true during the lifetime of the instance. When the
 /// RunningGaurd goes out of scope the boolean lvalue is set to false.
-class RunningGaurd SPATIUMGL_EXPORT
+class SPATIUMGL_EXPORT RunningGaurd
 {
 public:
   /// Constructor.
@@ -72,14 +73,23 @@ public:
     , m_cancel()
     , m_result(nullptr)
     , m_resultMutex()
-    , m_progressPercentage()
-    , m_progressMessage("")
-    , m_progressMessageMutex()
+    , m_progress()
   {
     m_running.store(false);
     m_cancel.store(false);
-    m_progressPercentage.store(0);
   }
+
+  /// Copy constructor.
+  AsyncTask(const AsyncTask& other) = delete;
+
+  /// Move constructor.
+  AsyncTask(AsyncTask&& other) = default;
+
+  /// Copy assignment operator.
+  AsyncTask& operator=(const AsyncTask& other) = delete;
+
+  /// Move assignment operator.
+  AsyncTask& operator=(AsyncTask&& other) = default;
 
   /// Destructor
   virtual ~AsyncTask() = default; // required for pure virtual run()
@@ -92,8 +102,7 @@ public:
     if (m_thread == nullptr) {
 
       // Re-set progress
-      setProgressPercentage(0);
-      setProgressMessage("");
+      m_progress.reset();
 
       // Clear result
       setResult(nullptr);
@@ -102,7 +111,7 @@ public:
       m_thread = std::unique_ptr<std::thread>(
         new std::thread(&AsyncTask::run, this));
 
-	  m_running = true;
+      m_running = true;
 
       return true;
     } else {
@@ -140,21 +149,10 @@ public:
   /// there is no guarantee for the caller.
   void cancel() { m_cancel.store(true); }
 
-  /// Get progress percentage.
-  ///
-  /// Range: 0 - 100
+  /// Get progress.
   ///
   /// \return Progress
-  int progressPercentage() { return m_progressPercentage.load(); }
-
-  /// Get progress message.
-  ///
-  /// \return Progress message
-  std::string progressMessage()
-  {
-    std::lock_guard<std::mutex> guard(m_progressMessageMutex);
-    return m_progressMessage; // copy?
-  }
+  AsyncTaskProgress& progress() { return m_progress; }
 
   /// Get result of the task execution.
   ///
@@ -175,20 +173,6 @@ protected:
   std::atomic<bool>& running() { return m_running; }
 
   bool shouldCancel() const { return m_cancel.load(); }
-
-  /// Set progress percentage.
-  ///
-  /// \param[in] progress Progress
-  void setProgressPercentage(int progress) { m_progressPercentage.store(progress); }
-
-  /// Set progress message.
-  ///
-  /// \param[in] message Progress message
-  void setProgressMessage(const std::string& message)
-  {
-    std::lock_guard<std::mutex> guard(m_progressMessageMutex);
-    m_progressMessage = message; // copy?
-  }
 
   /// Set task result.
   ///
@@ -212,6 +196,22 @@ protected:
   /// - Store result in m_result at end of execution. (nullptr on error)
   virtual void run() = 0;
 
+  /// Set progress message.
+  ///
+  /// \param[in] message Progress message
+  void setProgressMessage(const std::string& message)
+  {
+    m_progress.setMessage(message);
+  }
+
+  /// Set progress percentage.
+  ///
+  /// \param[in] message Progress percentage
+  void setProgressPercentage(int percentage)
+  {
+    m_progress.setPercentage(percentage);
+  }
+
 private:
   std::unique_ptr<std::thread> m_thread;
   std::atomic<bool> m_running;
@@ -220,11 +220,7 @@ private:
   // std::atomic is not an option -> use std::mutex.
   std::shared_ptr<T> m_result;
   std::mutex m_resultMutex;
-  std::atomic<int> m_progressPercentage;
-  // std::string is not a trivially copyable type and therefor std::atomic is
-  // not an option -> use std::mutex.
-  std::string m_progressMessage;
-  std::mutex m_progressMessageMutex;
+  AsyncTaskProgress m_progress;
 };
 
 } // namespace spgl

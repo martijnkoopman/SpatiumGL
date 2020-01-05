@@ -31,7 +31,7 @@ public:
   /// Constructor.
   ///
   /// \param[in] bounds Boundaries (optional)
-  RenderObject(const BoundingBox<double>& bounds = BoundingBox<double>())
+  RenderObject(const BoundingBox& bounds = BoundingBox())
     : SceneObject()
     , m_bounds(bounds)
   {}
@@ -39,10 +39,10 @@ public:
   /// Get boundaries of the object (axis aligned bounding box).
   ///
   /// \return Boundaries
-  BoundingBox<double> bounds() const { return m_bounds; }
+  BoundingBox bounds() const { return m_bounds; }
 
 protected:
-  BoundingBox<double> m_bounds;
+  BoundingBox m_bounds;
 };
 
 } // namespace gfx3d

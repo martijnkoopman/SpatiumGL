@@ -11,95 +11,120 @@
  */
 
 #include "LasWriterImpl.hpp"
+#include "spatiumgl/io/LasUtils.hpp"
 
-#include <memory> // std::unique_ptr
+#include <memory>  // std::unique_ptr
+#include <cstring> // std::strncpy
 
 namespace spgl {
 namespace io {
 LasWriterImpl::LasWriterImpl(const std::string& path)
-  : m_laswriteopener()
+  : m_lasWriteOpener()
+  , m_lasWriter(nullptr)
+  , m_header()
 {
-  m_laswriteopener.set_file_name(path.c_str());
+  m_lasWriteOpener.set_file_name(path.c_str());
 }
 
-LasWriterImpl::~LasWriterImpl() {}
-
-void
-LasWriterImpl::setPath(const std::string& path)
-{
-  m_laswriteopener.set_file_name(path.c_str());
+LasWriterImpl::~LasWriterImpl() {
+  if (m_lasWriter != nullptr) {
+    close();
+  }
 }
 
 std::string
 LasWriterImpl::path() const
 {
-  return m_laswriteopener.get_file_name();
+  return m_lasWriteOpener.get_file_name();
 }
 
 bool
-LasWriterImpl::isActive() const
+LasWriterImpl::isReady() const
 {
-  return m_laswriteopener.active();
+  return m_lasWriteOpener.active();
 }
 
 bool
-LasWriterImpl::writePointCloud(const gfx3d::PointCloud& pointCloud)
+LasWriterImpl::open(const LasHeader& header)
 {
-  const bool hasColors = pointCloud.header().hasColors();
-  // const bool hasNormals = pointCloud.hasNormals();
+  close();
 
-  // Init header
-  LASheader lasheader;
-  lasheader.x_scale_factor = 0.001;
-  lasheader.y_scale_factor = 0.001;
-  lasheader.z_scale_factor = 0.001;
-  lasheader.x_offset = 0;
-  lasheader.y_offset = 0;
-  lasheader.z_offset = 0;
-  lasheader.point_data_format = (hasColors ? 2 : 0); // See LAS specification
-  lasheader.point_data_record_length = (hasColors ? 26 : 20);
+  // Construct LASlib file header
+  m_lasHeader.x_scale_factor = header.scale_factor;
+  m_lasHeader.y_scale_factor = header.scale_factor;
+  m_lasHeader.z_scale_factor = header.scale_factor;
+  m_lasHeader.x_offset = header.extent.min()[0];
+  m_lasHeader.y_offset = header.extent.min()[1];
+  m_lasHeader.z_offset = header.extent.min()[2];
+  m_lasHeader.point_data_format = header.point_data_format;
+  m_lasHeader.point_data_record_length =
+    LasUtils::formatRecordSize(header.point_data_format);
+  std::strncpy(m_lasHeader.system_identifier, "Spatium Graphics Library", 32);
+  m_lasHeader.system_identifier[31] = '\0';
+  strncpy(m_lasHeader.generating_software, "SpatiumGL", 32);
+  m_lasHeader.generating_software[31] = '\0';
+
+  /// \todo LASzip compression
 
   // Init point
-  LASpoint laspoint;
-  laspoint.init(&lasheader,
-                lasheader.point_data_format,
-                lasheader.point_data_record_length,
-                nullptr);
+  m_lasPoint.init(&m_lasHeader,
+                  m_lasHeader.point_data_format,
+                  m_lasHeader.point_data_record_length,
+                  nullptr);
 
-  // Open laswriter
-  std::unique_ptr<LASwriter> laswriter(m_laswriteopener.open(&lasheader));
-  if (laswriter == nullptr) {
-    return false;
-  }
-
-  for (size_t i = 0; i < pointCloud.header().pointCount(); i++) {
-    // Populate the point
-    Vector3 position = pointCloud.data().positions()[i].staticCast<double>() +
-                       pointCloud.header().originShift();
-    laspoint.set_X(static_cast<int>(position.x() * 1000));
-    laspoint.set_Y(static_cast<int>(position.y() * 1000));
-    laspoint.set_Z(static_cast<int>(position.z() * 1000));
-    if (hasColors) {
-      Vector3 color = pointCloud.data().colors()[i].staticCast<double>();
-      laspoint.set_R(static_cast<unsigned short>(color.x() * 255));
-      laspoint.set_G(static_cast<unsigned short>(color.y() * 255));
-      laspoint.set_B(static_cast<unsigned short>(color.z() * 255));
-    }
-
-    // Write the point
-    laswriter->write_point(&laspoint);
-
-    // Add it to the inventory
-    laswriter->update_inventory(&laspoint);
-  }
-
-  // Update the header
-  laswriter->update_header(&lasheader, TRUE);
-
-  // close the writer
-  laswriter->close();
-
-  return true;
+  // Open file
+  m_lasWriter.reset(m_lasWriteOpener.open(&m_lasHeader));
+  return (m_lasWriter != nullptr);
 }
+
+bool
+LasWriterImpl::isOpen() const
+{
+  return (m_lasWriter != nullptr);
+}
+
+void
+LasWriterImpl::close()
+{
+  if (m_lasWriter != nullptr) {
+    m_lasWriter->update_header(&m_lasHeader, true);
+    m_lasWriter->close();
+    m_lasWriter.reset();
+  }
+}
+
+void
+LasWriterImpl::writeLasPoint(const LasPoint& point)
+{ 
+  // Set point values
+  m_lasPoint.set_X(static_cast<int>(point.xyz[0] * (1.0 / m_lasHeader.x_scale_factor)));
+  m_lasPoint.set_Y(static_cast<int>(point.xyz[1] * (1.0 / m_lasHeader.y_scale_factor)));
+  m_lasPoint.set_Z(static_cast<int>(point.xyz[2] * (1.0 / m_lasHeader.z_scale_factor)));
+  m_lasPoint.set_intensity(point.intensity);
+  m_lasPoint.set_return_number(point.return_number);
+  m_lasPoint.set_number_of_returns(point.number_of_returns);
+  m_lasPoint.set_classification(point.classification);
+  m_lasPoint.set_scan_angle_rank(point.scan_angle_rank);
+  m_lasPoint.set_user_data(point.user_data);
+  m_lasPoint.set_point_source_ID(point.point_source_ID);
+  if (LasUtils::formatHasGpsTime(m_lasHeader.point_data_format)) {
+    m_lasPoint.set_gps_time(point.gps_time);
+  }
+  if (LasUtils::formatHasRgb(m_lasHeader.point_data_format)) {
+    m_lasPoint.set_R(point.rgb[0]);
+    m_lasPoint.set_G(point.rgb[1]);
+    m_lasPoint.set_B(point.rgb[2]);
+  }
+  if (LasUtils::formatHasNir(m_lasHeader.point_data_format)) {
+    m_lasPoint.set_NIR(point.nir);
+  }
+
+  // Write the point
+  m_lasWriter->write_point(&m_lasPoint);
+
+  // Add it to the inventory
+  m_lasWriter->update_inventory(&m_lasPoint);
+}
+
 } // namespace io
 } // namespace spgl

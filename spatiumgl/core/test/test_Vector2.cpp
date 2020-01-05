@@ -30,6 +30,14 @@ TEST(Vector2, constructorInitializerList)
   EXPECT_EQ(v2[1], 2);
 }
 
+TEST(Vector2, cast)
+{
+  const spgl::Vector2 v1(1, 2);
+  const spgl::Vector2f v2 = v1.staticCast<float>();
+  EXPECT_EQ(v2[0], 1);
+  EXPECT_EQ(v2[1], 2);
+}
+
 TEST(Vector2, accessValue)
 {
   const spgl::Vector2 v(1, 2);
@@ -98,12 +106,12 @@ TEST(Vector2, divideScalar)
   EXPECT_EQ(v2[1], 2);
 }
 
-TEST(Vector2, length)
+TEST(Vector2, magnitude)
 {
   const spgl::Vector2 v1(10, 0);
-  EXPECT_EQ(v1.length(), 10);
+  EXPECT_EQ(v1.magnitude(), 10);
   const spgl::Vector2 v2(0, 5);
-  EXPECT_EQ(v2.length(), 5);
+  EXPECT_EQ(v2.magnitude(), 5);
 }
 
 TEST(Vector2, normalize)

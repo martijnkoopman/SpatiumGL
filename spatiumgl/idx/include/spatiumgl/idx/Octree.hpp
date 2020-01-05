@@ -26,22 +26,22 @@ namespace idx {
 class SPATIUMGL_EXPORT Octree : public NTree<8>
 {
 public:
-  Octree(const BoundingCube<double>& bounds)
+  Octree(const BoundingCube& bounds)
     : m_bounds(bounds)
   {}
 
   /// Get bounds of entire octree. (cubical)
   ///
   /// \return Bounds
-  const BoundingCube<double>& bounds() const { return m_bounds; }
+  const BoundingCube& bounds() const { return m_bounds; }
 
   /// Compute child bounds.
   ///
   /// \param[in] parentBounds Bounds of parent node
   /// \param[in] childIndex Child index (0-7)
   /// \return Child bounds.
-  static BoundingCube<double> computeChildBounds(
-    const BoundingCube<double>& parentBounds,
+  static BoundingCube computeChildBounds(
+    const BoundingCube& parentBounds,
     size_t childIndex);
 
   /// Write octree to file.
@@ -147,7 +147,7 @@ public:
   }
 
 protected:
-  BoundingCube<double> m_bounds;
+  BoundingCube m_bounds;
 };
 
 } // namespace idx

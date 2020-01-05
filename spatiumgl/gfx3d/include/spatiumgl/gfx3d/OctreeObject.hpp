@@ -32,10 +32,10 @@ public:
   OctreeObject(idx::Octree&& octree)
     : m_octree(std::move(octree))
   {
-    m_bounds = BoundingBox<double>(m_octree.bounds().center(),
-                                   { m_octree.bounds().radius(),
-                                     m_octree.bounds().radius(),
-                                     m_octree.bounds().radius() });
+    m_bounds = BoundingBox(m_octree.bounds().center(),
+                           { m_octree.bounds().radius(),
+                             m_octree.bounds().radius(),
+                             m_octree.bounds().radius() });
   }
 
   /// Get octree.

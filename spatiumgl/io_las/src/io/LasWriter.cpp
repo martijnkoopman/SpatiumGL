@@ -15,17 +15,13 @@
 
 namespace spgl {
 namespace io {
+
 LasWriter::LasWriter(const std::string& path)
   : m_pimpl{ std::unique_ptr<LasWriterImpl>(new LasWriterImpl(path)) }
 {}
 
-LasWriter::~LasWriter() {}
-
-void
-LasWriter::setPath(const std::string& path)
-{
-  m_pimpl->setPath(path);
-}
+// Destructor implementation must be in CPP file for PIMPL pattern
+LasWriter::~LasWriter() = default;
 
 std::string
 LasWriter::path() const
@@ -36,13 +32,32 @@ LasWriter::path() const
 bool
 LasWriter::isReady() const
 {
-  return m_pimpl->isActive();
+  return m_pimpl->isReady();
 }
 
 bool
-LasWriter::writePointCloud(const gfx3d::PointCloud& pointCloud) const
+LasWriter::open(const LasHeader& lasHeader)
 {
-  return m_pimpl->writePointCloud(pointCloud);
+  return m_pimpl->open(lasHeader);
 }
+
+bool
+LasWriter::isOpen()
+{
+  return m_pimpl->isOpen();
+}
+
+void
+LasWriter::close()
+{
+  m_pimpl->close();
+}
+
+void LasWriter::writeLasPoint(const LasPoint& point)
+{
+  m_pimpl->writeLasPoint(point);
+}
+
+
 } // namespace io
 } // namespace spgl

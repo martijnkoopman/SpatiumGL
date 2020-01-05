@@ -27,9 +27,8 @@ TEST(PointCloud, constructor)
 
   EXPECT_EQ(header.pointCount(), 3);
   EXPECT_EQ(header.hasColors(), false);
-  EXPECT_EQ(header.hasNormals(), false);
-  EXPECT_EQ(header.originShift(), spgl::Vector3());
-  EXPECT_EQ(header.extent(), spgl::BoundingBox<double>({ 4, 5, 6 }, { 3, 3, 3 }));
+  EXPECT_EQ(header.hasScalars(), false);
+  EXPECT_EQ(header.extent(), spgl::BoundingBox({ 4, 5, 6 }, { 3, 3, 3 }));
 
   const spgl::gfx3d::PointCloud pointcloud(header, std::move(data));
 
@@ -43,9 +42,8 @@ TEST(PointCloud, constructor)
   // Point cloud header should not be moved
   EXPECT_EQ(header.pointCount(), 3);
   EXPECT_EQ(header.hasColors(), false);
-  EXPECT_EQ(header.hasNormals(), false);
-  EXPECT_EQ(header.originShift(), spgl::Vector3());
-  EXPECT_EQ(header.extent(), spgl::BoundingBox<double>({ 4, 5, 6 }, { 3, 3, 3 }));
+  EXPECT_EQ(header.hasScalars(), false);
+  EXPECT_EQ(header.extent(), spgl::BoundingBox({ 4, 5, 6 }, { 3, 3, 3 }));
 }
 
 TEST(PointCloud, copy)

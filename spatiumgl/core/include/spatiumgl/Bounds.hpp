@@ -171,7 +171,7 @@ protected:
 /// \class BoundingCircle
 /// \brief Minimum bounding circle (2D)
 template<typename T>
-struct BoundingCircle
+struct BoundingCircleT
   : public BoundsCenter<T, 2>
   , public BoundsRadii<T, 1>
 {};
@@ -179,7 +179,7 @@ struct BoundingCircle
 /// \class BoundingEllipse
 /// \brief Minimum bounding ellipse (2D)
 template<typename T>
-struct BoundingEllipse
+struct BoundingEllipseT
   : public BoundsCenter<T, 2>
   , public BoundsRadii<T, 2>
 {};
@@ -187,7 +187,7 @@ struct BoundingEllipse
 /// \class BoundingSquare
 /// \brief Minimum bounding square (2D)
 template<typename T>
-struct BoundingSquare
+struct BoundingSquareT
   : public BoundsCenter<T, 2>
   , public BoundsRadii<T, 1>
 {};
@@ -195,7 +195,7 @@ struct BoundingSquare
 /// \class BoundingRectangle
 /// \brief Minimum bounding rectangle (2D)
 template<typename T>
-struct BoundingRectangle
+struct BoundingRectangleT
   : public BoundsCenter<T, 2>
   , public BoundsRadii<T, 2>
 {};
@@ -203,7 +203,7 @@ struct BoundingRectangle
 /// \class OrientedBoundingEllipse
 /// \brief Minimum bounding oriented ellipse (2D)
 template<typename T>
-struct OrientedBoundingEllipse
+struct OrientedBoundingEllipseT
   : public BoundsCenter<T, 2>
   , public BoundsRadii<T, 2>
   , public BoundsOrientation<T, 2>
@@ -212,7 +212,7 @@ struct OrientedBoundingEllipse
 /// \class OrientedBoundingSquare
 /// \brief Minimum bounding oriented square (2D)
 template<typename T>
-struct OrientedBoundingSquare
+struct OrientedBoundingSquareT
   : public BoundsCenter<T, 2>
   , public BoundsRadii<T, 1>
   , public BoundsOrientation<T, 2>
@@ -221,7 +221,7 @@ struct OrientedBoundingSquare
 /// \class OrientedBoundingRectangle
 /// \brief Minimum bounding oriented rectangle (2D)
 template<typename T>
-struct OrientedBoundingRectangle
+struct OrientedBoundingRectangleT
   : public BoundsCenter<T, 2>
   , public BoundsRadii<T, 2>
   , public BoundsOrientation<T, 2>
@@ -230,7 +230,7 @@ struct OrientedBoundingRectangle
 /// \class BoundingSphere
 /// \brief Minimum bounding sphere (3D)
 template<typename T>
-struct BoundingSphere
+struct BoundingSphereT
   : public BoundsCenter<T, 3>
   , public BoundsRadii<T, 1>
 {};
@@ -238,7 +238,7 @@ struct BoundingSphere
 /// \class BoundingEllipsoid
 /// \brief Minimum bounding ellipsoid (3D)
 template<typename T>
-struct BoundingEllipsoid
+struct BoundingEllipsoidT
   : public BoundsCenter<T, 3>
   , public BoundsRadii<T, 3>
 {};
@@ -246,18 +246,18 @@ struct BoundingEllipsoid
 /// \class BoundingCube
 /// \brief Minimum bounding cube (3D)
 template<typename T>
-struct BoundingCube
+struct BoundingCubeT
   : public BoundsCenter<T, 3>
   , public BoundsRadii<T, 1>
 {
   /// Default constructor.
-  BoundingCube() = default;
+  BoundingCubeT() = default;
 
   /// Constructor.
   ///
   /// \param[in] center Center position
   /// \param[in] radius Radius for all three axes
-  BoundingCube(const Vector<T, 3>& center, const T radius)
+  BoundingCubeT(const Vector<T, 3>& center, const T radius)
     : BoundsCenter<T, 3>(center)
     , BoundsRadii<T, 1>(radius)
   {}
@@ -266,18 +266,18 @@ struct BoundingCube
 /// \class BoundingBox
 /// \brief Minimum bounding box (3D)
 template<typename T>
-struct BoundingBox
+struct BoundingBoxT
   : public BoundsCenter<T, 3>
   , public BoundsRadii<T, 3>
 {
   /// Default constructor.
-  BoundingBox() = default;
+  BoundingBoxT() = default;
 
   /// Constructor.
   ///
   /// \param[in] center Center position
   /// \param[in] radii Radii for each axis
-  BoundingBox(const Vector<T, 3>& center, const Vector<T, 3>& radii)
+  BoundingBoxT(const Vector<T, 3>& center, const Vector<T, 3>& radii)
     : BoundsCenter<T, 3>(center)
     , BoundsRadii<T, 3>(radii)
   {}
@@ -288,7 +288,7 @@ struct BoundingBox
   ///
   /// \param[in] points Points in N-dimensional space.
   /// \return Bounding box
-  static BoundingBox<T> fromPoints(const std::vector<Vector<T, 3>>& points)
+  static BoundingBoxT<T> fromPoints(const std::vector<Vector<T, 3>>& points)
   {
     if (points.size() == 0) {
       return {};
@@ -312,7 +312,7 @@ struct BoundingBox
       }
     }
 
-    return BoundingBox::fromMinMax(minVal, maxVal);
+    return BoundingBoxT::fromMinMax(minVal, maxVal);
   }
 
   /// Construct from minimum and maximum coordinates.
@@ -320,7 +320,7 @@ struct BoundingBox
   /// \param[in] min Minimum coordinates
   /// \param[in] max Maximum coordinates
   /// \return Bounding box
-  static BoundingBox fromMinMax(const Vector<T, 3>& min,
+  static BoundingBoxT fromMinMax(const Vector<T, 3>& min,
                                 const Vector<T, 3>& max)
   {
     // Compute center and radii
@@ -342,7 +342,7 @@ struct BoundingBox
   ///
   /// \param[in] other Other bounding box
   /// \return True if equal, otherwise false
-  bool operator==(const BoundingBox<T> &other) const
+  bool operator==(const BoundingBoxT<T> &other) const
   {
     if (this->m_center != other.m_center ||
         this->m_radii != other.m_radii) {
@@ -356,7 +356,7 @@ struct BoundingBox
   ///
   /// \param[in] other Other bounding box
   /// \return True if unequal, otherwise false
-  bool operator!=(const BoundingBox<T> & other) const
+  bool operator!=(const BoundingBoxT<T> & other) const
   {
     return !(operator==(other));
   }
@@ -419,7 +419,7 @@ struct BoundingBox
     }
 
     // Construct new box
-    const auto box = BoundingBox<T>::fromMinMax(minVal, maxVal);
+    const auto box = BoundingBoxT<T>::fromMinMax(minVal, maxVal);
 
     // Update values
     this->m_center = box.center();
@@ -429,7 +429,7 @@ struct BoundingBox
   /// Extend bounding box to include other bounding box.
   ///
   /// \param[in] bounds Bounding box
-  void include(const BoundingBox& bounds)
+  void include(const BoundingBoxT& bounds)
   {
     // Get min and max values
     Vector<T, 3> minVal = min();
@@ -449,7 +449,7 @@ struct BoundingBox
     }
 
     // Construct new box
-    const auto box = BoundingBox<T>::fromMinMax(minVal, maxVal);
+    const auto box = BoundingBoxT<T>::fromMinMax(minVal, maxVal);
 
     // Update values
     this->m_center = box.center();
@@ -457,7 +457,7 @@ struct BoundingBox
   }
 
   /// Output to ostream
-  friend std::ostream& operator<<(std::ostream& os, const BoundingBox& bounds)
+  friend std::ostream& operator<<(std::ostream& os, const BoundingBoxT& bounds)
   {
     os << "(" << bounds.min() << ", " << bounds.max() << ")";
     return os;
@@ -467,7 +467,7 @@ struct BoundingBox
 /// \class OrientedBoundingEllipsoid
 /// \brief Minimum bounding oriented ellipsoid (3D)
 template<typename T>
-struct OrientedBoundingEllipsoid
+struct OrientedBoundingEllipsoidT
   : public BoundsCenter<T, 3>
   , public BoundsRadii<T, 3>
   , public BoundsOrientation<T, 3>
@@ -476,7 +476,7 @@ struct OrientedBoundingEllipsoid
 /// \class OrientedBoundingCube
 /// \brief Minimum bounding oriented cube (3D)
 template<typename T>
-struct OrientedBoundingCube
+struct OrientedBoundingCubeT
   : public BoundsCenter<T, 3>
   , public BoundsRadii<T, 1>
   , public BoundsOrientation<T, 3>
@@ -485,11 +485,26 @@ struct OrientedBoundingCube
 /// \class OrientedBoundingBox
 /// \brief Minimum bounding oriented box (3D)
 template<typename T>
-struct OrientedBoundingBox
+struct OrientedBoundingBoxT
   : public BoundsCenter<T, 3>
   , public BoundsRadii<T, 3>
   , public BoundsOrientation<T, 3>
 {};
+
+using BoundingCircle = BoundingCircleT<double>;
+using BoundingEllipse = BoundingEllipseT<double>;
+using BoundingSquare = BoundingSquareT<double>;
+using BoundingRectangle = BoundingRectangleT<double>;
+using OrientedBoundingEllipse = OrientedBoundingEllipseT<double>;
+using OrientedBoundingSquare = OrientedBoundingSquareT<double>;
+using OrientedBoundingRectangle = OrientedBoundingRectangleT<double>;
+using BoundingSphere = BoundingSphereT<double>;
+using BoundingEllipsoid = BoundingEllipsoidT<double>;
+using BoundingCube = BoundingCubeT<double>;
+using BoundingBox = BoundingBoxT<double>;
+using OrientedBoundingEllipsoid = OrientedBoundingEllipsoidT<double>;
+using OrientedBoundingCube = OrientedBoundingCubeT<double>;
+using OrientedBoundingBox = OrientedBoundingBoxT<double>;
 
 } // namespace spgl
 

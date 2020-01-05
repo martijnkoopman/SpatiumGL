@@ -17,14 +17,14 @@ namespace gfx3d {
 
 LineMesh::LineMesh(const std::vector<Vector3f>&& vertices,
                    const std::vector<Vector<unsigned int, 2>>&& lines,
-                   const BoundingBox<double>& bounds)
+                   const BoundingBox& bounds)
   : RenderObject(bounds)
   , m_vertices(std::move(vertices))
   , m_lines(std::move(lines))
 {
   if (m_bounds.radii() == Vector3(0, 0, 0) && m_vertices.size() > 0) {
     // Compute bounds from vertices
-    BoundingBox<double> bounds(m_vertices[0].staticCast<double>(), { 0, 0, 0 });
+    BoundingBox bounds(m_vertices[0].staticCast<double>(), { 0, 0, 0 });
     for (size_t i = 1; i < m_vertices.size(); i++) {
       bounds.include(m_vertices[i].staticCast<double>());
     }

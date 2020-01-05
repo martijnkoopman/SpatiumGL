@@ -25,7 +25,7 @@ Grid::Grid(const size_t radiusX,
   , m_spacingX(spacingX)
   , m_spacingY(spacingY)
 {
-  m_bounds = BoundingBox<double>(
+  m_bounds = BoundingBox(
     { 0, 0, 0 }, { m_radiusX * m_spacingX, m_radiusY * m_spacingY, 0 });
 }
 

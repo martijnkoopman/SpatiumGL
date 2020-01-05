@@ -15,6 +15,10 @@
 
 #include "spatiumglexport.hpp"
 
+#include <type_traits> // std::enable_if
+#include <limits>      // std::numeric_limits
+#include <cmath>       // std::fabs
+
 namespace spgl {
 
 /// Pi constant
@@ -39,6 +43,15 @@ constexpr T
 Deg2Rad()
 {
   return 1.745329251994329576923690768488612713e-02;
+}
+
+template<class T>
+typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type
+almostEqual(T x, T y, int ulp)
+{
+  return std::fabs(x - y) <=
+           std::numeric_limits<T>::epsilon() * std::fabs(x + y) * ulp ||
+         std::fabs(x - y) < std::numeric_limits<T>::min();
 }
 
 } // namespace spgl

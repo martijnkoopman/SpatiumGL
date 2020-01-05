@@ -6,10 +6,27 @@
 #include <spatiumgl/gfx3d/PointCloud.hpp>
 #include <spatiumgl/gfx3d/PointCloudObject.hpp>
 #include <spatiumgl/io/LasReadTask.hpp>
+#include <spatiumgl/io/LasUtils.hpp>
 
 #include "CLI11.hpp"
 
 #include <iostream>
+
+enum ColoringMethod : int
+{
+  Classification, // unsigned short
+  GpsTime,        // double
+  Intensity,      // unsigned short
+  NumberOfReturns,
+  PointSourceID,
+  RGB,
+  ReturnNumber,
+  ScanAngle,
+  UserData,
+  X,
+  Y,
+  Z
+};
 
 int
 main(int argc, char* argv[])
@@ -20,23 +37,37 @@ main(int argc, char* argv[])
   app.add_option("-i,--input", fileIn, "Input LAS/lAZ file")
     ->required()
     ->check(CLI::ExistingFile);
+
+  ColoringMethod coloringMethod;
+  std::vector<std::pair<std::string, ColoringMethod>> map{
+    { "classification", ColoringMethod::Classification },
+    { "gps-time", ColoringMethod::GpsTime },
+    { "intentsity", ColoringMethod::Intensity },
+    { "number-of-returns", ColoringMethod::NumberOfReturns },
+    { "point-source-id", ColoringMethod::PointSourceID },
+    { "return-number", ColoringMethod::ReturnNumber },
+    { "rgb", ColoringMethod::RGB },
+    { "scan-angle", ColoringMethod::ScanAngle },
+    { "user-data", ColoringMethod::UserData }
+  };
+  app.add_option("-c,--color", coloringMethod, "Coloring method")
+    ->required()
+    ->transform(
+      CLI::CheckedTransformer(map, CLI::ignore_case).description("color in {classification, gps-time, intentsity, number-of-returns, point-source-id, return-number, rgb, scan-angle, user-data}"));
+
   CLI11_PARSE(app, argc, argv)
 
   // Construct point cloud reader
   spgl::io::LasReadTask readTask(fileIn, true);
-  if (!readTask.isReady()) {
-    std::cerr << "Invalid input file: " << fileIn << std::endl;
+  std::string error = readTask.validate();
+  if (!error.empty()) {
+    std::cerr << error << std::endl;
     return 1;
   }
 
-  if (!readTask.open()) {
-    std::cerr << "Unable to open file: " << fileIn << std::endl;
-    return 1;
-  }
-
-  std::cout << "Point count to read: " << readTask.pointCount() << std::endl;
+  std::cout << "Point count to read: " << readTask.lasReader().lasHeader().number_of_point_records << std::endl;
   std::cout << "Point cloud has color: "
-            << (readTask.hasColors() ? "Yes" : "No") << std::endl;
+            << (spgl::io::LasUtils::formatHasRgb(readTask.lasReader().lasHeader().point_data_format) ? "Yes" : "No") << std::endl;
 
   // Read all points from file
   readTask.start();
@@ -48,7 +79,7 @@ main(int argc, char* argv[])
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
     // Check and print progress if updated
-    int currentProgress = readTask.progressPercentage();
+    int currentProgress = readTask.progress().percentage();
     if (currentProgress > progress) {
       int dots = currentProgress - progress;
       for (int i = 0; i < dots; i++) {

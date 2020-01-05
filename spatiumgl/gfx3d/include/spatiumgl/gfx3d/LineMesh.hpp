@@ -34,7 +34,7 @@ public:
   /// \param[in] bounds Boundaries (optional; computed if omitted)
   LineMesh(const std::vector<Vector3f>&& vertices,
            const std::vector<Vector<unsigned int, 2>>&& lines,
-           const BoundingBox<double>& bounds = BoundingBox<double>());
+           const BoundingBox& bounds = BoundingBox());
 
   /// Get all vertex positions.
   ///

@@ -15,6 +15,7 @@
 
 #include "spatiumgl/AsyncTask.hpp"
 #include "spatiumgl/gfx3d/PointCloud.hpp"
+#include "spatiumgl/io/LasReader.hpp"
 #include "spatiumglexport.hpp"
 
 #include <memory> // std::unique_ptr
@@ -27,79 +28,49 @@ class LasReadTaskImpl;
 
 /// \class LasReadTask
 /// \brief Read point cloud from LAS/LAZ file asynchronously.
-///
-/// \todo Read normals
 class SPATIUMGL_EXPORT LasReadTask : public AsyncTask<gfx3d::PointCloud>
 {
 public:
   /// Constructor
   ///
   /// \param[in] path Path to LAS/LAZ file
-  LasReadTask(const std::string& path, bool shiftToOrigin = false);
+  /// \param[in] readRgb If RGB color should be read
+  /// \param[in] readScalars If scalars should to read
+  LasReadTask(const std::string& path, bool readRgb = true, LasScalars readScalars = LasScalars::None);
 
   /// Copy constructor. (deleted)
   LasReadTask(const LasReadTask& other) = delete;
 
+  /// Move constructor.
+  LasReadTask(LasReadTask&& other) = default;
+
   /// Copy assignment operator. (deleted)
   LasReadTask& operator=(const LasReadTask& other) = delete;
 
+  /// Move assignment operator.
+  LasReadTask& operator=(LasReadTask&& other) = default;
+
   /// Destructor
-  virtual ~LasReadTask() override; // Must be virtual for PIMPL pattern
+  virtual ~LasReadTask() override = default;
 
-  /// Check wheter file stream is ready.
+  /// Validate file being read.
   ///
-  ///
-  bool isReady() const;
+  /// \return Error message (empty if none)
+  std::string validate();
 
-  /// Open file input stream.
+  /// Get the LAS/LAZ reader.
   ///
-  /// This function may fail for various reasons: file doesn't
-  /// exist, no permission to read, etc.
-  ///
-  /// \return True on success, false otherwise
-  bool open();
-
-  /// Check whether the file stream is open.
-  ///
-  /// \return True if open, false otherwise
-  bool isOpen();
-
-  /// Close the file input stream.
-  void close();
-
-  // Meta data from file header
-
-  /// Get total point count, according to the file header.
-  ///
-  /// The file should be opened with open() before calling this function.
-  /// Otherwise a default value (0) will be returned.
-  ///
-  /// \return Point count
-  long long int pointCount() const;
-
-  /// Indicator if the points have colors, according to the file header.
-  ///
-  /// The file should be opened with open() before calling this function.
-  /// Otherwise a default value (0) will be returned.
-  ///
-  /// \return True if points have colors, false otherwise
-  bool hasColors() const;
-
-  /// Get spatial extent of all points, according to the file header.
-  ///
-  /// The file should be opened with open() before calling this function.
-  /// Otherwise a default value (0) will be returned.
-  ///
-  /// \return Extent
-  BoundingBox<double> extent() const;
+  /// \return LAS/LAZ reader
+  const LasReader& lasReader() const { return m_lasReader; }
 
 protected:
   /// Perform read task
   void run() override;
 
 private:
-  class Impl;
-  std::unique_ptr<LasReadTaskImpl> m_pimpl;
+  LasReader m_lasReader;
+  bool m_readRgb;
+  LasScalars m_readScalars;
 };
 
 } // namespace io

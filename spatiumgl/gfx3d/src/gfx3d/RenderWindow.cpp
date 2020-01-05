@@ -60,7 +60,7 @@ RenderWindow::addRenderer(Renderer* renderer)
   }
 }
 
-BoundingBox<double>
+BoundingBox
 RenderWindow::bounds() const
 {
   return m_bounds;

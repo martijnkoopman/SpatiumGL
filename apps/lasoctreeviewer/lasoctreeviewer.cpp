@@ -45,7 +45,7 @@ main(int argc, char* argv[])
   spgl::gfx3d::PivotInteractor interactor(&renderWindow);
   renderWindow.setInteractor(&interactor);
 
-  spgl::idx::Octree octree(spgl::BoundingCube<double>({ 5, 5, 5 }, 5));
+  spgl::idx::Octree octree(spgl::BoundingCube({ 5, 5, 5 }, 5));
   octree.root()->createChild(4);
   octree.root()->child(4)->createChild(5);
   octree.root()->child(4)->child(5)->createChild(6);

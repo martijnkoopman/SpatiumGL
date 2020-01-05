@@ -55,7 +55,7 @@ TEST(AsyncTask, finished)
   EXPECT_EQ(countTask.isRunning(), true);
 
   // Get and check progress
-  const int progressPercentage = countTask.progressPercentage();
+  const int progressPercentage = countTask.progress().percentage();
   EXPECT_TRUE(progressPercentage > 0);
 
   // Wait for 500 ms
@@ -65,9 +65,9 @@ TEST(AsyncTask, finished)
   EXPECT_EQ(countTask.isRunning(), true);
 
   // Get and check progress
-  EXPECT_TRUE(countTask.progressPercentage() > progressPercentage);
+  EXPECT_TRUE(countTask.progress().percentage() > progressPercentage);
 
-  EXPECT_EQ(countTask.progressMessage(), "Hello world");
+  EXPECT_EQ(countTask.progress().message(), "Hello world");
 
   // Wait for 500 ms
   std::this_thread::sleep_for (std::chrono::milliseconds(500));

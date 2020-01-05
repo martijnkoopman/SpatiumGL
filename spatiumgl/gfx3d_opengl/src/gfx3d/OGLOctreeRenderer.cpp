@@ -80,12 +80,12 @@ OGLOctreeRenderer::OGLOctreeRenderer(const OctreeObject* octObj)
 
   // Traverse octree tree breadth-first (queue)
   // Push root node + bounds onto queue
-  std::queue<std::pair<const idx::OctreeNode*, BoundingCube<double>>> queue;
+  std::queue<std::pair<const idx::OctreeNode*, BoundingCube>> queue;
   queue.push({ octree.root(), octree.bounds() });
   while (!queue.empty()) {
     // Pop node + bounds from queue
     const idx::OctreeNode* node = queue.front().first;
-    const BoundingCube<double> bounds = queue.front().second;
+    const BoundingCube bounds = queue.front().second;
     queue.pop();
 
     // Get offset and radius for instance of cube rendering

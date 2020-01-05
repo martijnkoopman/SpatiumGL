@@ -14,11 +14,12 @@
 #define SPATIUMGL_GFX3D_PIVOTINTERACTOR_H
 
 #include "RenderWindowInteractor.hpp"
-#include "spatiumgl/Vector3.hpp"
+#include "spatiumgl/Vector.hpp"
 #include "spatiumglexport.hpp"
 
 namespace spgl {
 namespace gfx3d {
+
 class SPATIUMGL_EXPORT PivotInteractor : public RenderWindowInteractor
 {
 public:

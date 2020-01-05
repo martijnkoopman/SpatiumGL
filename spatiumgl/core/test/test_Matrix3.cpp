@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <spatiumgl/Matrix3x3.hpp>
+#include <spatiumgl/Matrix.hpp>
 
 TEST(Matrix3, constructorDefault)
 {
@@ -47,26 +47,26 @@ TEST(Matrix3, compareUnequal)
 TEST(Matrix3, addMatrix)
 {
   const spgl::Matrix3 matrix1 = { { 4, 8, 12 },
-                                       { 16, 20, 24 },
-                                       { 28, 32, 36 } };
+                                     { 16, 20, 24 },
+                                     { 28, 32, 36 } };
   const spgl::Matrix3 matrix2 = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
   const spgl::Matrix3 result = matrix1 + matrix2;
   const spgl::Matrix3 correct = { { 5, 10, 15 },
-                                       { 20, 25, 30 },
-                                       { 35, 40, 45 } };
+                                     { 20, 25, 30 },
+                                     { 35, 40, 45 } };
   EXPECT_EQ(correct, result);
 }
 
 TEST(Matrix3, subtractMatrix)
 {
   const spgl::Matrix3 matrix1 = { { 4, 8, 12 },
-                                       { 16, 20, 24 },
-                                       { 28, 32, 36 } };
+                                     { 16, 20, 24 },
+                                     { 28, 32, 36 } };
   const spgl::Matrix3 matrix2 = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
   const spgl::Matrix3 result = matrix1 - matrix2;
   const spgl::Matrix3 correct = { { 3, 6, 9 },
-                                       { 12, 15, 18 },
-                                       { 21, 24, 27 } };
+                                     { 12, 15, 18 },
+                                     { 21, 24, 27 } };
   EXPECT_EQ(correct, result);
 }
 
@@ -75,8 +75,8 @@ TEST(Matrix3, multiplyScalar)
   const spgl::Matrix3 matrix = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
   const spgl::Matrix3 result = matrix * 2;
   const spgl::Matrix3 correct = { { 2, 4, 6 },
-                                       { 8, 10, 12 },
-                                       { 14, 16, 18 } };
+                                     { 8, 10, 12 },
+                                     { 14, 16, 18 } };
   EXPECT_EQ(correct, result);
 };
 
@@ -100,12 +100,12 @@ TEST(Matrix3, multiplyVector)
 TEST(Matrix3, divideScalar)
 {
   const spgl::Matrix3 matrix = { { 2, 4, 6 },
-                                      { 8, 10, 12 },
-                                      { 14, 16, 18 } };
+                                    { 8, 10, 12 },
+                                    { 14, 16, 18 } };
   const spgl::Matrix3 result = matrix / 2;
   const spgl::Matrix3 correct = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
   EXPECT_EQ(correct, result);
-};
+}
 
 // transpose
 
@@ -136,8 +136,8 @@ TEST(Matrix3, inverse)
   const spgl::Matrix3 m = { { 3, 2, 0 }, { 0, 0, 1 }, { 2, -2, 1 } };
   const spgl::Matrix3 result = m.inverse();
   const spgl::Matrix3 correct = { { 0.2, -0.2, 0.2 },
-                                       { 0.2, 0.3, -0.3 },
-                                       { 0, 1, 0 } };
+                                     { 0.2, 0.3, -0.3 },
+                                     { 0, 1, 0 } };
   EXPECT_EQ(correct, result);
 }
 

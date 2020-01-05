@@ -64,7 +64,7 @@ public:
   /// scene.
   ///
   /// \return Scene boundaries
-  BoundingBox<double> bounds() const;
+  BoundingBox bounds() const;
 
   /// Add an animator
   ///
@@ -111,7 +111,7 @@ protected:
   std::vector<Renderer*> m_renderers;
   std::vector<Animator*> m_animators;
 
-  BoundingBox<double> m_bounds;
+  BoundingBox m_bounds;
 
   Vector2i m_framebufferSize;
   bool m_debug;

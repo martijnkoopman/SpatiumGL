@@ -13,12 +13,13 @@
 #ifndef SPATIUMGL_GFX3D_PLANEINTERACTOR_H
 #define SPATIUMGL_GFX3D_PLANEINTERACTOR_H
 
-#include "RenderWindowInteractor.hpp"
-#include "spatiumgl/Vector3.hpp"
 #include "spatiumglexport.hpp"
+#include "RenderWindowInteractor.hpp"
+#include "spatiumgl/Vector.hpp"
 
 namespace spgl {
 namespace gfx3d {
+
 class SPATIUMGL_EXPORT PlaneInteractor : public RenderWindowInteractor
 {
 public:

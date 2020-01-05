@@ -13,8 +13,9 @@
 #ifndef SPATIUMGL_IO_LAS_LASWRITER_H
 #define SPATIUMGL_IO_LAS_LASWRITER_H
 
-#include "spatiumgl/gfx3d/PointCloud.hpp"
 #include "spatiumglexport.hpp"
+#include "LasHeader.hpp"
+#include "LasPoint.hpp"
 
 #include <memory> // std::unique_ptr
 
@@ -24,8 +25,8 @@ namespace io {
 // Forward declare implementation
 class LasWriterImpl;
 
-/// \class PointCloudWriter
-/// \brief Write point cloud to LAS/LAZ file.
+/// \class LasWriter
+/// \brief Write points to LAS/LAZ file.
 class SPATIUMGL_EXPORT LasWriter
 {
 public:
@@ -34,28 +35,57 @@ public:
   /// \param[in] path Path to LAS/LAZ file
   LasWriter(const std::string& path = "");
 
+  /// Copy constructor. (deleted)
+  LasWriter(const LasWriter& other) = delete;
+
+  /// Move constructor.
+  LasWriter(LasWriter&& other) = default;
+
+  /// Copy assignment operator. (deleted)
+  LasWriter& operator=(const LasWriter& other) = delete;
+
+  /// Move assignment operator.
+  LasWriter& operator=(LasWriter&& other) = default;
+
   /// Destructor
   virtual ~LasWriter(); // Must be virtual for PIMPL pattern
 
-  /// Set path to file.
+  /// Get LAS/LAZ file path.
   ///
-  /// \param[in] path Path to LAS/LAZ file
-  void setPath(const std::string& path);
-
-  /// Get path to file.
-  ///
-  /// \return Path to LAS/LAZ file
+  /// \return LAS/LAZ file path.
   std::string path() const;
 
-  /// ???
+  /// Check wheter file stream is ready for reading.
   ///
-  /// \return True if ready, false otherwise
+  /// \return True if ready, false otherwise.
   bool isReady() const;
 
-  /// Read all points from file into a point cloud.
+  /// Open file input stream.
   ///
-  /// \return PointCloud
-  bool writePointCloud(const gfx3d::PointCloud& pointCloud) const;
+  /// This function may fail for various reasons: file doesn't
+  /// exist, no permission to read, etc.
+  ///
+  /// \param[in] lasHeader LAS header
+  /// \return True on success, false otherwise
+  bool open(const LasHeader& lasHeader);
+
+  /// Check whether the file stream is open.
+  ///
+  /// \return True if open, false otherwise
+  bool isOpen();
+
+  /// Close the file input stream.
+  void close();
+
+  // The following functions should only be called when file stream is open.
+
+  /// Write a single LAS point to file.
+  ///
+  /// This function should only be called after the file is opened.
+  ///
+  /// \return True on success, false otherwise (end of file)
+  /// \sa open
+  void writeLasPoint(const LasPoint& point);
 
 private:
   std::unique_ptr<LasWriterImpl> m_pimpl;

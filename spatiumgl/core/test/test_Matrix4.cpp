@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <spatiumgl/Matrix4x4.hpp>
+#include <spatiumgl/Matrix.hpp>
 
 #include <iostream>
 
@@ -90,9 +90,9 @@ TEST(Matrix4, inverse)
   };
   const spgl::Matrix4 result = matrix.inverse();
   const spgl::Matrix4 correct = { { 0.25, 0, 0, -0.25 },
-                                       { -0.25, 0, 0.5, 0.25 },
-                                       { 0, 1, 0, 0 },
-                                       { 0, 0, 0, 1 } };
+                                  { -0.25, 0, 0.5, 0.25 },
+                                  { 0, 1, 0, 0 },
+                                  { 0, 0, 0, 1 } };
   EXPECT_EQ(correct, result);
 }
 

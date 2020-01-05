@@ -13,7 +13,7 @@
 #ifndef SPATIUMGL_GFX3D_POINTCLOUD_H
 #define SPATIUMGL_GFX3D_POINTCLOUD_H
 
-#include "RenderObject.hpp"
+#include "spatiumgl/gfx3d/Scalars.hpp"
 #include "spatiumgl/Bounds.hpp"
 #include "spatiumgl/Vector.hpp"
 #include "spatiumglexport.hpp"
@@ -26,7 +26,7 @@ namespace gfx3d {
 /// \class PointCloudData
 ///
 /// A point cloud data contains the actual point cloud: points, colors and
-/// normals.
+/// scalars.
 struct SPATIUMGL_EXPORT PointCloudData
 {
 public:
@@ -35,26 +35,24 @@ public:
   /// The PointCloudData becomes owner of the data (moved).
   ///
   /// \param[in] positions Point positions
-  /// \param[in] colors Point colors (RGB)
-  /// \param[in] normals Point normals
+  /// \param[in] colors Point colors (RGB) (optional)
+  /// \param[in] scalars Point scalars (optional)
   PointCloudData(std::vector<Vector3f>&& positions,
                  std::vector<Vector3f>&& colors = std::vector<Vector3f>(),
-                 std::vector<Vector3f>&& normals = std::vector<Vector3f>())
+                 Scalars<float>&& scalars = Scalars<float>())
     : m_positions(std::move(positions))
     , m_colors(std::move(colors))
-    , m_normals(std::move(normals))
+    , m_scalars(std::move(scalars))
   {}
 
   /// Clear all data.
   ///
-  /// Clears: points, colors and normals.
+  /// Clears points, colors and scalars.
   void clear()
   {
     std::vector<Vector3f>().swap(m_positions);
     std::vector<Vector3f>().swap(m_colors);
-    std::vector<Vector3f>().swap(m_normals);
-    // m_positions.clear();
-    // m_positions.shrink_to_fit(); // Only a request to shrink
+    m_scalars.clear();
   }
 
   /// Get point positions (by const reference)
@@ -67,22 +65,25 @@ public:
   /// \return Point colors
   const std::vector<Vector3f>& colors() const { return m_colors; }
 
-  /// Get point normals (by const reference)
+  /// Get point scalars (by const reference)
   ///
-  /// \return Point normals
-  const std::vector<Vector3f>& normals() const { return m_normals; }
+  /// \return Point scalars
+  const Scalars<float>& scalars() const { return m_scalars; }
 
-  const size_t computeSize() const
+  /// Compute size in bytes.
+  ///
+  /// \return Size
+  size_t computeSize() const
   {
     return m_positions.capacity() * sizeof(Vector3f) +
-           m_normals.capacity() * sizeof(Vector3f) +
+           m_scalars.values().capacity() * sizeof(float) +
            m_colors.capacity() * sizeof(Vector3f);
   }
 
 protected:
   std::vector<Vector3f> m_positions;
   std::vector<Vector3f> m_colors;
-  std::vector<Vector3f> m_normals;
+  Scalars<float> m_scalars;
 };
 
 /// \class PointCloudHeader
@@ -95,18 +96,16 @@ public:
   ///
   /// \param[in] pointCount Point count
   /// \param[in] hasColors Points have colors
-  /// \param[in] hasNormals Points have normals
+  /// \param[in] hasScalars Points have scalars
   /// \param[in] shift Origin shift applied on points
   /// \param[in] extent Spatial extent of all points (without shift)
   PointCloudHeader(size_t pointCount,
                    bool hasColors,
-                   bool hasNormals,
-                   const Vector3& originShift,
-                   const BoundingBox<double> extent)
+                   bool hasScalars,
+                   const BoundingBox extent)
     : m_pointCount(pointCount)
     , m_hasColors(hasColors)
-    , m_hasNormals(hasNormals)
-    , m_originShift(originShift)
+    , m_hasScalars(hasScalars)
     , m_extent(extent)
   {}
 
@@ -121,18 +120,18 @@ public:
   /// \return Point cloud header
   static PointCloudHeader constructFromData(const PointCloudData& data)
   {
-    size_t count = data.positions().size();
+    const size_t count = data.positions().size();
     const bool hasColors = data.colors().size() == count && count > 0;
-    const bool hasNormals = data.normals().size() == count && count > 0;
+    const bool hasScalars = data.scalars().values().size() == count && count > 0;
 
     // Compute extent
     auto computeExtent =
-      [&](const std::vector<Vector3f>& positions) -> BoundingBox<double> {
+      [&](const std::vector<Vector3f>& positions) -> BoundingBox {
       if (positions.size() < 1) {
         return {};
       } else {
         // Set initial extent
-        BoundingBox<double> extent(positions[0].staticCast<double>(), {});
+        BoundingBox extent(positions[0].staticCast<double>(), {});
 
         // Iterate points and update extent
         for (size_t i = 1; i < positions.size(); i++) {
@@ -143,7 +142,7 @@ public:
     };
 
     return {
-      count, hasColors, hasNormals, {}, computeExtent(data.positions())
+      count, hasColors, hasScalars, computeExtent(data.positions())
     };
   }
 
@@ -157,8 +156,7 @@ public:
   {
     if (this->m_pointCount != other.m_pointCount ||
         this->m_hasColors != other.m_hasColors ||
-        this->m_hasNormals != other.m_hasNormals ||
-        this->m_originShift != other.m_originShift ||
+        this->m_hasScalars != other.m_hasScalars ||
         this->m_extent != other.m_extent) {
       return false;
     }
@@ -186,37 +184,31 @@ public:
   /// True if colors are present, false otherwise
   bool hasColors() const { return m_hasColors; }
 
-  /// Has normals?
+  /// Has scalars?
   ///
-  /// True if normals are present, false otherwise
-  bool hasNormals() const { return m_hasNormals; }
-
-  /// Get spatial origin shift.
-  ///
-  /// \return Origin shift
-  Vector3 originShift() const { return m_originShift; }
+  /// True if scalars are present, false otherwise
+  bool hasScalars() const { return m_hasScalars; }
 
   /// Get spatial extent.
   ///
   /// \return Extent
-  BoundingBox<double> extent() const { return m_extent; }
+  BoundingBox extent() const { return m_extent; }
 
 protected:
   size_t m_pointCount;
   bool m_hasColors;
-  bool m_hasNormals;
-  Vector3 m_originShift;
-  BoundingBox<double> m_extent;
+  bool m_hasScalars;
+  BoundingBox m_extent;
 };
 
 /// \class PointCloud
 /// \brief Point cloud
 ///
-/// A point cloud is a collection of points with optionally colors and normals.
-/// A point cloud is immutable; no points, colors or normals can be added or
+/// A point cloud is a collection of points with optionally colors and scalars.
+/// A point cloud is immutable; no points, colors or scalars can be added or
 /// removed. The datastructure consists of a header and data. The header
 /// contains metadata like point count, extent, etc. The data contains the
-/// actual points, colors and normals. The data can be cleared while the header
+/// actual points, colors and scalars. The data can be cleared while the header
 /// remains. This is for example useful after a point cloud has been mapped to
 /// GPU memory.
 class SPATIUMGL_EXPORT PointCloud

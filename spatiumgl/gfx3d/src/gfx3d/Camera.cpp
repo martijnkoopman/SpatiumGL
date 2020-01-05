@@ -102,7 +102,7 @@ Camera::orthogonalizeViewUp()
 }
 
 void
-Camera::setNearAndFarFromBounds(const BoundingBox<double>& bounds)
+Camera::setNearAndFarFromBounds(const BoundingBox& bounds)
 {
   // Compute radius from bounds
   const Vector3 radii = bounds.radii();
@@ -116,7 +116,7 @@ Camera::setNearAndFarFromBounds(const BoundingBox<double>& bounds)
     m_near = m_far / 1000;
   } else {
     // Compute distance to center of bounds
-    const double distance = (bounds.center() - cameraTranslation).length();
+    const double distance = (bounds.center() - cameraTranslation).magnitude();
 
     // Compute and set near and far clipping plane distances
     m_far = distance + radius;

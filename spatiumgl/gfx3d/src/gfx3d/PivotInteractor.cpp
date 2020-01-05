@@ -90,7 +90,7 @@ PivotInteractor::OnMouseWheelScrolled(double scroll)
     // Update orthographic camera size
     auto orthoCamera = dynamic_cast<OrthographicCamera*>(camera);
     if (orthoCamera != nullptr) {
-      orthoCamera->setSize(directionOfProjection.length());
+      orthoCamera->setSize(directionOfProjection.magnitude());
     }
   }
 }
@@ -132,7 +132,7 @@ PivotInteractor::OnMouseMoved(double deltaX, double deltaY)
 
           // Compute translation vector
           const double distance =
-            (camera->transform().translation() - m_pivotPoint).length();
+            (camera->transform().translation() - m_pivotPoint).magnitude();
 
           const double angleY =
             perspectiveCamera->fov() * deltaY / framebufferSize[1];

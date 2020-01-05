@@ -67,7 +67,7 @@ public:
   /// boundaries.
   ///
   /// \param[in] bounds Boundaries
-  void setNearAndFarFromBounds(const BoundingBox<double>& bounds);
+  void setNearAndFarFromBounds(const BoundingBox& bounds);
 
   /// Get the projection matrix.
   ///
