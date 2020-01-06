@@ -52,14 +52,7 @@ BOOL LASreaderLAS::open(const char* file_name, I32 io_buffer_size, BOOL peek_onl
     return FALSE;
   }
 
-#ifdef _MSC_VER
-  wchar_t* utf16_file_name = UTF8toUTF16(file_name);
-  file = _wfopen(utf16_file_name, L"rb");
-  delete [] utf16_file_name;
-#else
   file = fopen(file_name, "rb");
-#endif
-
   if (file == 0)
   {
     fprintf(stderr, "ERROR: cannot open file '%s'\n", file_name);
@@ -1362,10 +1355,6 @@ BOOL LASreaderLAS::read_point_default()
   {
     if (reader->read(point.point) == FALSE)
     {
-      if (reader->warning())
-      {
-        fprintf(stderr,"WARNING: '%s' for '%s'\n", reader->warning(), file_name);
-      }
       if (reader->error())
       {
         fprintf(stderr,"ERROR: '%s' after %u of %u points for '%s'\n", reader->error(), (U32)p_count, (U32)npoints, file_name);

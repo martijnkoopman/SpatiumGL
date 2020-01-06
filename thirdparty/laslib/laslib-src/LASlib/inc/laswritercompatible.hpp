@@ -34,7 +34,7 @@
 
 #include "laswriter.hpp"
 
-class LASLIB_DLL LASwriterCompatibleDown : public LASwriter
+class LASwriterCompatibleDown : public LASwriter
 {
 public:
   BOOL open(LASheader* header, LASwriteOpener* laswriteopener, BOOL moveCRSfromEVLRtoVLR=FALSE, BOOL moveEVLRtoVLR=FALSE);
@@ -59,7 +59,7 @@ private:
   I32 start_NIR_band;
 };
 
-class LASLIB_DLL LASwriterCompatibleUp : public LASwriter
+class LASwriterCompatibleUp : public LASwriter
 {
 public:
   BOOL open(LASheader* header, LASwriteOpener* laswriteopener);

@@ -117,19 +117,11 @@ SOURCE=.\src\lasfilter.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\lasignore.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\LASzip\src\lasindex.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\LASzip\src\lasinterval.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\laskdtree.cpp
 # End Source File
 # Begin Source File
 
@@ -279,10 +271,6 @@ SOURCE=.\src\laswritercompatible.cpp
 
 SOURCE=..\LASzip\src\laszip.cpp
 # End Source File
-# Begin Source File
-
-SOURCE=..\LASzip\src\mydefs.cpp
-# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -353,19 +341,11 @@ SOURCE=.\inc\lasfilter.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\inc\lasignore.hpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\LASzip\src\lasindex.hpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\LASzip\src\lasinterval.hpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\inc\laskdtree.hpp
 # End Source File
 # Begin Source File
 

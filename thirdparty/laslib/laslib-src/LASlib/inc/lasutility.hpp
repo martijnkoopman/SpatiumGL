@@ -36,7 +36,7 @@
 
 #include "lasdefinitions.hpp"
 
-class LASLIB_DLL LASinventory
+class LASinventory
 {
 public:
   BOOL active() const { return (first == FALSE); }; 
@@ -56,7 +56,7 @@ private:
   BOOL first;
 };
 
-class LASLIB_DLL LASsummary
+class LASsummary
 {
 public:
   BOOL active() const { return (first == FALSE); }; 
@@ -124,7 +124,7 @@ private:
   F64* values_neg;
 };
 
-class LASLIB_DLL LAShistogram
+class LAShistogram
 {
 public:
   BOOL active() const { return is_active; }; 
@@ -178,7 +178,7 @@ private:
   LASbin* return_map_bin_intensity;
 };
 
-class LASLIB_DLL LASoccupancyGrid
+class LASoccupancyGrid
 {
 public:
   void reset();

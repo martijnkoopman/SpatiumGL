@@ -41,8 +41,6 @@
   These are also "free" to use but not (yet) available in open source.
 
     * demzip  
-    * demdiff
-    * e572las
     * lasview
     * laspublish
     * lasoptimize

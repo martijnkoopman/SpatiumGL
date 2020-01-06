@@ -61,19 +61,11 @@ protected:
   I64 overflow;
 };
 
-#define LASTRANSFORM_X_COORDINATE 0x00000001
-#define LASTRANSFORM_Y_COORDINATE 0x00000002
-#define LASTRANSFORM_Z_COORDINATE 0x00000004
-#define LASTRANSFORM_INTENSITY    0x00000008
-
-#define LASTRANSFORM_XY_COORDINATE (LASTRANSFORM_X_COORDINATE | LASTRANSFORM_Y_COORDINATE)
-#define LASTRANSFORM_XYZ_COORDINATE (LASTRANSFORM_XY_COORDINATE | LASTRANSFORM_Z_COORDINATE)
-
 class LAStransform
 {
 public:
 
-  U32 transformed_fields; 
+  BOOL change_coordinates;
 
   void usage() const;
   void clean();
@@ -87,7 +79,6 @@ public:
   void setFilter(LASfilter* filter);
 
   void setPointSource(U16 value);
-  void unsetPointSource();
 
   void transform(LASpoint* point);
 
@@ -101,7 +92,6 @@ public:
 private:
 
   void add_operation(LASoperation* operation);
-  void delete_operation(const CHAR* name);
   U32 num_operations;
   U32 alloc_operations;
   LASoperation** operations;
