@@ -33,6 +33,13 @@ TEST(Vector, constructor)
   EXPECT_EQ(vec7[0], 1);
   EXPECT_EQ(vec7[1], 2);
   EXPECT_EQ(vec7[2], 3);
+
+  spgl::Vector<double, 5> vec8{ 1, 2, 3, 4, 5 };
+  EXPECT_EQ(vec8[0], 1);
+  EXPECT_EQ(vec8[1], 2);
+  EXPECT_EQ(vec8[2], 3);
+  EXPECT_EQ(vec8[3], 4);
+  EXPECT_EQ(vec8[4], 5);
 }
 
 TEST(Vector, assignment)
