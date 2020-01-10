@@ -29,7 +29,6 @@ class SPATIUMGL_EXPORT AsyncTaskProgress
   friend class AsyncTask;
 
 public:
-
   /// Constructor.
   AsyncTaskProgress()
     : m_percentage()
@@ -56,7 +55,6 @@ public:
   }
 
 protected:
-
   /// Reset percentage and message.
   void reset()
   {

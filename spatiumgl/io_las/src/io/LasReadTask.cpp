@@ -70,7 +70,7 @@ LasReadTask::run()
   RunningGaurd gaurd(running());
 
   // Check file is ready (Apparently not?)
-  //if (!m_reader->isReady()) {
+  // if (!m_reader->isReady()) {
   //  setProgressMessage("Failed to activate LAS/LAZ reader.");
   //  return;
   //}
@@ -84,7 +84,7 @@ LasReadTask::run()
   }
 
   // Read point cloud metrics from file header
-  const LasHeader &lasHeader = m_lasReader.lasHeader();
+  const LasHeader& lasHeader = m_lasReader.lasHeader();
   const bool hasColors =
     LasUtils::formatHasRgb(lasHeader.point_data_format) && m_readRgb;
 
@@ -107,15 +107,13 @@ LasReadTask::run()
 
   // Allocate memory for points colors
   std::vector<Vector3f> pointColors;
-  if (hasColors)
-  {
+  if (hasColors) {
     pointColors.reserve(pointCount);
   }
 
   // Allocate memory for point scalars
   gfx3d::Scalars<float> pointScalars;
-  if (hasScalars)
-  {
+  if (hasScalars) {
     pointScalars.reserve(pointCount);
   }
 
@@ -135,7 +133,7 @@ LasReadTask::run()
     // Add to color vector
     if (hasColors) {
       // TODO: Unsigned short to float
-      //pointColors.emplace_back(lasPoint.rgb[0], );
+      // pointColors.emplace_back(lasPoint.rgb[0], );
     }
 
     // Add scalar vector
@@ -161,8 +159,7 @@ LasReadTask::run()
     Vector3(pointStatistics.max().xyz) + lasHeader.extent.min());
 
   // Construct point cloud header
-  gfx3d::PointCloudHeader header(
-    pointCount, hasColors, hasScalars, extent);
+  gfx3d::PointCloudHeader header(pointCount, hasColors, hasScalars, extent);
   gfx3d::PointCloudData data(std::move(pointPositions), std::move(pointColors));
   std::shared_ptr<gfx3d::PointCloud> pointCloud =
     std::make_shared<gfx3d::PointCloud>(header, std::move(data));

@@ -115,10 +115,10 @@ public:
   /// \return Last read LAS point
   /// \sa open
   /// \sa readLasPoint
-  const LasPoint &lasPoint() const;
+  const LasPoint& lasPoint() const;
 
 private:
-  //class Impl;
+  // class Impl;
   std::unique_ptr<LasReaderImpl> m_pimpl;
 };
 

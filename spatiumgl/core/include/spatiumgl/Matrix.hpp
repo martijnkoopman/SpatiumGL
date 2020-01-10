@@ -13,8 +13,8 @@
 #ifndef SPATIUMGL_MATRIX_H
 #define SPATIUMGL_MATRIX_H
 
-#include "Vector.hpp"
 #include "spatiumglexport.hpp"
+#include "Vector.hpp"
 
 #include <ostream>
 

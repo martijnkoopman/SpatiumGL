@@ -17,7 +17,7 @@
 
 namespace spgl {
 
-/// \class Pixmap
+/// \class Pixmap (Unused so far)
 class SPATIUMGL_EXPORT Pixmap
 {
 public:

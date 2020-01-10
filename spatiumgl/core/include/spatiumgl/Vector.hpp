@@ -22,6 +22,7 @@
 
 namespace spgl {
 
+// std::enable_if_t available from C++14
 template<bool cond, typename U>
 using spgl_enable_if_t = typename std::enable_if<cond, U>::type;
 
@@ -67,8 +68,10 @@ public:
   ///
   /// \param[in] x X value
   /// \param[in] y Y value
-  template<typename = typename std::enable_if<N == 2>::type>
-  Vector(T x, T y)
+  template<
+    typename U = T,
+    spgl_enable_if_t<std::is_same<Vector<T, N>, Vector<U, 2>>::value, int> = 0>
+  Vector(U x, U y)
     : m_data{ x, y }
   {}
 
@@ -77,7 +80,9 @@ public:
   /// \param[in] x X value
   /// \param[in] y Y value
   /// \param[in] z Z value
-  template<typename = typename std::enable_if<N == 3>::type>
+  template<
+    typename U = T,
+    spgl_enable_if_t<std::is_same<Vector<T, N>, Vector<U, 3>>::value, int> = 0>
   Vector(T x, T y, T z)
     : m_data{ x, y, z }
   {}
@@ -88,7 +93,9 @@ public:
   /// \param[in] y Y value
   /// \param[in] z Z value
   /// \param[in] w W value
-  template<typename = typename std::enable_if<N == 4>::type>
+  template<
+    typename U = T,
+    spgl_enable_if_t<std::is_same<Vector<T, N>, Vector<U, 4>>::value, int> = 0>
   Vector(T x, T y, T z, T w)
     : m_data{ x, y, z, w }
   {}
@@ -96,11 +103,18 @@ public:
   /// Constructor.
   ///
   /// \param[in] values Element values
-  template<typename = typename std::enable_if<N >= 5>::type>
+  //  template<typename = typename std::enable_if<N >= 5>::type>
+
+  template<
+    typename U = T,
+    spgl_enable_if_t<std::is_same<Vector<T, N>, Vector<U, 5>>::value, int> = 0>
   Vector(std::initializer_list<T> values)
     : m_data{ 0 }
   {
     // Beware: length of initializer list is not fixed.
+    // An alternative would be to use a templated parameter list (args...),
+    // but then narrowing will occur because the type of the parameter is
+    // deduced fromthe calling code, not the defintion of the constructor.
     size_t i = 0;
     auto it = values.begin();
     while (it != values.end() && i < N) {

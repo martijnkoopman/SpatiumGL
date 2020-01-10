@@ -15,7 +15,8 @@
 namespace spgl {
 namespace io {
 
-LasReadTaskImpl::LasReadTaskImpl(const std::string& path, const bool shiftToOrigin)
+LasReadTaskImpl::LasReadTaskImpl(const std::string& path,
+                                 const bool shiftToOrigin)
   : m_lasreadopener()
   , m_reader(nullptr)
   , m_shiftToOrigin(shiftToOrigin)
@@ -30,16 +31,25 @@ LasReadTaskImpl::~LasReadTaskImpl()
   }
 }
 
-//void LasReadTaskImpl::setPath(const std::string& path)
+// void LasReadTaskImpl::setPath(const std::string& path)
 //{
 //  m_lasreadopener.set_file_name(path.c_str());
 //}
 
-std::string LasReadTaskImpl::path() const { return m_lasreadopener.get_file_name(); }
+std::string
+LasReadTaskImpl::path() const
+{
+  return m_lasreadopener.get_file_name();
+}
 
-bool LasReadTaskImpl::isReady() const { return m_lasreadopener.active(); }
+bool
+LasReadTaskImpl::isReady() const
+{
+  return m_lasreadopener.active();
+}
 
-bool LasReadTaskImpl::open()
+bool
+LasReadTaskImpl::open()
 {
   close();
 
@@ -47,9 +57,14 @@ bool LasReadTaskImpl::open()
   return (m_reader != nullptr);
 }
 
-bool LasReadTaskImpl::isOpen() const { return (m_reader != nullptr); }
+bool
+LasReadTaskImpl::isOpen() const
+{
+  return (m_reader != nullptr);
+}
 
-void LasReadTaskImpl::close()
+void
+LasReadTaskImpl::close()
 {
   if (m_reader != nullptr) {
     m_reader->close();
@@ -57,20 +72,20 @@ void LasReadTaskImpl::close()
   }
 }
 
- bool LasReadTaskImpl::readPoint()
+bool
+LasReadTaskImpl::readPoint()
 {
-  if (m_reader == nullptr)
-  {
+  if (m_reader == nullptr) {
     return false;
   }
 
   return m_reader->read_point();
 }
 
-Vector3 LasReadTaskImpl::lastReadPointPosition()
+Vector3
+LasReadTaskImpl::lastReadPointPosition()
 {
-  if (m_reader == nullptr)
-  {
+  if (m_reader == nullptr) {
     return {};
   }
 
@@ -87,10 +102,10 @@ Vector3 LasReadTaskImpl::lastReadPointPosition()
   return { x, y, z };
 }
 
-Vector3 LasReadTaskImpl::lastReadPointColor()
+Vector3
+LasReadTaskImpl::lastReadPointColor()
 {
-  if (m_reader == nullptr)
-  {
+  if (m_reader == nullptr) {
     return {};
   }
 
@@ -102,7 +117,8 @@ Vector3 LasReadTaskImpl::lastReadPointColor()
   return { r, g, b };
 }
 
-long long int LasReadTaskImpl::pointCount() const
+long long int
+LasReadTaskImpl::pointCount() const
 {
   if (m_reader == nullptr) {
     return 0;
@@ -111,7 +127,8 @@ long long int LasReadTaskImpl::pointCount() const
   return m_reader->npoints;
 }
 
-bool LasReadTaskImpl::hasColors() const
+bool
+LasReadTaskImpl::hasColors() const
 {
   if (m_reader == nullptr) {
     return false;
@@ -123,7 +140,8 @@ bool LasReadTaskImpl::hasColors() const
           format == 8 || format == 10);
 }
 
-BoundingBox LasReadTaskImpl::extent() const
+BoundingBox
+LasReadTaskImpl::extent() const
 {
   if (m_reader == nullptr) {
     return {};

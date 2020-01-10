@@ -13,6 +13,7 @@
 #ifndef SPATIUMGL_GFX3D_BOUNDS_H
 #define SPATIUMGL_GFX3D_BOUNDS_H
 
+#include "spatiumglexport.hpp"
 #include "Vector.hpp"
 
 #include <vector> // std::vector
@@ -321,7 +322,7 @@ struct BoundingBoxT
   /// \param[in] max Maximum coordinates
   /// \return Bounding box
   static BoundingBoxT fromMinMax(const Vector<T, 3>& min,
-                                const Vector<T, 3>& max)
+                                 const Vector<T, 3>& max)
   {
     // Compute center and radii
     Vector<T, 3> center(max[0] / static_cast<T>(2) + min[0] / static_cast<T>(2),
@@ -333,7 +334,7 @@ struct BoundingBoxT
                        max[1] / static_cast<T>(2) - min[1] / static_cast<T>(2),
                        max[2] / static_cast<T>(2) - min[2] / static_cast<T>(2));
 
-    return {center, radii};
+    return { center, radii };
   }
 
   // Compare operators
@@ -342,10 +343,9 @@ struct BoundingBoxT
   ///
   /// \param[in] other Other bounding box
   /// \return True if equal, otherwise false
-  bool operator==(const BoundingBoxT<T> &other) const
+  bool operator==(const BoundingBoxT<T>& other) const
   {
-    if (this->m_center != other.m_center ||
-        this->m_radii != other.m_radii) {
+    if (this->m_center != other.m_center || this->m_radii != other.m_radii) {
       return false;
     } else {
       return true;
@@ -356,7 +356,7 @@ struct BoundingBoxT
   ///
   /// \param[in] other Other bounding box
   /// \return True if unequal, otherwise false
-  bool operator!=(const BoundingBoxT<T> & other) const
+  bool operator!=(const BoundingBoxT<T>& other) const
   {
     return !(operator==(other));
   }

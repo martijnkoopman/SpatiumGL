@@ -831,6 +831,7 @@ WARN_LOGFILE           =
 
 INPUT                  = README.md \
 						 spatiumgl/core/include \
+                         spatiumgl/idx/include \
 						 spatiumgl/gfx3d/include \
 						 spatiumgl/gfx3d_opengl/include \
 						 spatiumgl/io_las/include

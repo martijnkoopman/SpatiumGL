@@ -113,7 +113,7 @@ public:
   /// \return Last read LAS point
   /// \sa open
   /// \sa readLasPoint
-  const LasPoint &lasPoint() const;
+  const LasPoint& lasPoint() const;
 
 private:
   // LASlib

@@ -53,11 +53,11 @@ LasWriter::close()
   m_pimpl->close();
 }
 
-void LasWriter::writeLasPoint(const LasPoint& point)
+void
+LasWriter::writeLasPoint(const LasPoint& point)
 {
   m_pimpl->writeLasPoint(point);
 }
-
 
 } // namespace io
 } // namespace spgl

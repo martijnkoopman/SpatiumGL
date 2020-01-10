@@ -18,6 +18,7 @@
 
 namespace spgl {
 namespace io {
+
 LasWriterImpl::LasWriterImpl(const std::string& path)
   : m_lasWriteOpener()
   , m_lasWriter(nullptr)
@@ -26,7 +27,8 @@ LasWriterImpl::LasWriterImpl(const std::string& path)
   m_lasWriteOpener.set_file_name(path.c_str());
 }
 
-LasWriterImpl::~LasWriterImpl() {
+LasWriterImpl::~LasWriterImpl()
+{
   if (m_lasWriter != nullptr) {
     close();
   }
@@ -95,11 +97,14 @@ LasWriterImpl::close()
 
 void
 LasWriterImpl::writeLasPoint(const LasPoint& point)
-{ 
+{
   // Set point values
-  m_lasPoint.set_X(static_cast<int>(point.xyz[0] * (1.0 / m_lasHeader.x_scale_factor)));
-  m_lasPoint.set_Y(static_cast<int>(point.xyz[1] * (1.0 / m_lasHeader.y_scale_factor)));
-  m_lasPoint.set_Z(static_cast<int>(point.xyz[2] * (1.0 / m_lasHeader.z_scale_factor)));
+  m_lasPoint.set_X(
+    static_cast<int>(point.xyz[0] * (1.0 / m_lasHeader.x_scale_factor)));
+  m_lasPoint.set_Y(
+    static_cast<int>(point.xyz[1] * (1.0 / m_lasHeader.y_scale_factor)));
+  m_lasPoint.set_Z(
+    static_cast<int>(point.xyz[2] * (1.0 / m_lasHeader.z_scale_factor)));
   m_lasPoint.set_intensity(point.intensity);
   m_lasPoint.set_return_number(point.return_number);
   m_lasPoint.set_number_of_returns(point.number_of_returns);

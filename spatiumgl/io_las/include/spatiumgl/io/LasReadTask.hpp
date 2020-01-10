@@ -13,10 +13,10 @@
 #ifndef SPATIUMGL_IO_LAS_LASREADTASK_H
 #define SPATIUMGL_IO_LAS_LASREADTASK_H
 
+#include "spatiumglexport.hpp"
 #include "spatiumgl/AsyncTask.hpp"
 #include "spatiumgl/gfx3d/PointCloud.hpp"
 #include "spatiumgl/io/LasReader.hpp"
-#include "spatiumglexport.hpp"
 
 #include <memory> // std::unique_ptr
 
@@ -36,7 +36,9 @@ public:
   /// \param[in] path Path to LAS/LAZ file
   /// \param[in] readRgb If RGB color should be read
   /// \param[in] readScalars If scalars should to read
-  LasReadTask(const std::string& path, bool readRgb = true, LasScalars readScalars = LasScalars::None);
+  LasReadTask(const std::string& path,
+              bool readRgb = true,
+              LasScalars readScalars = LasScalars::None);
 
   /// Copy constructor. (deleted)
   LasReadTask(const LasReadTask& other) = delete;

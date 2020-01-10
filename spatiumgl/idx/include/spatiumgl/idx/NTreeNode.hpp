@@ -77,7 +77,7 @@ public:
   {
     if (index >= N) {
       return false;
-	}
+    }
 
     if (m_children[index] != nullptr) {
       return false;

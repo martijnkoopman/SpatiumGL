@@ -14,7 +14,6 @@
 #define SPATIUMGL_IDX_OCTREE_H
 
 #include "spatiumgl/idx/NTree.hpp"
-#include "spatiumglexport.hpp"
 
 #include <fstream> // std::ofstream, std::ifstream
 #include <queue>   // std::queue
@@ -40,16 +39,15 @@ public:
   /// \param[in] parentBounds Bounds of parent node
   /// \param[in] childIndex Child index (0-7)
   /// \return Child bounds.
-  static BoundingCube computeChildBounds(
-    const BoundingCube& parentBounds,
-    size_t childIndex);
+  static BoundingCube computeChildBounds(const BoundingCube& parentBounds,
+                                         size_t childIndex);
 
   /// Write octree to file.
   ///
   /// File format:
   /// 1. ASCII signature: SPATIUMGL_OCTREE\n
   /// 2. Extent: Xmin, Ymin, Zmin, Xmax, Ymax, Zmax (64-bit floating points)
-  /// 3. Nodes: 1 byte (8 bits) per node. 1 bit for each child. 
+  /// 3. Nodes: 1 byte (8 bits) per node. 1 bit for each child.
   static size_t writeToFile(const Octree& octree, const std::string& fileName)
   {
     size_t bytesWritten = 0;
@@ -89,15 +87,15 @@ public:
       bytesWritten++;
     }
 
-	return bytesWritten;
+    return bytesWritten;
   }
 
   /// Read octree from file.
   ///
-  /// \param[in] path Path to octree file. Should have file extension .idx 
+  /// \param[in] path Path to octree file. Should have file extension .idx
   /// \param[out] octree Octree
   /// \return True on success, false otherwise
-  static bool readFromFile(const std::string& fileName, Octree &octree)
+  static bool readFromFile(const std::string& fileName, Octree& octree)
   {
     // Open file
     std::ifstream ifile(fileName, std::ios::in | std::ios::binary);
@@ -114,8 +112,8 @@ public:
 
     // Read extent
     // ...
-	// delete octree.root()
-	// octree.setBounds()
+    // delete octree.root()
+    // octree.setBounds()
 
     // Traverse tree breadth-first with queue
     std::queue<OctreeNode*> queue;
@@ -138,12 +136,12 @@ public:
           if (node->createChild(static_cast<size_t>(i))) {
             queue.push(node->child(static_cast<size_t>(i)));
           }
-		  /// \TODO Check for allocation error
-		}
+          /// \TODO Check for allocation error
+        }
       }
     }
 
-	return true;
+    return true;
   }
 
 protected:

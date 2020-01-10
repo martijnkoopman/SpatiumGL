@@ -13,9 +13,9 @@
 #ifndef SPATIUMGL_IDX_NTREE_H
 #define SPATIUMGL_IDX_NTREE_H
 
+#include "spatiumglexport.hpp"
 #include "spatiumgl/Bounds.hpp"
 #include "spatiumgl/idx/NTreeNode.hpp"
-#include "spatiumglexport.hpp"
 
 namespace spgl {
 namespace idx {
@@ -62,10 +62,7 @@ public:
   }
 
   /// Destructor.
-  ~NTree()
-  {
-    delete m_root;
-  }
+  ~NTree() { delete m_root; }
 
   /// Get root node.
   ///

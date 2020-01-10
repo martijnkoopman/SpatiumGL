@@ -17,8 +17,7 @@ namespace spgl {
 namespace io {
 
 LasReader::LasReader(const std::string& path)
-  : m_pimpl{ std::unique_ptr<LasReaderImpl>(
-      new LasReaderImpl(path)) }
+  : m_pimpl{ std::unique_ptr<LasReaderImpl>(new LasReaderImpl(path)) }
 {}
 
 // Destructor implementation must be in CPP file for PIMPL pattern

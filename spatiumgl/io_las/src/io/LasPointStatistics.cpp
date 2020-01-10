@@ -27,7 +27,8 @@ LasPointStatistics::LasPointStatistics(unsigned char pointFormat)
   , m_return_numbers()
 {}
 
-void LasPointStatistics::addLasPoint(const LasPoint& lasPoint)
+void
+LasPointStatistics::addLasPoint(const LasPoint& lasPoint)
 {
   if (m_pointCount == 0) {
     // Set initial statistics
@@ -59,11 +60,15 @@ void LasPointStatistics::addLasPoint(const LasPoint& lasPoint)
     m_min.xyz[2] = std::min(m_min.xyz[2], lasPoint.xyz[2]);
     m_min.intensity = std::min(m_min.intensity, lasPoint.intensity);
     m_min.return_number = std::min(m_min.return_number, lasPoint.return_number);
-    m_min.number_of_returns = std::min(m_min.number_of_returns, lasPoint.number_of_returns);
-    m_min.classification = std::min(m_min.classification, lasPoint.classification);
-    m_min.scan_angle_rank = std::min(m_min.scan_angle_rank, lasPoint.scan_angle_rank);
+    m_min.number_of_returns =
+      std::min(m_min.number_of_returns, lasPoint.number_of_returns);
+    m_min.classification =
+      std::min(m_min.classification, lasPoint.classification);
+    m_min.scan_angle_rank =
+      std::min(m_min.scan_angle_rank, lasPoint.scan_angle_rank);
     m_min.user_data = std::min(m_min.user_data, lasPoint.user_data);
-    m_min.point_source_ID = std::min(m_min.point_source_ID, lasPoint.point_source_ID);
+    m_min.point_source_ID =
+      std::min(m_min.point_source_ID, lasPoint.point_source_ID);
     m_min.gps_time = std::min(m_min.gps_time, lasPoint.gps_time);
     m_min.rgb[0] = std::min(m_min.rgb[0], lasPoint.rgb[0]);
     m_min.rgb[1] = std::min(m_min.rgb[1], lasPoint.rgb[1]);
@@ -76,11 +81,15 @@ void LasPointStatistics::addLasPoint(const LasPoint& lasPoint)
     m_max.xyz[2] = std::max(m_max.xyz[2], lasPoint.xyz[2]);
     m_max.intensity = std::max(m_max.intensity, lasPoint.intensity);
     m_max.return_number = std::max(m_max.return_number, lasPoint.return_number);
-    m_max.number_of_returns = std::max(m_max.number_of_returns, lasPoint.number_of_returns);
-    m_max.classification = std::max(m_max.classification, lasPoint.classification);
-    m_max.scan_angle_rank = std::max(m_max.scan_angle_rank, lasPoint.scan_angle_rank);
+    m_max.number_of_returns =
+      std::max(m_max.number_of_returns, lasPoint.number_of_returns);
+    m_max.classification =
+      std::max(m_max.classification, lasPoint.classification);
+    m_max.scan_angle_rank =
+      std::max(m_max.scan_angle_rank, lasPoint.scan_angle_rank);
     m_max.user_data = std::max(m_max.user_data, lasPoint.user_data);
-    m_max.point_source_ID = std::max(m_max.point_source_ID, lasPoint.point_source_ID);
+    m_max.point_source_ID =
+      std::max(m_max.point_source_ID, lasPoint.point_source_ID);
     m_max.gps_time = std::max(m_max.gps_time, lasPoint.gps_time);
     m_max.rgb[0] = std::max(m_max.rgb[0], lasPoint.rgb[0]);
     m_max.rgb[1] = std::max(m_max.rgb[1], lasPoint.rgb[1]);
@@ -121,8 +130,8 @@ LasPointStatistics::max() const
   return m_max;
 }
 
-std::ostream& operator<<(std::ostream& os,
-           const LasPointStatistics& stats)
+std::ostream&
+operator<<(std::ostream& os, const LasPointStatistics& stats)
 {
   // XYZ
   os << "X: " << std::to_string(stats.m_min.xyz[0]) << " - "
@@ -141,9 +150,8 @@ std::ostream& operator<<(std::ostream& os,
   // Number of returns
   if (stats.m_min.number_of_returns != 0 ||
       stats.m_max.number_of_returns != 0) {
-    os << "Number of Returns: "
-       << std::to_string(stats.m_min.number_of_returns) << " - "
-       << std::to_string(stats.m_max.number_of_returns) << std::endl;
+    os << "Number of Returns: " << std::to_string(stats.m_min.number_of_returns)
+       << " - " << std::to_string(stats.m_max.number_of_returns) << std::endl;
   }
 
   // Return number
@@ -160,8 +168,7 @@ std::ostream& operator<<(std::ostream& os,
     os << "Classifications: " << std::endl;
     for (const auto& pair : stats.m_classifications) {
       os << "> " << std::to_string(pair.first) << " ("
-         << LasUtils::classificationToString(pair.first,
-         stats.m_pointFormat)
+         << LasUtils::classificationToString(pair.first, stats.m_pointFormat)
          << "): " << std::to_string(pair.second) << std::endl;
     }
   }

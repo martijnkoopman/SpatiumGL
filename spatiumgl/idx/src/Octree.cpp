@@ -16,8 +16,7 @@ namespace spgl {
 namespace idx {
 
 BoundingCube
-Octree::computeChildBounds(const BoundingCube& extent,
-                           size_t childIndex)
+Octree::computeChildBounds(const BoundingCube& extent, size_t childIndex)
 {
   const double radius = extent.radius() / 2;
 
