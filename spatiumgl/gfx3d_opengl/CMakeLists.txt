@@ -15,7 +15,7 @@ target_include_directories(gfx3d_opengl PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 	$<INSTALL_INTERFACE:include>)
 	
-target_link_libraries(gfx3d_opengl PRIVATE core gfx3d idx)
+target_link_libraries(gfx3d_opengl PRIVATE core idx gfx3d)
  
 find_package(OpenGL REQUIRED)
 
