@@ -103,8 +103,6 @@ public:
   /// Constructor.
   ///
   /// \param[in] values Element values
-  //  template<typename = typename std::enable_if<N >= 5>::type>
-
   template<
     typename U = T,
     spgl_enable_if_t<std::is_same<Vector<T, N>, Vector<U, 5>>::value, int> = 0>

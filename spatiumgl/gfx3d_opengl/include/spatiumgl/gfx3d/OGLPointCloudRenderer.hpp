@@ -13,18 +13,26 @@
 #ifndef SPATIUMGL_GFX3D_OGLPOINTCLOUDRENDERER_H
 #define SPATIUMGL_GFX3D_OGLPOINTCLOUDRENDERER_H
 
+#include "spatiumglexport.hpp"
 #include "OGLRenderer.hpp"
 #include "spatiumgl/gfx3d/PointCloudObject.hpp"
-#include "spatiumglexport.hpp"
 
 namespace spgl {
 namespace gfx3d {
+
+enum SPATIUMGL_EXPORT PointCloudRenderingColorMethod
+{
+  Fixed,
+  Scalar,
+  RGB
+};
 
 struct SPATIUMGL_EXPORT PointCloudRenderOptions
 {
   float pointSize = 1;
   bool pointScaleWorld = false;
-  Vector3 color;
+  PointCloudRenderingColorMethod colorMethod = Fixed;
+  Vector3 color = { 1, 1, 1 };
 };
 
 class SPATIUMGL_EXPORT OGLPointCloudRenderer : public OGLRenderer
@@ -33,7 +41,8 @@ public:
   /// Constructor
   ///
   /// \param[in] pointCloud Point cloud
-  OGLPointCloudRenderer(const PointCloudObject* pointCloudObject, const PointCloudRenderOptions &renderOptions);
+  OGLPointCloudRenderer(const PointCloudObject* pointCloudObject,
+                        const PointCloudRenderOptions& renderOptions);
 
   /// Copy constructor. (deleted)
   OGLPointCloudRenderer(const OGLPointCloudRenderer& other) = delete;

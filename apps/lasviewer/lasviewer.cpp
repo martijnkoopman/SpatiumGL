@@ -11,21 +11,20 @@
 #include "CLI11.hpp"
 
 #include <iostream>
+#include <unordered_map>
 
 enum ColoringMethod : int
 {
-  Classification, // unsigned short
-  GpsTime,        // double
-  Intensity,      // unsigned short
+  None,
+  Classification,
+  GpsTime,
+  Intensity,
   NumberOfReturns,
   PointSourceID,
   RGB,
   ReturnNumber,
   ScanAngle,
-  UserData,
-  X,
-  Y,
-  Z
+  UserData
 };
 
 int
@@ -38,7 +37,7 @@ main(int argc, char* argv[])
     ->required()
     ->check(CLI::ExistingFile);
 
-  ColoringMethod coloringMethod;
+  ColoringMethod coloringMethod = ColoringMethod::None;
   std::vector<std::pair<std::string, ColoringMethod>> map{
     { "classification", ColoringMethod::Classification },
     { "gps-time", ColoringMethod::GpsTime },
@@ -51,23 +50,50 @@ main(int argc, char* argv[])
     { "user-data", ColoringMethod::UserData }
   };
   app.add_option("-c,--color", coloringMethod, "Coloring method")
-    ->required()
     ->transform(
-      CLI::CheckedTransformer(map, CLI::ignore_case).description("color in {classification, gps-time, intentsity, number-of-returns, point-source-id, return-number, rgb, scan-angle, user-data}"));
+      CLI::CheckedTransformer(map, CLI::ignore_case)
+        .description(
+          "color in {classification, gps-time, intentsity, number-of-returns, "
+          "point-source-id, return-number, rgb, scan-angle, user-data}"));
 
   CLI11_PARSE(app, argc, argv)
 
+  // Map coloring method to LAS scalars
+  spgl::io::LasScalars scalarsToRead = spgl::io::LasScalars::None;
+  {
+    std::unordered_map<ColoringMethod, spgl::io::LasScalars> coloringScalarMap({
+      { ColoringMethod::None, spgl::io::LasScalars::None },
+      { ColoringMethod::RGB, spgl::io::LasScalars::None },
+      { ColoringMethod::Classification, spgl::io::LasScalars::Classification },
+      { ColoringMethod::GpsTime, spgl::io::LasScalars::GpsTime },
+      { ColoringMethod::Intensity, spgl::io::LasScalars::Intensity },
+      { ColoringMethod::NumberOfReturns,
+        spgl::io::LasScalars::NumberOfReturns },
+      { ColoringMethod::PointSourceID, spgl::io::LasScalars::PointSourceId },
+      { ColoringMethod::ReturnNumber, spgl::io::LasScalars::ReturnNumber },
+      { ColoringMethod::ScanAngle, spgl::io::LasScalars::ScanAngleRank },
+      { ColoringMethod::UserData, spgl::io::LasScalars::UserData },
+    });
+    scalarsToRead = coloringScalarMap[coloringMethod];
+  }
+
   // Construct point cloud reader
-  spgl::io::LasReadTask readTask(fileIn, true);
+  spgl::io::LasReadTask readTask(fileIn, (coloringMethod == ColoringMethod::RGB), scalarsToRead);
   std::string error = readTask.validate();
   if (!error.empty()) {
     std::cerr << error << std::endl;
     return 1;
   }
 
-  std::cout << "Point count to read: " << readTask.lasReader().lasHeader().number_of_point_records << std::endl;
+  std::cout << "Point count to read: "
+            << readTask.lasReader().lasHeader().number_of_point_records
+            << std::endl;
   std::cout << "Point cloud has color: "
-            << (spgl::io::LasUtils::formatHasRgb(readTask.lasReader().lasHeader().point_data_format) ? "Yes" : "No") << std::endl;
+            << (spgl::io::LasUtils::formatHasRgb(
+                  readTask.lasReader().lasHeader().point_data_format)
+                  ? "Yes"
+                  : "No")
+            << std::endl;
 
   // Read all points from file
   readTask.start();
@@ -84,7 +110,7 @@ main(int argc, char* argv[])
       int dots = currentProgress - progress;
       for (int i = 0; i < dots; i++) {
         std::cout << "." << std::flush;
-	  }
+      }
       progress = currentProgress;
     }
   }
@@ -92,7 +118,7 @@ main(int argc, char* argv[])
 
   // Join with read task
   readTask.join();
- 
+
   std::shared_ptr<spgl::gfx3d::PointCloud> pointCloud = readTask.result();
   if (pointCloud == nullptr) {
     std::cerr << "Error reading point cloud." << std::endl;
@@ -128,11 +154,19 @@ main(int argc, char* argv[])
   renderWindow.setInteractor(&interactor);
 
   // Create point cloud render object
-  spgl::gfx3d::PointCloudObject pointCloudObject(std::move(*pointCloud)); // move!
+  spgl::gfx3d::PointCloudObject pointCloudObject(
+    std::move(*pointCloud)); // move!
 
   spgl::gfx3d::PointCloudRenderOptions renderOptions;
-  renderOptions.pointSize = 0.20f;
-  renderOptions.pointScaleWorld = true;
+  renderOptions.pointSize = 1;
+  renderOptions.pointScaleWorld = false;
+  if (coloringMethod == RGB) {
+    renderOptions.colorMethod = spgl::gfx3d::PointCloudRenderingColorMethod::RGB;
+  } else if(coloringMethod != None) {
+    renderOptions.colorMethod = spgl::gfx3d::PointCloudRenderingColorMethod::Scalar;
+  } else {
+    renderOptions.colorMethod = spgl::gfx3d::PointCloudRenderingColorMethod::Fixed;
+  }
 
   // Create point cloud renderer
   spgl::gfx3d::OGLPointCloudRenderer renderer(&pointCloudObject, renderOptions);

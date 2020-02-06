@@ -69,6 +69,7 @@ void LasReaderImpl::close()
   if (m_lasReader != nullptr) {
     m_lasReader->close();
     m_lasReader.reset();
+    m_lasReadOpener.reset();
   }
 }
 

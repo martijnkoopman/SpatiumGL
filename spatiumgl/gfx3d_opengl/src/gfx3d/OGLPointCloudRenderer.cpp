@@ -30,9 +30,20 @@ OGLPointCloudRenderer::OGLPointCloudRenderer(
 {
   std::string vertexShaderSrc;
   std::string fragmentShaderSrc;
-  if (pcObj->pointCloud().header().hasColors()) {
+
+  if (m_renderOptions.colorMethod == RGB &&
+      pcObj->pointCloud().header().hasColors()) {
+    if (m_renderOptions.pointScaleWorld) {
+      // vertexShaderSrc = std::string(vertexShaderColorWorldSize);
+      // fragementShaderSrc = std::string(fragmentShaderColor);
+    }
+
     vertexShaderSrc = std::string(vertexShaderColorFixedSize);
     fragmentShaderSrc = std::string(fragmentShaderColor);
+
+  } else if (m_renderOptions.colorMethod == Scalar &&
+             pcObj->pointCloud().header().hasScalars()) {
+    //
   } else {
     // Shader
     vertexShaderSrc = vertexShaderNoPointSize;
@@ -167,7 +178,7 @@ OGLPointCloudRenderer::render(Camera* camera, const Vector2i& size)
   }
 
   {
-    //float pointSize = 0.20;
+    // float pointSize = 0.20;
     int pointSizeLoc =
       glGetUniformLocation(m_shaderProgram.shaderProgamId(), "pointSize");
     glUniform1f(pointSizeLoc, m_renderOptions.pointSize);
