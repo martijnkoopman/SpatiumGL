@@ -33,21 +33,25 @@ OGLPointCloudRenderer::OGLPointCloudRenderer(
 
   if (m_renderOptions.colorMethod == RGB &&
       pcObj->pointCloud().header().hasColors()) {
+    // RGB color
     if (m_renderOptions.pointScaleWorld) {
-      // vertexShaderSrc = std::string(vertexShaderColorWorldSize);
-      // fragementShaderSrc = std::string(fragmentShaderColor);
+      vertexShaderSrc = std::string(vertexShaderWorldSizeRGB);
+    } else {
+      vertexShaderSrc = std::string(vertexShaderScreenSizeRGB);
     }
-
-    vertexShaderSrc = std::string(vertexShaderColorFixedSize);
-    fragmentShaderSrc = std::string(fragmentShaderColor);
-
+    fragmentShaderSrc = std::string(fragmentShaderRGB);
   } else if (m_renderOptions.colorMethod == Scalar &&
              pcObj->pointCloud().header().hasScalars()) {
-    //
+    // Scalar color
+    // TODO
   } else {
-    // Shader
-    vertexShaderSrc = vertexShaderNoPointSize;
-    fragmentShaderSrc = fragmentShaderSingleColor;
+    // Fixed color
+    if (m_renderOptions.pointScaleWorld) {
+      vertexShaderSrc = std::string(vertexShaderWorldSizeNoColor);
+    } else {
+      vertexShaderSrc = std::string(vertexShaderScreenSizeNoColor);
+    }
+    fragmentShaderSrc = std::string(fragmentShaderNoColor);
   }
 
   // Create shader program with vertex and fragment shader
@@ -92,6 +96,7 @@ OGLPointCloudRenderer::OGLPointCloudRenderer(
     glVertexAttribPointer(
       0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)nullptr); // positions
     glEnableVertexAttribArray(0);
+
     glVertexAttribPointer(1,
                           3,
                           GL_FLOAT,
@@ -116,9 +121,11 @@ OGLPointCloudRenderer::OGLPointCloudRenderer(
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
 
-  m_valid = true;
+  if (m_renderOptions.pointScaleWorld) {
+    glEnable(GL_PROGRAM_POINT_SIZE);
+  }
 
-  glEnable(GL_PROGRAM_POINT_SIZE);
+  m_valid = true;
 }
 
 OGLPointCloudRenderer::~OGLPointCloudRenderer()
@@ -180,7 +187,6 @@ OGLPointCloudRenderer::render(Camera* camera, const Vector2i& size)
       }
 
       {
-        // float pointSize = 0.20;
         int pointSizeLoc =
           glGetUniformLocation(m_shaderProgram.shaderProgamId(), "pointSize");
         glUniform1f(pointSizeLoc, m_renderOptions.pointSize);

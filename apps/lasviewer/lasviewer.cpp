@@ -56,6 +56,15 @@ main(int argc, char* argv[])
           "color in {classification, gps-time, intentsity, number-of-returns, "
           "point-source-id, return-number, rgb, scan-angle, user-data}"));
 
+  float pointSize = 1;
+  app.add_option("-s,--size", pointSize, "Point size in world or screen space (px).");
+
+  bool pointScaleWorld;
+  app.add_flag(
+    "-w,--world",
+    pointScaleWorld,
+    "Flag to set point size in world space. (Default = screen space)");
+
   CLI11_PARSE(app, argc, argv)
 
   // Map coloring method to LAS scalars
@@ -159,8 +168,8 @@ main(int argc, char* argv[])
     std::move(*pointCloud)); // move!
 
   spgl::gfx3d::PointCloudRenderOptions renderOptions;
-  renderOptions.pointSize = 1;
-  renderOptions.pointScaleWorld = false;
+  renderOptions.pointSize = pointSize;
+  renderOptions.pointScaleWorld = pointScaleWorld;
   if (coloringMethod == RGB) {
     renderOptions.colorMethod =
       spgl::gfx3d::PointCloudRenderingColorMethod::RGB;

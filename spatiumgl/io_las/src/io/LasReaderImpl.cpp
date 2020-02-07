@@ -93,8 +93,8 @@ const LasPointStatistics& LasReaderImpl::lasPointStatistics() const
   if (ret) {
     // Read point fields
     m_point.xyz[0] = m_lasReader->point.get_x() - m_lasReader->get_min_x();
-    m_point.xyz[2] = m_lasReader->point.get_y() - m_lasReader->get_min_y();
-    m_point.xyz[1] = m_lasReader->point.get_z() - m_lasReader->get_min_z();
+    m_point.xyz[1] = m_lasReader->point.get_y() - m_lasReader->get_min_y();
+    m_point.xyz[2] = m_lasReader->point.get_z() - m_lasReader->get_min_z();
     m_point.intensity = m_lasReader->point.get_intensity();
     m_point.return_number = m_lasReader->point.get_return_number();
     m_point.number_of_returns = m_lasReader->point.get_number_of_returns();

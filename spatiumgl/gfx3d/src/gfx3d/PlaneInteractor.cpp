@@ -181,7 +181,7 @@ void
 PlaneInteractor::resetCamera()
 {
   // Set pivot point to center of bounds
-  m_pivotPoint = m_window->bounds().center();
+  m_pivotPoint = m_window->bounds().center() - m_window->bounds().diameter(2) / 2;
 
   auto perspectiveCamera = dynamic_cast<PerspectiveCamera*>(m_window->camera());
   if (perspectiveCamera != nullptr) {
@@ -201,8 +201,10 @@ PlaneInteractor::resetCamera()
     z = z * 1.1 + m_window->bounds().max()[2];
 
     // Position camera above, looking down with Y+ up vector.
-    m_window->camera()->lookAt(
-      m_pivotPoint, Vector3(0, 1, 0), m_pivotPoint + Vector3(0, 0, z));
+    m_window->camera()->lookAt(m_pivotPoint,
+                               Vector3(0, 1, 0),
+                               m_pivotPoint + m_window->bounds().diameter(2) +
+                                 Vector3(0, 0, z));
   }
   /// \todo Implement for orthographic camera
 
