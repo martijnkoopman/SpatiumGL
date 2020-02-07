@@ -56,6 +56,8 @@ bool LasReaderImpl::open()
     m_header.extent = BoundingBox::fromMinMax(
       { m_lasReader->get_min_x(), m_lasReader->get_min_y(), m_lasReader->get_min_z() },
       { m_lasReader->get_max_x(), m_lasReader->get_max_y(), m_lasReader->get_max_z() });
+
+    m_pointStatistics.setPointFormat(m_header.point_data_format);
     return true;
   } else {
     return false;

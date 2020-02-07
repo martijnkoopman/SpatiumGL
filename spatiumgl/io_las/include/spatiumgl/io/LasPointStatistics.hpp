@@ -29,7 +29,7 @@ class SPATIUMGL_EXPORT LasPointStatistics
 public:
   /// Constructor.
   ///
-  /// \param[in] pointFormat LAS Point Data Format
+  /// \param[in] pointFormat LAS Point Data Format [0,10]
   LasPointStatistics(unsigned char pointFormat);
 
   /// Add LAS point.
@@ -39,7 +39,12 @@ public:
   /// \param[in] lasPoint LAS point
   void addLasPoint(const LasPoint& lasPoint);
 
-  /// Get LAS Point Data Format.
+  /// Set LAS Point Data Format.
+  ///
+  /// \param[in] format LAS Point Data Format [0,10]
+  void setPointFormat(unsigned char format) { m_pointFormat = format; }
+
+  /// Get LAS Point Data Format. [0,10]
   ///
   /// \return LAS Point Data Format
   unsigned char pointFormat() const { return m_pointFormat; }

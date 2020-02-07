@@ -73,7 +73,7 @@ OGLPointCloudRenderer::OGLPointCloudRenderer(
   const size_t pointCount = pcObj->pointCloud().data().positions().size();
   // Allocate vertex attributes buffer
   const size_t pointBufferSize = pointCount * sizeof(float) * 3;
-  if (pcObj->pointCloud().data().colors().size() == pointCount) {
+  if (m_renderOptions.colorMethod == RGB && pcObj->pointCloud().data().colors().size() == pointCount) {
 
     // Allocate vertex attributes buffer for points + colors
     glBufferData(GL_ARRAY_BUFFER, 2 * pointBufferSize, nullptr, GL_STATIC_DRAW);
@@ -167,23 +167,28 @@ OGLPointCloudRenderer::render(Camera* camera, const Vector2i& size)
     glUniformMatrix4fv(
       projectionMatrixLoc, 1, GL_FALSE, projectionMatrixF.data());
 
-    const PerspectiveCamera* perspectiveCamera =
-      dynamic_cast<PerspectiveCamera*>(camera);
-    if (perspectiveCamera != nullptr) {
-      float distanceScreen = size.y() * projectionMatrix[1][1]; // 1/tan(a/2)
-      int distanceScreenLoc = glGetUniformLocation(
-        m_shaderProgram.shaderProgamId(), "distanceScreen");
-      glUniform1f(distanceScreenLoc, distanceScreen);
+    if (m_renderOptions.pointScaleWorld) {
+
+      const PerspectiveCamera* perspectiveCamera =
+        dynamic_cast<PerspectiveCamera*>(camera);
+
+      if (perspectiveCamera != nullptr) {
+        float distanceScreen = size.y() * projectionMatrix[1][1]; // 1/tan(a/2)
+        int distanceScreenLoc = glGetUniformLocation(
+          m_shaderProgram.shaderProgamId(), "distanceScreen");
+        glUniform1f(distanceScreenLoc, distanceScreen);
+      }
+
+      {
+        // float pointSize = 0.20;
+        int pointSizeLoc =
+          glGetUniformLocation(m_shaderProgram.shaderProgamId(), "pointSize");
+        glUniform1f(pointSizeLoc, m_renderOptions.pointSize);
+      }
+    } else {
+      glPointSize(m_renderOptions.pointSize);
     }
   }
-
-  {
-    // float pointSize = 0.20;
-    int pointSizeLoc =
-      glGetUniformLocation(m_shaderProgram.shaderProgamId(), "pointSize");
-    glUniform1f(pointSizeLoc, m_renderOptions.pointSize);
-  }
-
   // Bind vertex array object
   glBindVertexArray(m_vao);
 

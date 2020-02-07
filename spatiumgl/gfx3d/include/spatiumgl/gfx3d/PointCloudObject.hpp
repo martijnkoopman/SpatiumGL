@@ -33,6 +33,7 @@ public:
     : m_pointCloud(std::move(pointCloud))
   {
     m_bounds = m_pointCloud.header().extent();
+    m_transform.translate(m_bounds.min());
   }
 
   /// Get point cloud.

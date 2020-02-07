@@ -97,7 +97,6 @@ public:
   /// \param[in] pointCount Point count
   /// \param[in] hasColors Points have colors
   /// \param[in] hasScalars Points have scalars
-  /// \param[in] shift Origin shift applied on points
   /// \param[in] extent Spatial extent of all points (without shift)
   PointCloudHeader(size_t pointCount,
                    bool hasColors,
@@ -112,7 +111,7 @@ public:
   /// Construct from point cloud data.
   ///
   /// Beware: This functions iterates ALL points to compute the header values
-  /// and therefore can be suboptimal for large point clouds. It is recommended
+  /// and therefore will be suboptimal for large point clouds. It is recommended
   /// to determine the header values in advance and construct the header using
   /// the provided constructor instead of this function.
   ///

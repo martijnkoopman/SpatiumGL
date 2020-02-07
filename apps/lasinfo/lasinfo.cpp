@@ -150,7 +150,7 @@ main(int argc, char* argv[])
       }
     }
 
-    std::cout << reader.lasPointStatistics() << std::endl;
+    std::cout << "\n" << reader.lasPointStatistics() << std::endl;
     reader.close();
   }
 

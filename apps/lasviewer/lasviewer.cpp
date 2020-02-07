@@ -78,7 +78,8 @@ main(int argc, char* argv[])
   }
 
   // Construct point cloud reader
-  spgl::io::LasReadTask readTask(fileIn, (coloringMethod == ColoringMethod::RGB), scalarsToRead);
+  spgl::io::LasReadTask readTask(
+    fileIn, (coloringMethod == ColoringMethod::RGB), scalarsToRead);
   std::string error = readTask.validate();
   if (!error.empty()) {
     std::cerr << error << std::endl;
@@ -161,11 +162,14 @@ main(int argc, char* argv[])
   renderOptions.pointSize = 1;
   renderOptions.pointScaleWorld = false;
   if (coloringMethod == RGB) {
-    renderOptions.colorMethod = spgl::gfx3d::PointCloudRenderingColorMethod::RGB;
-  } else if(coloringMethod != None) {
-    renderOptions.colorMethod = spgl::gfx3d::PointCloudRenderingColorMethod::Scalar;
+    renderOptions.colorMethod =
+      spgl::gfx3d::PointCloudRenderingColorMethod::RGB;
+  } else if (coloringMethod != None) {
+    renderOptions.colorMethod =
+      spgl::gfx3d::PointCloudRenderingColorMethod::Scalar;
   } else {
-    renderOptions.colorMethod = spgl::gfx3d::PointCloudRenderingColorMethod::Fixed;
+    renderOptions.colorMethod =
+      spgl::gfx3d::PointCloudRenderingColorMethod::Fixed;
   }
 
   // Create point cloud renderer
