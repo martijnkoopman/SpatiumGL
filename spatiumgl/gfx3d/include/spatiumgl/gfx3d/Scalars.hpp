@@ -15,6 +15,7 @@
 
 #include "spatiumglexport.hpp"
 
+#include <string>
 #include <vector>
 #include <array>
 
