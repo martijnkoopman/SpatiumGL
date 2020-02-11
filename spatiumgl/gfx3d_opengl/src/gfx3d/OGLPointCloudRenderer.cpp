@@ -12,9 +12,10 @@
 
 #include <GL/glew.h>
 
+#include "OGLPointCloudShaders.hpp"
 #include "spatiumgl/gfx3d/OGLPointCloudRenderer.hpp"
 #include "spatiumgl/gfx3d/PerspectiveCamera.hpp"
-#include "OGLPointCloudShaders.hpp"
+#include "spatiumgl/Color.hpp"
 
 #include <iostream>
 #include <string>
@@ -33,7 +34,7 @@ OGLPointCloudRenderer::OGLPointCloudRenderer(
 
   if (m_renderOptions.colorMethod == RGB &&
       pcObj->pointCloud().header().hasColors()) {
-    // RGB color
+    // Color by RGB
     if (m_renderOptions.pointScaleWorld) {
       vertexShaderSrc = std::string(vertexShaderWorldSizeRGB);
     } else {
@@ -42,8 +43,13 @@ OGLPointCloudRenderer::OGLPointCloudRenderer(
     fragmentShaderSrc = std::string(fragmentShaderRGB);
   } else if (m_renderOptions.colorMethod == Scalar &&
              pcObj->pointCloud().header().hasScalars()) {
-    // Scalar color
-    // TODO
+    // Color by scalar
+    if (m_renderOptions.pointScaleWorld) {
+      vertexShaderSrc = std::string("");
+    } else {
+      vertexShaderSrc = std::string(vertexShaderScreenSizeScalar);
+    }
+    fragmentShaderSrc = std::string(fragmentShaderScalar);
   } else {
     // Fixed color
     if (m_renderOptions.pointScaleWorld) {
@@ -77,35 +83,68 @@ OGLPointCloudRenderer::OGLPointCloudRenderer(
   const size_t pointCount = pcObj->pointCloud().data().positions().size();
   // Allocate vertex attributes buffer
   const size_t pointBufferSize = pointCount * sizeof(float) * 3;
-  if (m_renderOptions.colorMethod == RGB && pcObj->pointCloud().data().colors().size() == pointCount) {
+  if (m_renderOptions.colorMethod == RGB &&
+      pcObj->pointCloud().data().colors().size() == pointCount) {
 
-    // Allocate vertex attributes buffer for points + colors
+    // Allocate vertex attributes buffer for points positions + colors
     glBufferData(GL_ARRAY_BUFFER, 2 * pointBufferSize, nullptr, GL_STATIC_DRAW);
 
-    // Fill vertex attributes with positions and colors
+    // Fill vertex attributes buffer with positions
     glBufferSubData(GL_ARRAY_BUFFER,
                     0,
                     pointBufferSize,
                     (void*)pcObj->pointCloud().data().positions().data());
+    // Fill vertex attributes buffer with colors
     glBufferSubData(GL_ARRAY_BUFFER,
                     pointBufferSize,
                     pointBufferSize,
                     (void*)pcObj->pointCloud().data().colors().data());
 
-    // Specify strucutre of a single vertex attribute, and enable
+    // Specify vertex attribute format for point position, and enable
     glVertexAttribPointer(
-      0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)nullptr); // positions
+      0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)nullptr);
     glEnableVertexAttribArray(0);
 
-    glVertexAttribPointer(1,
-                          3,
-                          GL_FLOAT,
-                          GL_FALSE,
-                          3 * sizeof(float),
-                          (void*)(pointBufferSize)); // colors
+    // Specify vertex attribute format for point color, and enable
+    glVertexAttribPointer(
+      1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)(pointBufferSize));
     glEnableVertexAttribArray(1);
+  } else if (m_renderOptions.colorMethod == Scalar &&
+             pcObj->pointCloud().data().scalars().values().size() ==
+               pointCount) {
+
+    const size_t scalarsBufferSize = pointCount * sizeof(float);
+
+    // Allocate vertex attributes buffer for point positions + scalars
+    glBufferData(GL_ARRAY_BUFFER,
+                 pointBufferSize + scalarsBufferSize,
+                 nullptr,
+                 GL_STATIC_DRAW);
+
+    // Fill vertex attributes buffer with positions
+    glBufferSubData(GL_ARRAY_BUFFER,
+                    0,
+                    pointBufferSize,
+                    (void*)pcObj->pointCloud().data().positions().data());
+    // Fill vertex attributes buffer with scalars
+    glBufferSubData(
+      GL_ARRAY_BUFFER,
+      pointBufferSize,
+      scalarsBufferSize,
+      (void*)pcObj->pointCloud().data().scalars().values().data());
+
+    // Specify vertex attribute format for point position, and enable
+    glVertexAttribPointer(
+      0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)nullptr);
+    glEnableVertexAttribArray(0);
+
+    // Specify vertex attribute format for point color, and enable
+    glVertexAttribPointer(
+      1, 1, GL_FLOAT, GL_FALSE, sizeof(float), (void*)(pointBufferSize));
+    glEnableVertexAttribArray(1);
+
   } else {
-    // Allocate vertex attributes buffer for points
+    // Allocate vertex attributes buffer for point positions
     glBufferData(GL_ARRAY_BUFFER,
                  pointBufferSize,
                  pcObj->pointCloud().data().positions().data(),
@@ -195,6 +234,22 @@ OGLPointCloudRenderer::render(Camera* camera, const Vector2i& size)
       glPointSize(m_renderOptions.pointSize);
     }
   }
+
+  if (m_renderOptions.colorMethod == Scalar) {
+	// Set color ramp range
+    int colorRampRangeLoc =
+      glGetUniformLocation(m_shaderProgram.shaderProgamId(), "colorramp_range");
+    std::array<float, 2> range =
+      pointCloudObject()->pointCloud().data().scalars().range();
+    glUniform1fv(colorRampRangeLoc, 2, range.data());
+
+	// Set color ramp colors
+    ColorRampT<float> ramp = ColorRampT<float>::spectral(range[0], range[1]);
+    int colorRampColorsLoc =
+      glGetUniformLocation(m_shaderProgram.shaderProgamId(), "colorramp_colors");
+    glUniform4fv(colorRampColorsLoc, 32, ramp.toArray<32>().data()->data()); // Number of colors must match shader
+  }
+
   // Bind vertex array object
   glBindVertexArray(m_vao);
 

@@ -59,7 +59,7 @@ main(int argc, char* argv[])
   float pointSize = 1;
   app.add_option("-s,--size", pointSize, "Point size in world or screen space (px).");
 
-  bool pointScaleWorld;
+  bool pointScaleWorld = false;
   app.add_flag(
     "-w,--world",
     pointScaleWorld,

@@ -128,6 +128,11 @@ struct SPATIUMGL_EXPORT ColorT
   /// \param[in] other Other color
   /// \return True if unequal, false otherwise
   bool operator!=(const ColorT<T>& other) const { return !(operator==(other)); }
+
+  /// Get pointer to the underlying element storage.
+  ///
+  /// \return Pointer to underlying element storage.
+  const T* data() const noexcept { return &R; }
 };
 
 using Color = ColorT<double>;
@@ -148,20 +153,31 @@ struct SPATIUMGL_EXPORT ColorRampT
     m_map[maxValue] = maxColor;
   }
 
+  /// Construct grayscale color ramp.
+  ///
+  /// Black -> white
+  ///
+  /// \param[in] min Minimum value
+  /// \param[in] max Maximum value
+  /// \return Grayscale color ramp
   static ColorRampT<T> grayscale(T min, T max)
   {
     ColorRampT<T> ramp(min, { 0, 0, 0, 1 }, max, { 1, 1, 1, 1 });
     return ramp;
   }
 
+  /// Construct RGB spectrum color ramp.
+  ///
+  /// Blue -> green -> red
+  ///
+  /// \param[in] min Minimum value
+  /// \param[in] max Maximum value
+  /// \return RGB spectrum color ramp
   static ColorRampT<T> spectral(T min, T max)
   {
-    const T step = (max - min) / 5;
-    ColorRampT<T> ramp(min, { 1, 0, 0, 1 }, max, { 0, 0, 1, 1 });
-    ramp.addEntry(min + step, { 1, 0.5, 0, 1 });   // orange
-    ramp.addEntry(min + step * 2, { 1, 1, 0, 1 }); // yellow
-    ramp.addEntry(min + step * 3, { 0, 1, 0, 1 }); // green
-    ramp.addEntry(min + step * 4, { 0, 1, 1, 1 }); // cyan
+    const T step = (max - min) / 2;
+    ColorRampT<T> ramp(min, { 0, 0, 1, 1 }, max, { 1, 0, 0, 1 });
+    ramp.addEntry(min + step, { 0, 1, 0, 1 });
     return ramp;
   }
 
@@ -250,9 +266,10 @@ struct SPATIUMGL_EXPORT ColorRampT
   {
     std::array<ColorT<T>, N> array;
     const T maxValue = max();
-    const T step = (maxValue - min()) / (N - 1);
+    const T minValue = min();
+    const T step = (maxValue - minValue) / (N - 1);
     for (size_t i = 0; i < N - 1; i++) {
-      array[i] = map(i * step);
+      array[i] = map(minValue + i * step);
     }
     array[N - 1] = map(maxValue);
     return array;

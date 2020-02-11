@@ -61,14 +61,15 @@ public:
       m_range[0] = std::min(m_range[0], value);
       m_range[1] = std::max(m_range[1], value);
     }
+    m_values.emplace_back(value);
   }
 
   /// Clear scalar values.
   ///
+  /// The scalar range will not be cleared.
   /// This will free memory.
   void clear()
   {
-    m_range = { 0, 0 };
     std::vector<T>().swap(m_values);
   }
 
@@ -81,6 +82,11 @@ public:
   ///
   /// \return Scalars range
   const std::array<T, 2> range() const { return m_range; }
+
+  /// Set scalars name.
+  ///
+  /// \param[in] name Scalars name
+  void setName(const std::string& name) { m_name = name; }
 
   /// Get scalars name.
   ///

@@ -114,6 +114,7 @@ LasReadTask::run()
   // Allocate memory for point scalars
   gfx3d::Scalars<float> pointScalars;
   if (shouldReadScalars) {
+    pointScalars.setName(LasUtils::scalarsToString(m_readScalars));
     pointScalars.reserve(pointCount);
   }
 
@@ -160,12 +161,20 @@ LasReadTask::run()
     Vector3(pointStatistics.max().xyz) + lasHeader.extent.min());
 
   // Construct point cloud header
+  std::shared_ptr<gfx3d::PointCloud> pointCloud;
   gfx3d::PointCloudHeader header(
     pointCount, shouldReadRgb, shouldReadScalars, extent);
-  gfx3d::PointCloudData data(std::move(pointPositions), std::move(pointColors));
-  std::shared_ptr<gfx3d::PointCloud> pointCloud =
-    std::make_shared<gfx3d::PointCloud>(header, std::move(data));
-
+  if (shouldReadScalars) {
+    gfx3d::PointCloudData data(std::move(pointPositions),
+                               std::move(pointColors),
+								std::move(pointScalars));
+    pointCloud = std::make_shared<gfx3d::PointCloud>(header, std::move(data));
+  } else {
+    gfx3d::PointCloudData data(std::move(pointPositions),
+                               std::move(pointColors));
+    pointCloud = std::make_shared<gfx3d::PointCloud>(header, std::move(data));
+  }
+  
   // Expose result
   setResult(pointCloud);
 }

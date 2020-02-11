@@ -13,6 +13,7 @@
 #ifndef SPATIUMGL_IO_LAS_LASUTILS_H
 #define SPATIUMGL_IO_LAS_LASUTILS_H
 
+#include "LasScalars.hpp"
 #include "spatiumglexport.hpp"
 
 #include <set>
@@ -103,9 +104,8 @@ public:
   /// \param[in] classification Point classification (0 - 255)
   /// \param[in] format Point data format (0 - 10)
   /// \return Classification name
-  static std::string
-  classificationToString(unsigned char classification,
-                         unsigned char point_data_format)
+  static std::string classificationToString(unsigned char classification,
+                                            unsigned char point_data_format)
   {
     if (point_data_format < 6) {
       switch (classification) {
@@ -182,6 +182,38 @@ public:
       } else {
         return "User defined";
       }
+    }
+  }
+
+  /// Convert point scalars to string.
+  ///
+  /// \param[in] scalars Point scalars
+  /// \return Scalars name
+  static std::string scalarsToString(LasScalars scalars)
+  {
+    switch (scalars) {
+      case None:
+        return "none";
+      case Intensity:
+        return "intensity";
+      case ReturnNumber:
+        return "return-number";
+      case NumberOfReturns:
+        return "number-of-returns";
+      case Classification:
+        return "classification";
+      case ScanAngleRank:
+        return "scan-angle-rank";
+      case UserData:
+        return "user-data";
+      case PointSourceId:
+        return "point-source-id";
+      case GpsTime:
+        return "gps-time";
+      case Nir:
+        return "nir";
+      default:
+        return "unknown";
     }
   }
 };

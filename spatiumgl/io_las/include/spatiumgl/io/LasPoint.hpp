@@ -14,26 +14,13 @@
 #define SPATIUMGL_IO_LAS_LASPOINT_H
 
 #include "spatiumglexport.hpp"
+#include "LasScalars.hpp"
 #include "spatiumgl/Vector.hpp"
 
 #include <array>
 
 namespace spgl {
 namespace io {
-
-enum SPATIUMGL_EXPORT LasScalars : int
-{
-  None,
-  Intensity,
-  ReturnNumber,
-  NumberOfReturns,
-  Classification,
-  ScanAngleRank,
-  UserData,
-  PointSourceId,
-  GpsTime,
-  Nir
-};
 
 /// \class LasPoint
 /// \brief LAS point for APRS LAS 1.0 - 1.3 (extended 1.4 not supported)

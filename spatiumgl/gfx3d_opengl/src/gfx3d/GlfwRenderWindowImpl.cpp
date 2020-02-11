@@ -331,8 +331,8 @@ GlfwRenderWindowImpl::glfw_key_callback(GLFWwindow* window,
                                         int action,
                                         int mods)
 {
-  std::cout << "Key " << key << " " << scancode << " " << action << " " << mods
-            << std::endl;
+  // std::cout << "Key " << key << " " << scancode << " " << action << " " <<
+  // mods << std::endl;
 }
 
 void
