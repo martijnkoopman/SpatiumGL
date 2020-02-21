@@ -45,7 +45,7 @@ OGLPointCloudRenderer::OGLPointCloudRenderer(
              pcObj->pointCloud().header().hasScalars()) {
     // Color by scalar
     if (m_renderOptions.pointScaleWorld) {
-      vertexShaderSrc = std::string("");
+      vertexShaderSrc = std::string(vertexShaderWorldSizeScalar);
     } else {
       vertexShaderSrc = std::string(vertexShaderScreenSizeScalar);
     }

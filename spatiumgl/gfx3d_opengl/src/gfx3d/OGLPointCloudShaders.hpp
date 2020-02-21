@@ -65,6 +65,29 @@ void main()
 }
 )";
 
+const char* vertexShaderWorldSizeScalar = R"(
+#version 330 core 
+layout (location = 0) in vec3 pos;
+layout(location = 1) in float scalar; 
+uniform mat4 model; 
+uniform mat4 view; 
+
+uniform mat4 projection; 
+uniform float distanceScreen; 
+uniform float pointSize; 
+
+out float vertexScalar;
+
+void main() 
+{ 
+  gl_Position = view * model * vec4(pos.xyz, 1.0); 
+  gl_PointSize = max(1, pointSize * distanceScreen / -gl_Position.z); 
+  gl_Position = projection * gl_Position;
+
+  vertexScalar = scalar;
+}
+)";
+
 const char* vertexShaderScreenSizeRGB = R"(
 #version 330 core
 layout(location = 0) in vec3 aPos;
